@@ -9,10 +9,10 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t sp10-back-node .
-      - docker tag sp10-back-node:latest 851725249840.dkr.ecr.us-east-1.amazonaws.com/sp10-back-node:latest
+      - docker build -t smartproject10-back-node .
+      - docker tag smartproject10-back-node:latest 851725249840.dkr.ecr.us-east-1.amazonaws.com/smartproject10-back-node:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push 851725249840.dkr.ecr.us-east-1.amazonaws.com/sp10-back-node:latest
+      - docker push 851725249840.dkr.ecr.us-east-1.amazonaws.com/smartproject10-back-node:latest
