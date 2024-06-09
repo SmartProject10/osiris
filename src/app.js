@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
+
+const port = process.env.PORT || 3000;
 // const pool = require('./config/db');
 
 // pool.query('SELECT NOW()', (err, res) => {
@@ -52,5 +54,10 @@ app.get('/', (req, res) => res.send('Hello World!'));
 
 // Error handling middleware
 app.use(errorHandler);
+
+
+app.listen(port, '0.0.0.0', () => {
+    console.log(`App running on http://0.0.0.0:${port}`);
+})
 
 module.exports = app;
