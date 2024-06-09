@@ -5,6 +5,15 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
+// const pool = require('./config/db');
+
+// pool.query('SELECT NOW()', (err, res) => {
+//     if (err) {
+//         console.error('Error connecting to the database', err.stack);
+//     } else {
+//         console.log('Connected to the database:', res.rows[0]);
+//     }
+// });
 
 // Create Express app
 const app = express();
