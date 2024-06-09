@@ -1,18 +1,14 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 851725249840.dkr.ecr.us-east-1.amazonaws.com
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t smartproject10-back-node .
-      - docker tag smartproject10-back-node:latest 851725249840.dkr.ecr.us-east-1.amazonaws.com/smartproject10-back-node:latest
+      - docker tag smartproject10-back-node:latest public.ecr.aws/t3k0z2y6/smartproject10-back-node:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push 851725249840.dkr.ecr.us-east-1.amazonaws.com/smartproject10-back-node:latest
+      - docker push public.ecr.aws/t3k0z2y6/smartproject10-back-node:latest
