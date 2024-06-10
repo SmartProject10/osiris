@@ -28,8 +28,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          region: ${{ env.AWS_REGION }}
-      
+          registry: ${{ env.ECR_REGISTRY }}
+
       - name: Build, tag, and push Docker image to Amazon ECR
         id: build-image
         run: |
