@@ -9,4 +9,27 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 });
 
+const MONGO_URI = "mongodb://localhost:27017/db/dbIso"; 
+const MongoClient = require('mongodb').MongoClient;
+
+
+async function connectToMongo() {
+  try {
+    const client = await MongoClient.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log("Connected to MongoDB successfully!");
+
+    const db = client.db("dbIso"); 
+    console.log(db);
+    // await client.close();
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  }
+}
+
+connectToMongo();
+
+
 module.exports = pool;

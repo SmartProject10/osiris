@@ -2,25 +2,18 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
+const axios = require('axios');
 const userRoutes = require('./routes/userRoutes');
+const companyRoutes = require('./routes/companyRouter')
+const pool = require('./config/db');
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
 
 const port = process.env.PORT || 3000;
-// const pool = require('./config/db');
 
-// pool.query('SELECT NOW()', (err, res) => {
-//     if (err) {
-//         console.error('Error connecting to the database', err.stack);
-//     } else {
-//         console.log('Connected to the database:', res.rows[0]);
-//     }
-// });
 
-// Create Express app
 const app = express();
-
-// Middleware
+app.use(express.json()); 
 app.use(bodyParser.json());
 app.use(passport.initialize());
 
@@ -32,32 +25,35 @@ passport.use(new OAuth2Strategy({
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
 },
+
 function(accessToken, refreshToken, profile, cb) {
-    // Here you would typically fetch user information from the database
     return cb(null, profile);
 }));
 
-// Routes
-app.use('/auth/provider', passport.authenticate('oauth2'));
-
 app.get('/auth/callback', 
-    passport.authenticate('oauth2', { failureRedirect: '/' }),
-    function(req, res) {
-        // Successful authentication
-        res.redirect('/');
-    });
+  passport.authenticate('oauth2', { failureRedirect: '/' }),
+  function(req, res) {
 
-app.use('/users', userRoutes);
+      res.redirect('/');
+  }
 
-// Default route
-app.get('/', (req, res) => res.send('Pipeline Test!'));
+);
 
-// Error handling middleware
 app.use(errorHandler);
 
+// Routes
+app.use('/auth/provider', passport.authenticate('oauth2'));
+app.use('/users', userRoutes, passport.authenticate('oauth2'));
+app.get('/', (req, res) => res.send('Iso Main!'));
+app.use('/company', companyRoutes, passport.authenticate('oauth2'))
 
-app.listen(port, '0.0.0.0', () => {
-    console.log(`App running on http://0.0.0.0:${port}`);
-})
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log errors
+  res.status(err.status || 500).json({ message: 'Internal Server Error' });
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
 
 module.exports = app;
