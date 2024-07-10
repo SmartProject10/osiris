@@ -13,6 +13,11 @@ const cargoEmpresaSchema = new mongoose.Schema({
     enum: [1, 2], // 1: Activo, 2: Inactivo
     default: 1
   },
+  iId_AreaEmpresa: { // New field for referencing AreaEmpresa
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'AreaEmpresa',
+    required: true
+  },
   vCodigo: {
     type: String,
     required: true,
@@ -26,10 +31,6 @@ const cargoEmpresaSchema = new mongoose.Schema({
   vDescripcion: {
     type: String,
     maxlength: 50
-  },
-  dFechaRegistro: {
-    type: Date,
-    default: Date.now
   }
 });
 

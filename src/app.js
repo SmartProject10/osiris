@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
-const axios = require('axios');
+
 const userRoutes = require('./routes/userRoutes');
 const companyRoutes = require('./routes/companyRouter')
 const pool = require('./config/db');
@@ -45,7 +45,8 @@ app.use(errorHandler);
 app.use('/auth/provider', passport.authenticate('oauth2'));
 app.use('/users', userRoutes, passport.authenticate('oauth2'));
 app.get('/', (req, res) => res.send('Iso Main!'));
-app.use('/company', companyRoutes, passport.authenticate('oauth2'))
+// app.use('/company', companyRoutes, passport.authenticate('oauth2'))
+app.use('/company', companyRoutes)
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log errors

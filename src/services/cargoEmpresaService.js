@@ -1,4 +1,4 @@
-const CargoEmpresaRepository = require('./CargoEmpresaRepository');
+const CargoEmpresaRepository = require('../repositories/cargoEmpresaRepository');
 
 class cargoEmpresaService {
   constructor() {

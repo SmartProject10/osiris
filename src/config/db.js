@@ -15,10 +15,8 @@ const MongoClient = require('mongodb').MongoClient;
 
 async function connectToMongo() {
   try {
-    const client = await MongoClient.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    const client = await MongoClient.connect(MONGO_URI, { });
+    
     console.log("Connected to MongoDB successfully!");
 
     const db = client.db("dbIso"); 

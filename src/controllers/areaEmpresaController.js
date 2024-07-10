@@ -1,5 +1,6 @@
 const AreaEmpresaService = require('./AreaEmpresaService');
 
+
 class AreaEmpresaController {
   constructor() {
     this.service = new AreaEmpresaService();
@@ -59,3 +60,5 @@ class AreaEmpresaController {
 }
 
 }
+
+module.export = AreaEmpresaController;

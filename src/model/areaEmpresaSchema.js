@@ -10,7 +10,7 @@ const areaEmpresaSchema = new mongoose.Schema({
   iId_Estado: {
     type: Number,
     required: true,
-    enum: [1, 2],
+    enum: [1, 2], // 1: Activo, 2: Inactivo
     default: 1
   },
   vCodigo: {
@@ -23,9 +23,10 @@ const areaEmpresaSchema = new mongoose.Schema({
     required: true,
     maxlength: 50
   },
-  dFechaRegistro: {
-    type: Date,
-    default: Date.now
+  iId_Empresa: { // New field to reference Company
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
+    required: true
   }
 });
 
