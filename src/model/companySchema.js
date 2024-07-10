@@ -14,7 +14,11 @@ const companySchema = new mongoose.Schema({
   isos: [{ 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Iso'
-  }]
+  }],
+  sede: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'sede' // Reference the company model name
+  }
 });
 
 const Company = mongoose.model('Company', companySchema);
