@@ -1,62 +1,65 @@
-// src/controllers/userController.js
-const userService = require('../services/userService');
-const express = require('express');
-const router = express.Router();
+const User = require('../models/');
 
-router.get('/user/:id', async (req, res) => {
-    try {
-      const user = await userService.getUserById(req.params.id);
-      if (!user) {
-        return res.status(404).json({ message: 'user not found' });
-      }
-      res.status(200).json(user);
-    } catch (error) {
-      res.status(error.status || 500).json({ message: error.message });
-    }
-  });
+const createUser= async (req, res) => {
+  const newUser = new User(req.body);
+  try {
+    await newUser.save();
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  
-  router.get('/user/:id', async (req, res) => {
-    // Existing implementation for finding a user by ID
-  });
-  
-  
-  router.post('/user', async (req, res) => {
-    try {
-      const newUser = await userService.createUser(req.body);
-      res.status(201).json(newUser); // Created status code
-    } catch (error) {
-      res.status(error.status || 500).json({ message: error.message });
+const getUserById = async (req, res) => {
+  const UserId = req.params.id;
+  try {
+    const User = await User.findById(UserId);
+    if (!User) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
-  
-  // Update a user by ID (assuming update data comes from the request body)
-  router.put('/user/:id', async (req, res) => {
-    const id = req.params.id;
-    const updateData = req.body;
-  
-    try {
-      const updatedUser = await userService.updateUser(id, updateData);
-      if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      res.status(error.status || 500).json({ message: error.message });
+    res.status(200).json(User);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  try {
+    const Users = await User.find();
+    res.status(200).json(Users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateUser = async (req, res) => {
+  const UserId = req.params.id;
+  const updatedUser = req.body;
+  try {
+    const User = await User.findByIdAndUpdate(UserId, updatedUser, { new: true });
+    if (!User) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
-  
-  // Delete a user by ID
-  router.delete('/user/:id', async (req, res) => {
-    const id = req.params.id;
-  
-    try {
-      await userService.deleteUser(id);
-      res.status(204).json(); // No content response for successful deletion
-    } catch (error) {
-      res.status(error.status || 500).json({ message: error.message });
-    }
-  });
-  
-  module.exports = router;
-  
+    res.status(200).json(User);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const UserId = req.params.id;
+  try {
+    await User.findByIdAndDelete(UserId);
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  createUser,
+  getUserById,
+  getAllUsers,
+  updateUser,
+  deleteUser,
+};

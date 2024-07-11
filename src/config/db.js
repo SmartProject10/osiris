@@ -21,7 +21,7 @@ async function connectToMongo() {
 
     const db = client.db("dbIso"); 
     console.log(db);
-    // await client.close();
+    await client.close();
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
   }

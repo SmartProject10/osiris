@@ -4,25 +4,25 @@ const sedeSchema = new mongoose.Schema({
   iId_Sede: {
     type: Number,
     required: true,
-    unique: true, // Enforces primary key constraint
-    autoincrement: true // Configured at collection level (see note below)
+    unique: true, 
+    autoincrement: true 
   },
   iId_Ubigeo: {
     type: Number,
-    required: false // Adjust as needed
+    required: false
   },
   iId_Pais: {
     type: Number,
-    required: false // Adjust as needed
+    required: false 
   },
   iId_Empresa: {
     type: Number,
-    required: false // Adjust as needed
+    required: false 
   },
   iId_Estado: {
     type: String,
     required: true,
-    enum: ['Activo', 'Inactivo'] // Enforces valid states
+    enum: ['Activo', 'Inactivo'] 
   },
   vNombre: {
     type: String,
@@ -30,11 +30,11 @@ const sedeSchema = new mongoose.Schema({
   },
   dFechaRegistro: {
     type: Date,
-    required: false // Adjust as needed
+    required: false 
   },
   vDireccion: {
     type: String,
-    required: false // Adjust as needed
+    required: false 
   }
 });
 
