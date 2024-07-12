@@ -1,29 +1,65 @@
-const CargoEmpresaRepository = require('../repositories/cargoEmpresaRepository');
+const Cargo = require('../model/cargoEmpresaSchema');
 
-class cargoEmpresaService {
-  constructor() {
-    this.repository = new CargoEmpresaRepository();
+const createCargo = async (req, res) => {
+  const newCargo = new Cargo(req.body);
+  try {
+    await newCargo.save();
+    res.status(201).json({ message: 'Cargo created successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-  async getAll() {
-    return await this.repository.getAll();
+const getCargoById = async (req, res) => {
+  const CargoId = req.params.id;
+  try {
+    const Cargo = await Cargo.findById(CargoId);
+    if (!Cargo) {
+      return res.status(404).json({ message: 'Cargo not found' });
+    }
+    res.status(200).json(Cargo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-  async getById(id) {
-    return await this.repository.getById(id);
+const getAllCargos = async (req, res) => {
+  try {
+    const Cargos = await Cargo.find();
+    res.status(200).json(Cargos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-  async create(cargoEmpresa) {
-    return await this.repository.create(cargoEmpresa);
+const updateCargo = async (req, res) => {
+  const CargoId = req.params.id;
+  const updatedCargo = req.body;
+  try {
+    const Cargo = await Cargo.findByIdAndUpdate(CargoId, updatedCargo, { new: true });
+    if (!Cargo) {
+      return res.status(404).json({ message: 'Cargo not found' });
+    }
+    res.status(200).json(Cargo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-  async update(id, cargoEmpresa) {
-    return await this.repository.update(id, cargoEmpresa);
+const deleteCargo = async (req, res) => {
+  const CargoId = req.params.id;
+  try {
+    await Cargo.findByIdAndDelete(CargoId);
+    res.status(200).json({ message: 'Cargo deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-  async delete(id) {
-    return await this.repository.delete(id);
-  }
-}
-
-module.exports = new cargoEmpresaService();
+module.exports = {
+  createCargo,
+  getCargoById,
+  getAllCargos,
+  updateCargo,
+  deleteCargo,
+};

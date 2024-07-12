@@ -2,12 +2,15 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
-
-const userRoutes = require('./routes/userRoutes');
-const companyRoutes = require('./routes/companyRouter')
 const pool = require('./config/db');
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
+const companyController = require('./controllers/CompanyController'); // Assuming you have a controllers folder
+const cargoEmpresaController = require('./controllers/cargoEmpresaController'); // Assuming you have a controllers folder
+const areaEmpresaController = require('./controllers/areaEmpresaController'); // Assuming you have a controllers folder
+const isoController = require('./controllers/isoController'); // Assuming you have a controllers folder
+const companyEconomicActivityController = require('./controllers/companyEconomicActivity.controller'); // Assuming you have a controllers folder
+
 
 const port = process.env.PORT || 3000;
 
@@ -42,11 +45,16 @@ app.get('/auth/callback',
 app.use(errorHandler);
 
 // Routes
-app.use('/auth/provider', passport.authenticate('oauth2'));
-app.use('/users', userRoutes, passport.authenticate('oauth2'));
 app.get('/', (req, res) => res.send('Iso Main!'));
-// app.use('/company', companyRoutes, passport.authenticate('oauth2'))
-app.use('/company', companyRoutes)
+app.use('/auth/provider', passport.authenticate('oauth2'));
+app.use('/companies', companyController); 
+app.use('/cargoEmpresas', cargoEmpresaController); 
+app.use('/areasEmpresas', areaEmpresaController); 
+app.use('/isos', isoController); 
+app.use('/companyEconomicActivities', companyEconomicActivityController); 
+// app.use('/users', userRoutes, passport.authenticate('oauth2'));
+// // app.use('/company', companyRoutes, passport.authenticate('oauth2'))
+// app.use('/company', companyRoutes)
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log errors

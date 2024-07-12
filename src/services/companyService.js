@@ -1,54 +1,65 @@
 const Company = require('../model/companySchema');
 
-const companyRepository = require('../repositories/companyRepository');
-
-class CompanyService {
-  async registerCompany(companyData) {
-    const newCompany = new Company(companyData);
+const createCompany = async (req, res) => {
+  const newCompany = new Company(req.body);
+  try {
     await newCompany.save();
+    res.status(201).json({ message: 'Company created successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-  async getAll() {
-    const companies = await companyRepository.getAll();
-    return companies; 
-  }
-  
-  async getById(id) {
-    const company = await companyRepository.findById(id); 
-    if (!company) { 
-      return null;  
+const getCompanyById = async (req, res) => {
+  const CompanyId = req.params.id;
+  try {
+    const Company = await Company.findById(CompanyId);
+    if (!Company) {
+      return res.status(404).json({ message: 'Company not found' });
     }
-    return company;  
+    res.status(200).json(Company);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-  async updateCompany(id, updatedCompanyData) {
-    try {
-      const company = await Company.findById(id);
-      if (!company) {
-        return null; 
-      }
-        company.set(updatedCompanyData); 
-     await company.save();
-      return company;
-    } catch (error) {
-      console.error('Error updating company:', error);
-      throw error; 
+};
+
+const getAllCompanys = async (req, res) => {
+  try {
+    const Companys = await Company.find();
+    res.status(200).json(Companys);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateCompany = async (req, res) => {
+  const CompanyId = req.params.id;
+  const updatedCompany = req.body;
+  try {
+    const Company = await Company.findByIdAndUpdate(CompanyId, updatedCompany, { new: true });
+    if (!Company) {
+      return res.status(404).json({ message: 'Company not found' });
     }
+    res.status(200).json(Company);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-  async deleteCompany(id) {
-    try {
-      const company = await Company.findByIdAndDelete(id);
-      if (!company) {
-        return null; 
-      }
-      return company; 
-    } catch (error) {
-      console.error('Error deleting company:', error);
-      throw error; 
-    }
+const deleteCompany = async (req, res) => {
+  const CompanyId = req.params.id;
+  try {
+    await Company.findByIdAndDelete(CompanyId);
+    res.status(200).json({ message: 'Company deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
 
-}
-
-module.exports = new CompanyService();
-
+module.exports = {
+  createCompany,
+  getCompanyById,
+  getAllCompanys,
+  updateCompany,
+  deleteCompany,
+};

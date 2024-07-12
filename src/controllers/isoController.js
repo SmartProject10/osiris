@@ -1,65 +1,74 @@
-const Iso = require('../models/iso.model');
+const express = require('express');
+const router = express.Router();
+const isoService = require('../services/companyIso.service'); // Assuming you have an iso.service module
 
-const createIso = async (req, res) => {
-  const newIso = new Iso(req.body);
+// Create ISO record
+router.post('/iso', async (req, res) => {
   try {
-    await newIso.save();
-    res.status(201).json({ message: 'ISO created successfully' });
+    const isoData = req.body; // Extract ISO data from request body
+    const createdIso = await isoService.createIso(isoData);
+    res.status(201).json(createdIso); // Send created ISO record in response
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    handleError(error, res); // Handle any errors that occur
   }
-};
+});
 
-const getIsoById = async (req, res) => {
-  const isoId = req.params.id;
+// Read ISO record by ID
+router.get('/iso/:id', async (req, res) => {
   try {
-    const iso = await Iso.findById(isoId);
-    if (!iso) {
-      return res.status(404).json({ message: 'ISO not found' });
+    const isoId = req.params.id; // Get ISO ID from request parameters
+    const isoRecord = await isoService.getIsoById(isoId);
+    if (!isoRecord) {
+      return res.status(404).json({ message: 'ISO record not found' });
     }
-    res.status(200).json(iso);
+    res.json(isoRecord); // Send ISO record in response
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    handleError(error, res); // Handle any errors that occur
   }
-};
+});
 
-const getAllIsos = async (req, res) => {
+// Update ISO record
+router.put('/iso/:id', async (req, res) => {
   try {
-    const isos = await Iso.find();
-    res.status(200).json(isos);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const updateIso = async (req, res) => {
-  const isoId = req.params.id;
-  const updatedIso = req.body;
-  try {
-    const iso = await Iso.findByIdAndUpdate(isoId, updatedIso, { new: true });
-    if (!iso) {
-      return res.status(404).json({ message: 'ISO not found' });
+    const isoId = req.params.id; // Get ISO ID from request parameters
+    const isoData = req.body; // Extract updated ISO data from request body
+    const updatedIso = await isoService.updateIsoById(isoId, isoData);
+    if (!updatedIso) {
+      return res.status(404).json({ message: 'ISO record not found' });
     }
-    res.status(200).json(iso);
+    res.json(updatedIso); // Send updated ISO record in response
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    handleError(error, res); // Handle any errors that occur
   }
-};
+});
 
-const deleteIso = async (req, res) => {
-  const isoId = req.params.id;
+router.get('/isos', async (req, res) => {
+    try {
+      const isoRecord = await isoService.getAllIsos();
+      if (!isoRecord) {
+        return res.status(404).json({ message: 'ISO record not found' });
+      }
+      res.json(isoRecord); // Send ISO record in response
+    } catch (error) {
+      handleError(error, res); // Handle any errors that occur
+    }
+  });
+
+// Delete ISO record
+router.delete('/iso/:id', async (req, res) => {
   try {
-    await Iso.findByIdAndDelete(isoId);
-    res.status(200).json({ message: 'ISO deleted successfully' });
+    const isoId = req.params.id; // Get ISO ID from request parameters
+    await isoService.deleteIsoById(isoId);
+    res.status(204).json(); // Send no content response on successful deletion
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    handleError(error, res); // Handle any errors that occur
   }
-};
+});
 
-module.exports = {
-  createIso,
-  getIsoById,
-  getAllIsos,
-  updateIso,
-  deleteIso,
-};
+// Error handling function (example)
+function handleError(error, res) {
+  console.error(error);
+  res.status(500).json({ message: 'Internal server error' });
+}
+
+module.exports = router;
