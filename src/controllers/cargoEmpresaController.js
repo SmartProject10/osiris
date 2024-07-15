@@ -3,10 +3,10 @@ const router = express.Router();
 const cargoEmpresaService = require('../services/cargoEmpresaService'); // Assuming you have a service module
 
 // Create a new company position
-router.post('/cargo', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const cargoEmpresaData = req.body; // Extract company position data from request body
-    const createdCargoEmpresa = await cargoEmpresaService.createCargoEmpresa(cargoEmpresaData);
+    const createdCargoEmpresa = await cargoEmpresaService.createCargo(cargoEmpresaData);
     res.status(201).json(createdCargoEmpresa); // Send created company position in response
   } catch (error) {
     handleError(error, res); // Handle any errors that occur
@@ -14,9 +14,9 @@ router.post('/cargo', async (req, res) => {
 });
 
 // Read all company positions
-router.get('/cargos', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const cargoEmpresas = await cargoEmpresaService.getAllCargoEmpresas();
+    const cargoEmpresas = await cargoEmpresaService.getAllCargos();
     res.json(cargoEmpresas); // Send all company positions in response
   } catch (error) {
     handleError(error, res); // Handle any errors that occur
@@ -24,10 +24,10 @@ router.get('/cargos', async (req, res) => {
 });
 
 // Read a specific company position by ID
-router.get('/cargo/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const cargoEmpresaId = req.params.id; // Get company position ID from request parameters
-    const cargoEmpresa = await cargoEmpresaService.getCargoEmpresaById(cargoEmpresaId);
+    const cargoEmpresa = await cargoEmpresaService.getCargoById(cargoEmpresaId);
     if (!cargoEmpresa) {
       return res.status(404).json({ message: 'Company position not found' });
     }
@@ -38,11 +38,11 @@ router.get('/cargo/:id', async (req, res) => {
 });
 
 // Update a specific company position
-router.put('/cargo/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const cargoEmpresaId = req.params.id; // Get company position ID from request parameters
     const cargoEmpresaData = req.body; // Extract updated company position data from request body
-    const updatedCargoEmpresa = await cargoEmpresaService.updateCargoEmpresaById(cargoEmpresaId, cargoEmpresaData);
+    const updatedCargoEmpresa = await cargoEmpresaService.updateCargo(cargoEmpresaId, cargoEmpresaData);
     if (!updatedCargoEmpresa) {
       return res.status(404).json({ message: 'Company position not found' });
     }
@@ -53,10 +53,10 @@ router.put('/cargo/:id', async (req, res) => {
 });
 
 // Delete a specific company position
-router.delete('/cargo/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const cargoEmpresaId = req.params.id; // Get company position ID from request parameters
-    await cargoEmpresaService.deleteCargoEmpresaById(cargoEmpresaId);
+    await cargoEmpresaService.deleteCargo(cargoEmpresaId);
     res.status(204).json(); // Send no content response on successful deletion
   } catch (error) {
     handleError(error, res); // Handle any errors that occur

@@ -6,7 +6,7 @@ const createCargo = async (req, res) => {
     await newCargo.save();
     res.status(201).json({ message: 'Cargo created successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
@@ -19,7 +19,7 @@ const getCargoById = async (req, res) => {
     }
     res.status(200).json(Cargo);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
@@ -27,8 +27,9 @@ const getAllCargos = async (req, res) => {
   try {
     const Cargos = await Cargo.find();
     res.status(200).json(Cargos);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (error) { 
+    // res.status(error.statusCode || 500).json({ error: error.message });
+    console.log(error);
   }
 };
 
@@ -42,7 +43,7 @@ const updateCargo = async (req, res) => {
     }
     res.status(200).json(Cargo);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
@@ -52,7 +53,7 @@ const deleteCargo = async (req, res) => {
     await Cargo.findByIdAndDelete(CargoId);
     res.status(200).json({ message: 'Cargo deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 

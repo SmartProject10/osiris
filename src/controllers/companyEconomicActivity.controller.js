@@ -3,7 +3,7 @@ const router = express.Router();
 const companyEconomicActivityService = require('../services/companyEconomicActivity.service'); // Assuming you have a service module
 
 // Create a new company economic activity
-router.post('/companyActivity', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const companyEconomicActivityData = req.body; // Extract company economic activity data from request body
     const createdCompanyEconomicActivity = await companyEconomicActivityService.createCompanyEconomicActivity(companyEconomicActivityData);
@@ -14,9 +14,9 @@ router.post('/companyActivity', async (req, res) => {
 });
 
 // Read all company economic activities
-router.get('/companyActivities', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const companyEconomicActivities = await companyEconomicActivityService.getAllCompanyEconomicActivities();
+    const companyEconomicActivities = await companyEconomicActivityService.getAllCompanyEconomicActivitys();
     res.json(companyEconomicActivities); // Send all company economic activities in response
   } catch (error) {
     handleError(error, res); // Handle any errors that occur
@@ -24,7 +24,7 @@ router.get('/companyActivities', async (req, res) => {
 });
 
 // Read a specific company economic activity by ID
-router.get('/companyActivity/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const companyEconomicActivityId = req.params.id; // Get company economic activity ID from request parameters
     const companyEconomicActivity = await companyEconomicActivityService.getCompanyEconomicActivityById(companyEconomicActivityId);
@@ -38,7 +38,7 @@ router.get('/companyActivity/:id', async (req, res) => {
 });
 
 // Update a specific company economic activity
-router.put('/companyActivity/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const companyEconomicActivityId = req.params.id; // Get company economic activity ID from request parameters
     const companyEconomicActivityData = req.body; // Extract updated company economic activity data from request body
@@ -53,7 +53,7 @@ router.put('/companyActivity/:id', async (req, res) => {
 });
 
 // Delete a specific company economic activity
-router.delete('/companyActivity/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const companyEconomicActivityId = req.params.id; // Get company economic activity ID from request parameters
     await companyEconomicActivityService.deleteCompanyEconomicActivityById(companyEconomicActivityId);

@@ -23,11 +23,14 @@ const areaEmpresaSchema = new mongoose.Schema({
     required: true,
     maxlength: 50
   },
-  iId_Empresa: { // New field to reference Company
+  companyAreas: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
-    required: true
-  }
+    ref: 'CompanyArea'
+  }],
+  companyAreas: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'personArea'
+  }],
 });
 
-module.exports = mongoose.model('AreaEmpresa', areaEmpresaSchema);
+module.exports = mongoose.model('areaEmpresa', areaEmpresaSchema);

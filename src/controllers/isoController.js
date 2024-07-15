@@ -3,7 +3,7 @@ const router = express.Router();
 const isoService = require('../services/companyIso.service'); // Assuming you have an iso.service module
 
 // Create ISO record
-router.post('/iso', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const isoData = req.body; // Extract ISO data from request body
     const createdIso = await isoService.createIso(isoData);
@@ -14,7 +14,7 @@ router.post('/iso', async (req, res) => {
 });
 
 // Read ISO record by ID
-router.get('/iso/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const isoId = req.params.id; // Get ISO ID from request parameters
     const isoRecord = await isoService.getIsoById(isoId);
@@ -28,7 +28,7 @@ router.get('/iso/:id', async (req, res) => {
 });
 
 // Update ISO record
-router.put('/iso/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const isoId = req.params.id; // Get ISO ID from request parameters
     const isoData = req.body; // Extract updated ISO data from request body
@@ -42,7 +42,7 @@ router.put('/iso/:id', async (req, res) => {
   }
 });
 
-router.get('/isos', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
       const isoRecord = await isoService.getAllIsos();
       if (!isoRecord) {
@@ -55,7 +55,7 @@ router.get('/isos', async (req, res) => {
   });
 
 // Delete ISO record
-router.delete('/iso/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const isoId = req.params.id; // Get ISO ID from request parameters
     await isoService.deleteIsoById(isoId);

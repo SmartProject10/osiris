@@ -7,14 +7,17 @@ const companyIsoSchema = new mongoose.Schema({
       required: true,
       autoIncrement: true,
     },
-    iId_Empresa: {
-      type: Number,
-      required: true,
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
+      required: true
     },
-    iId_iso: {
-      type: Number,
-      required: true,
-      enum: [1, 2], // 1: Activo, 2: Inactivo
+  
+    // Reference to the Area document
+    iso: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'iso',
+      required: true
     },
     iId_Estado: {
       type: Number,
@@ -27,6 +30,6 @@ const companyIsoSchema = new mongoose.Schema({
     },
   });
 
-const CompanyIso = mongoose.model('CompanyIso', companyIsoSchema);
+const CompanyIso = mongoose.model('companyIso', companyIsoSchema);
 
 module.exports = CompanyIso;

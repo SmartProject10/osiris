@@ -13,18 +13,26 @@ const companySchema = new mongoose.Schema({
   vEmail: { type: String, required: true, unique: true },
   isos: [{ 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Iso'
+    ref: 'companyIso'
   }],
-  sede: {
+  companyAreas: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CompanyArea'
+  }],
+  pais: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Pais'
+  }],
+  sedes: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'sede' // Reference the company model name
   }
 });
 
-const Company = mongoose.model('Company', companySchema);
+const Company = mongoose.model('company', companySchema);
 
-companySchema.virtual('CompanyEconomicActivity', {
-  ref: 'CompanyEconomicActivity',
+companySchema.virtual('companyEconomicActivity', {
+  ref: 'companyEconomicActivity',
   localField: 'iId_Empresa',
   foreignField: 'iIdEmpresa',
   justOne: false // Allow multiple activities

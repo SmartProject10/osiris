@@ -25,10 +25,11 @@ const getCompanyById = async (req, res) => {
 
 const getAllCompanys = async (req, res) => {
   try {
-    const Companys = await Company.find();
+    const Companys = await pool.getCollection('company').find({});
     res.status(200).json(Companys);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    // res.json({ error: error.message });
+    console.log(error);
   }
 };
 

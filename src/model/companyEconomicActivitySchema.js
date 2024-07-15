@@ -10,6 +10,6 @@ const companyEconomicActivitySchema = new mongoose.Schema({
 
 companyEconomicActivitySchema.index({ iIdEmpresa: 1 }, { unique: true }); // Optional index for faster queries by company
 
-const CompanyEconomicActivity = mongoose.model('CompanyEconomicActivity', companyEconomicActivitySchema);
+const CompanyEconomicActivity = mongoose.model('companyEconomicActivity', companyEconomicActivitySchema);
 
 module.exports = CompanyEconomicActivity;

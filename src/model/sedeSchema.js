@@ -5,19 +5,11 @@ const sedeSchema = new mongoose.Schema({
     type: Number,
     required: true,
     unique: true, 
-    autoincrement: true 
+    autoincrement: true
   },
   iId_Ubigeo: {
     type: Number,
     required: false
-  },
-  iId_Pais: {
-    type: Number,
-    required: false 
-  },
-  iId_Empresa: {
-    type: Number,
-    required: false 
   },
   iId_Estado: {
     type: String,
@@ -27,10 +19,6 @@ const sedeSchema = new mongoose.Schema({
   vNombre: {
     type: String,
     required: true
-  },
-  dFechaRegistro: {
-    type: Date,
-    required: false 
   },
   vDireccion: {
     type: String,

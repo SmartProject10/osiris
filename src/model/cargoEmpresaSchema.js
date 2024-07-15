@@ -15,7 +15,7 @@ const cargoEmpresaSchema = new mongoose.Schema({
   },
   iId_AreaEmpresa: { // New field for referencing AreaEmpresa
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'AreaEmpresa',
+    ref: 'areaEmpresa',
     required: true
   },
   vCodigo: {
@@ -34,4 +34,4 @@ const cargoEmpresaSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('CargoEmpresa', cargoEmpresaSchema);
+module.exports = mongoose.model('cargoEmpresa', cargoEmpresaSchema);
