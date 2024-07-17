@@ -78,7 +78,7 @@ app.use(errorHandler);
 // Routes
 app.get('/', (req, res) => res.send('Iso Main!'));
 app.use('/auth/provider', passport.authenticate('oauth2'));
-app.use('/companies', companyController); 
+app.use('/company', companyController); 
 app.use('/cargo', cargoEmpresaController); 
 app.use('/area', areaEmpresaController); 
 app.use('/isos', isoController); 

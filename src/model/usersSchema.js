@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 
-const usersSchema = new mongoose.Schema({
-  name: String,
+const userSchema = new mongoose.Schema({
   email: String,
   password: String
 });
 
-usersSchema.pre(
+userSchema.pre(
   'save',
   async function(next) {
     const user = this;
@@ -17,11 +16,11 @@ usersSchema.pre(
   }
 );
 
-usersSchema.methods.isValidPassword = async function(password) {
+userSchema.methods.isValidPassword = async function(password) {
   const user = this;
   const compare = await bcrypt.compare(password, user.password);
 
   return compare;
 }
 
-module.exports = mongoose.model('User', usersSchema);
+module.exports = mongoose.model('User', userSchema);

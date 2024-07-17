@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const paisSchema = new mongoose.Schema({
   iId_Pais: {
-    type: Number,
+    type: String,
     required: true,
     unique: true, 
   },
@@ -28,6 +28,11 @@ const paisSchema = new mongoose.Schema({
     required: true,
     enum: ['Activo', 'Inactivo'], // Enum based on table note
   },
+  vBanderaUrl:{
+    type: String,
+    required: false,
+    maxlength: 50, // Varchar length from table definition
+  }
 });
 
 module.exports = mongoose.model('Pais', paisSchema);

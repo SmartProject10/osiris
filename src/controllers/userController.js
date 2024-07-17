@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
 // Get all users route (be cautious with large datasets)
 router.get('/', async (req, res) => {
   try {
-    await userService.getAllUsers(req, res);
+    await userService.getAllUser(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

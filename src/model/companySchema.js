@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 
 const companySchema = new mongoose.Schema({
-  iId_Empresa: { type: Number, required: true, unique: true },
+ _id: { type: Number, required: true, unique: true },
   iId_Estado: { type: Number, required: true },
-  iId_TipDocumento: { type: Number, required: true },
+  iId_TipDocumento: { type: Number, required: false },
   vNumDocumento: { type: String, required: true, unique: true },
   vNombre: { type: String, required: true },
   vContacto: { type: String },
@@ -13,19 +13,23 @@ const companySchema = new mongoose.Schema({
   vEmail: { type: String, required: true, unique: true },
   isos: [{ 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'companyIso'
+    ref: 'companyIso',
+    required: false
   }],
   companyAreas: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'CompanyArea'
+    ref: 'CompanyArea',
+    required: false
   }],
   pais: [{ 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Pais'
+    ref: 'Pais',
+    required: true
   }],
   sedes: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'sede' // Reference the company model name
+    ref: 'sede',
+    required: false
   }
 });
 
