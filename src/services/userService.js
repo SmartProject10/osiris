@@ -1,8 +1,9 @@
-const User = require('../model/usersSchema');
+const User = require('../model/userSchema');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
+require('dotenv').config();
 
 const createUser = async (req, res) => {
-
   try {
     const newUser = new User(req.body);
     await newUser.save({ bufferTimeoutMS: 20000 });
@@ -14,54 +15,99 @@ const createUser = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
+  const client = await MongoClient.connect(
+    process.env.URI
+  );
   try {
+    await client.connect();
     const userId =req.params.id;
-    const user = await User.findById({_id: userId}).exec();
-    if (!user) {
+    const filter = {_id: userId};
+     const coll = client.db('isoDb').collection('user');
+     const cursor = coll.find(filter);
+     const data = await cursor.toArray();
+    if (!data) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json(user);
+    res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }finally{
+    await client.close();
   }
- 
 };
 
 const getAllUser = async (req, res) => {
-  console.log(req)
-  // try {
-  //   const users = await User.find({}).exec();
-  //   res.status(200).json(users);
-  // } catch (error) {
-  //   res.status(500).json({ error: error.message });
-  // }
-  const nombre = req.query.nombre;
-        // var condicion = nombre ? { nombre: { $regex: new RegExp(nombre), $options: "i" } } : {};
-
+  const client = await MongoClient.connect(
+    process.env.URI
+  );
         try {
-            const data = await User.find({});
-            return res.json(data);
+          await client.connect();
+          const filter = {};
+          const coll = client.db('isoDb').collection('user');
+          const cursor = coll.find(filter);
+          const data = await cursor.toArray();
+          // console.log(result);
+          return res.json(data);
         } catch (err) {
             res.status(500).send({
                 message:
                     err.message || "Error al realizar la búsqueda"
             });
+        }finally{
+          await client.close();
         }
 };
 
+// const updateUser = async (req, res) => {
+//   const client = await MongoClient.connect(
+//     process.env.URI
+//   );
+//   const UserId = req.params.id;
+//   const updatedUser = req.body;
+//   try {
+//     await client.connect();
+//     // const filter = {};
+//     const coll = client.db('isoDb').collection('user');
+//     const cursor = coll.findByIdAndUpdate(UserId, updatedUser, { new: true });
+//     const data = await cursor.toArray();
+//     if (!data) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+//     res.status(200).json(data);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 const updateUser = async (req, res) => {
-  const UserId = req.params.id;
+  const { id } = req.params.id; 
   const updatedUser = req.body;
+  let client; 
   try {
-    const User = await User.findByIdAndUpdate(UserId, updatedUser, { new: true });
-    if (!User) {
+    const uri = process.env.URI;
+    if (!uri) {
+      return res.status(500).json({ error: 'Missing environment variable: URI' });
+    }
+    client = await MongoClient.connect(uri);
+    const db = client.db('isoDb'); // Use a variable for clarity
+    const collection = db.collection('user');
+    const filter = { _id: id }; 
+    const updateResult = await collection.findOneAndUpdate(
+      filter,
+      { $set: updatedUser },
+      { returnDocument: 'after' } // Return updated document
+    );
+    if (!updateResult.value) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json(User);
+    res.status(200).json(updateResult.value); // Return the updated user
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error); // Log the error for debugging
+    res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    await client?.close(); // Close the connection even if errors occur
   }
 };
+
 
 const deleteUser = async (req, res) => {
   const UserId = req.params.id;
@@ -72,6 +118,7 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 module.exports = {
   createUser,
