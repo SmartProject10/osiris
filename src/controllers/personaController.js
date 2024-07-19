@@ -1,47 +1,47 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../services/userService'); 
+const personaService = require('../services/personaService'); 
 
-// Create user route
+// Create Persona route
 router.post('/', async (req, res) => {
   try {
-    await userService.createUser(req, res);
+    await personaService.createPersona(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Get user by ID route
+// Get Persona by ID route
 router.get('/:id', async (req, res) => {
   try {
-    await userService.getUserById(req, res);
+    await personaService.getPersonaById(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Get all users route (be cautious with large datasets)
+// Get all Personas route (be cautious with large datasets)
 router.get('/', async (req, res) => {
   try {
-    await userService.getAllUser(req, res);
+    await personaService.getAllPersonas(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Update user route
+// Update Persona route
 router.put('/:id', async (req, res) => {
   try {
-    await userService.updateUser(req, res);
+    await personaService.updatePersona(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Delete user route
+// Delete Persona route
 router.delete('/:id', async (req, res) => {
   try {
-    await userService.deleteUser(req, res);
+    await personaService.deletePersona(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

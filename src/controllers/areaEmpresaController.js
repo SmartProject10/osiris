@@ -1,47 +1,47 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../services/userService'); 
+const areaEmpresaService = require('../services/areaEmpresaService'); // Assuming './areaEmpresa.service' is the path to your areaEmpresa service file
 
-// Create user route
+// Create areaEmpresa route
 router.post('/', async (req, res) => {
   try {
-    await userService.createUser(req, res);
+    await areaEmpresaService.createAreaEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Get user by ID route
+// Get areaEmpresa by ID route
 router.get('/:id', async (req, res) => {
   try {
-    await userService.getUserById(req, res);
+    await areaEmpresaService.getAreaEmpresaById(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Get all users route (be cautious with large datasets)
+// Get all areaEmpresas route (be cautious with large datasets)
 router.get('/', async (req, res) => {
   try {
-    await userService.getAllUser(req, res);
+    await areaEmpresaService.getAllAreas(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Update user route
+// Update areaEmpresa route
 router.put('/:id', async (req, res) => {
   try {
-    await userService.updateUser(req, res);
+    await areaEmpresaService.updateAreaEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Delete user route
+// Delete areaEmpresa route
 router.delete('/:id', async (req, res) => {
   try {
-    await userService.deleteUser(req, res);
+    await areaEmpresaService.deleteAreaEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

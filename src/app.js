@@ -2,62 +2,87 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/userRoutes');
+
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
-
+const companyController = require('./controllers/CompanyController'); 
+const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
+const areaEmpresaController = require('./controllers/areaEmpresaController'); 
+const isoController = require('./controllers/isoController'); 
+const companyEconomicActivityController = require('./controllers/companyEconomicActivity.controller'); 
+const userController = require('./controllers/userController');
+const sedeController = require('./controllers/sedeController');
+const paisController = require('./controllers/paisController');
+const personaController = require('./controllers/personaController');
 const port = process.env.PORT || 3000;
-// const pool = require('./config/db');
+const cors  = require('cors');
 
-// pool.query('SELECT NOW()', (err, res) => {
-//     if (err) {
-//         console.error('Error connecting to the database', err.stack);
-//     } else {
-//         console.log('Connected to the database:', res.rows[0]);
-//     }
-// });
-
-// Create Express app
 const app = express();
-
-// Middleware
+app.use(express.json()); 
 app.use(bodyParser.json());
 app.use(passport.initialize());
+app.use(cors())
 
-// OAuth2 Strategy
-passport.use(new OAuth2Strategy({
+passport.use(
+  'login',
+  new OAuth2Strategy({
     authorizationURL: process.env.AUTHORIZATION_URL,
     tokenURL: process.env.TOKEN_URL,
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
 },
+
 function(accessToken, refreshToken, profile, cb) {
-    // Here you would typically fetch user information from the database
     return cb(null, profile);
 }));
 
-// Routes
-app.use('/auth/provider', passport.authenticate('oauth2'));
-
 app.get('/auth/callback', 
-    passport.authenticate('oauth2', { failureRedirect: '/' }),
-    function(req, res) {
-        // Successful authentication
-        res.redirect('/');
-    });
+  passport.authenticate('oauth2', { failureRedirect: '/' }),
+  function(req, res) {
+      res.redirect('/');
+  }
 
-app.use('/users', userRoutes);
+);
 
-// Default route
-app.get('/', (req, res) => res.send('Pipeline Test!'));
-
-// Error handling middleware
 app.use(errorHandler);
 
+// Routes
 
-app.listen(port, '0.0.0.0', () => {
-    console.log(`App running on http://0.0.0.0:${port}`);
-})
+app.use('/auth/provider', passport.authenticate('oauth2'));
+app.use('/company', companyController); 
+app.use('/cargo', cargoEmpresaController); 
+app.use('/area', areaEmpresaController); 
+app.use('/isos', isoController); 
+app.use('/companyEconomicActivities', companyEconomicActivityController); 
+app.use('/user', userController);
+app.use('/sede', sedeController);
+app.use('/persona', personaController);
+app.use('/pais', paisController);
+
+app.get('/', (req, res) => res.send('Iso Main!'));
+app.get('/company', companyController); 
+app.get('/cargo', cargoEmpresaController); 
+app.get('/area', areaEmpresaController); 
+app.get('/isos', isoController); 
+app.get('/companyEconomicActivities', companyEconomicActivityController); 
+app.get('/user', userController);
+app.get('/sede', sedeController);
+app.get('/persona', personaController);
+app.get('/pais', paisController);
+
+// app.use('/users', userController, passport.authenticate('oauth2'));
+// // app.use('/company', companyRoutes, passport.authenticate('oauth2'))
+// app.use('/company', companyRoutes)
+
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log errors
+  res.status(err.status || 500).json({ message: 'Internal Server Error' });
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
 
 module.exports = app;
+
