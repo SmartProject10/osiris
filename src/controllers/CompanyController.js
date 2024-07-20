@@ -5,68 +5,48 @@ const companyService = require('../services/companyService'); // Assuming you ha
 // Create a new company
 router.post('/', async (req, res) => {
   try {
-    const companyData = req.body; // Extract company data from request body
-    const createdCompany = await companyService.createCompany(companyData);
-    res.status(201).json(createdCompany); // Send created company in response
+    await companyService.createCompany(req, res);
   } catch (error) {
-    handleError(error, res); // Handle any errors that occur
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
 // Read all companies
 router.get('/', async (req, res) => {
   try {
-    const companies = await companyService.getAllCompanys();
-    res.json(companies); // Send all companies in response
+    await companyService.getAllCompanys(req, res);
   } catch (error) {
-    handleError(error, res); // Handle any errors that occur
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
 // Read a specific company by ID
 router.get('/:id', async (req, res) => {
   try {
-    const companyId = req.params.id; // Get company ID from request parameters
-    const company = await companyService.getCompanyById(companyId);
-    if (!company) {
-      return res.status(404).json({ message: 'Company not found' });
-    }
-    res.json(company); // Send company in response
+    await companyService.getCompanyById(req, res);
   } catch (error) {
-    handleError(error, res); // Handle any errors that occur
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
 // Update a specific company
 router.put('/:id', async (req, res) => {
   try {
-    const companyId = req.params.id; // Get company ID from request parameters
-    const companyData = req.body; // Extract updated company data from request body
-    const updatedCompany = await companyService.updateCompanyById(companyId, companyData);
-    if (!updatedCompany) {
-      return res.status(404).json({ message: 'Company not found' });
-    }
-    res.json(updatedCompany); // Send updated company in response
+    await companyService.updateCompany(req, res);
   } catch (error) {
-    handleError(error, res); // Handle any errors that occur
+    res.status(error.statusCode || 500).json({ error  : error.message });
   }
 });
 
 // Delete a specific company
 router.delete('/:id', async (req, res) => {
   try {
-    const companyId = req.params.id; // Get company ID from request parameters
-    await companyService.deleteCompanyById(companyId);
-    res.status(204).json(); // Send no content response on successful deletion
+    await companyService.deleteCompanyById(req, res);
   } catch (error) {
-    handleError(error, res); // Handle any errors that occur
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
+
 });
 
-// Error handling function (example)
-function handleError(error, res) {
-  console.error(error);
-  res.status(500).json({ message: 'Internal server error' });
-}
 
 module.exports = router;

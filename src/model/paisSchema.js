@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const paisSchema = new mongoose.Schema({
-  iId_Pais: {
-    type: String,
-    required: true,
-    unique: true, 
-  },
   vCodigo: {
     type: String,
     required: true,
@@ -35,4 +30,4 @@ const paisSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Pais', paisSchema);
+module.exports = mongoose.model('pais', paisSchema);

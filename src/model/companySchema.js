@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const companySchema = new mongoose.Schema({
-  iId_Estado: { type: Number, required: true },
+  iId_Estado: { type: Number, required: false },
   iId_TipDocumento: { type: Number, required: false },
   vNumDocumento: { type: String, required: true, unique: true },
   vNombre: { type: String, required: true },
@@ -10,35 +10,40 @@ const companySchema = new mongoose.Schema({
   vDireccion: { type: String },
   dFechaRegistro: { type: Date, default: Date.now },
   vEmail: { type: String, required: true, unique: true },
-  isos: [{ 
+  iso: [{ 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companyIso',
     required: false
   }],
-  companyAreas: [{
+  companyArea: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'CompanyArea',
+    ref: 'companyArea',
     required: false
   }],
   pais: [{ 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Pais',
+    ref: 'pais',
     required: true
   }],
-  sedes: {
+  sede:  [{ 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'sede',
     required: false
-  }
+  }],
+  companyEconomicActivity:  [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'companyEconomicActivity',
+    required: false
+  }]
+
 });
 
-const Company = mongoose.model('company', companySchema);
 
-companySchema.virtual('companyEconomicActivity', {
-  ref: 'companyEconomicActivity',
-  localField: 'iId_Empresa',
-  foreignField: 'iIdEmpresa',
-  justOne: false // Allow multiple activities
-});
+// companySchema.virtual('companyEconomicActivity', {
+//   ref: 'companyEconomicActivity',
+//   localField: '_id',
+//   foreignField: '_id',
+//   justOne: false // Allow multiple activities
+// });
 
-module.exports = [Company, companySchema];
+module.exports = mongoose.model('company', companySchema);

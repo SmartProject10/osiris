@@ -1,56 +1,107 @@
 const Pais = require('../model/paisSchema');
+const { MongoClient, ObjectId } = require('mongodb');
+require('dotenv').config();
 
 const createPais = async (req, res) => {
-  const newPais = new Pais(req.body);
-  try {
-    await newPais.save();
-    res.status(201).json({ message: 'Pais created successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  const client = await MongoClient.connect(
+    process.env.URI
+  );
+    try {
+      await client.connect();
+      const newPais = new Pais(req.body);
+      const coll = client.db('isoDb').collection('pais');
+      const result = await coll.insertOne(newPais);
+      console.log(`New user inserted with ID: ${result.insertedId}`);
+      res.status(201).json({ message: 'Country created successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }finally{
+      await client.close();
+    }
+
 };
 
 const getPaisById = async (req, res) => {
-  const PaisId = req.params.id;
+  const client = await MongoClient.connect(process.env.URI);
   try {
-    const Pais = await Pais.findById(PaisId);
-    if (!Pais) {
+    const paisId = req.params.id;
+    const db = client.db('isoDb');
+    const collection = db.collection('pais');
+    const filter = { _id: new ObjectId(paisId) }; 
+    const pais = await collection.findOne(filter);
+
+    if (!pais) {
       return res.status(404).json({ message: 'Pais not found' });
     }
-    res.status(200).json(Pais);
+
+    res.status(200).json(pais);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    await client?.close();
   }
 };
 
 const getAllPais = async (req, res) => {
-  try {
-    const Paiss = await pool.getCollection('Pais').find({});
-    res.status(200).json(Paiss);
-  } catch (error) {
-    // res.json({ error: error.message });
-    console.log(error);
-  }
+  const client = await MongoClient.connect(
+    process.env.URI
+  );
+        try {
+          await client.connect();
+          const filter = {};
+          const coll = client.db('isoDb').collection('pais');
+          const cursor = coll.find(filter);
+          const data = await cursor.toArray();
+          // console.log(result);
+          return res.json(data);
+        } catch (err) {
+            res.status(500).send({
+                message:
+                    err.message || "Error al realizar la búsqueda"
+            });
+        }finally{
+          await client.close();
+        }
 };
 
 const updatePais = async (req, res) => {
-  const PaisId = req.params.id;
-  const updatedPais = req.body;
-  try {
-    const Pais = await Pais.findByIdAndUpdate(PaisId, updatedPais, { new: true });
-    if (!Pais) {
-      return res.status(404).json({ message: 'Pais not found' });
-    }
-    res.status(200).json(Pais);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  const client = await MongoClient.connect(
+    process.env.URI
+  );
+try {
+await client.connect();
+const db = client.db('isoDb'); 
+const collection = db.collection('pais');
+const paisId = req.params.id; 
+const updatedPais = req.body;
+const filter = { _id: new ObjectId(paisId) }; 
+console.log(paisId);
+await collection.findOneAndUpdate(
+  filter,
+  { $set: updatedPais },
+  { returnDocument: 'after' } 
+);
+res.status(200).json({ message: 'Pais updated successfully' });
+} catch (error) {
+console.error(error);
+res.status(500).json({ error: 'Internal server error' });
+} finally {
+await client?.close(); 
+}
 };
 
 const deletePais = async (req, res) => {
-  const PaisId = req.params.id;
+  const client = await MongoClient.connect(
+    process.env.URI
+  );
   try {
-    await Pais.findByIdAndDelete(PaisId);
+    await client.connect();
+    const db = client.db('isoDb'); 
+    const collection = db.collection('user');
+    const paisId = req.params.id; 
+    const filter = { _id: new ObjectId(paisId) }; 
+    await collection.findOneAndDelete(filter);
     res.status(200).json({ message: 'Pais deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -4,7 +4,7 @@ const companyAreaSchema = new mongoose.Schema({
   // Reference to the Company document
   company: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
+    ref: 'company',
     required: true
   },
 
@@ -16,4 +16,4 @@ const companyAreaSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('CompanyArea', companyAreaSchema);
+module.exports = mongoose.model('companyArea', companyAreaSchema);
