@@ -5,10 +5,11 @@ const areaEmpresaService = require('../services/areaEmpresaService'); // Assumin
 // Create areaEmpresa route
 router.post('/', async (req, res) => {
   try {
-    await areaEmpresaService.createAreaEmpresa(req, res);
+    await areaEmpresaService.createArea(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
+
 });
 
 // Get areaEmpresa by ID route

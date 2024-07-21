@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
-
+const auth = passport.authenticate('jwt', { session: false });
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
 const companyController = require('./controllers/companyController'); 
@@ -70,10 +70,16 @@ app.get('/user', userController);
 app.get('/sede', sedeController);
 app.get('/persona', personaController);
 app.get('/pais', paisController);
-
-// app.use('/users', userController, passport.authenticate('oauth2'));
-// // app.use('/company', companyRoutes, passport.authenticate('oauth2'))
-// app.use('/company', companyRoutes)
+// router.post(
+//   '/login',
+//   passport.authenticate('login', { session: false }),
+//   async (req, res, next) => {
+//     res.json({
+//       message: 'Login successful',
+//       user: req.user
+//     });
+//   }
+// );
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log errors

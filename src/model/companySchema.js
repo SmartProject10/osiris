@@ -39,11 +39,4 @@ const companySchema = new mongoose.Schema({
 });
 
 
-// companySchema.virtual('companyEconomicActivity', {
-//   ref: 'companyEconomicActivity',
-//   localField: '_id',
-//   foreignField: '_id',
-//   justOne: false // Allow multiple activities
-// });
-
 module.exports = mongoose.model('company', companySchema);
