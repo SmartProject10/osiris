@@ -16,7 +16,7 @@ const cargoEmpresaSchema = new mongoose.Schema({
   iId_AreaEmpresa: { // New field for referencing AreaEmpresa
     type: mongoose.Schema.Types.ObjectId,
     ref: 'areaEmpresa',
-    required: true
+    required: false
   },
   vCodigo: {
     type: String,

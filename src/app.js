@@ -2,10 +2,10 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
-
+const auth = passport.authenticate('jwt', { session: false });
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
-const companyController = require('./controllers/CompanyController'); 
+const companyController = require('./controllers/companyController'); 
 const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
 const areaEmpresaController = require('./controllers/areaEmpresaController'); 
 const isoController = require('./controllers/isoController'); 
@@ -53,8 +53,8 @@ app.use('/auth/provider', passport.authenticate('oauth2'));
 app.use('/company', companyController); 
 app.use('/cargo', cargoEmpresaController); 
 app.use('/area', areaEmpresaController); 
-app.use('/isos', isoController); 
-app.use('/companyEconomicActivities', companyEconomicActivityController); 
+app.use('/iso', isoController); 
+app.use('/companyEconomicActivity', companyEconomicActivityController); 
 app.use('/user', userController);
 app.use('/sede', sedeController);
 app.use('/persona', personaController);
@@ -64,16 +64,22 @@ app.get('/', (req, res) => res.send('Iso Main!'));
 app.get('/company', companyController); 
 app.get('/cargo', cargoEmpresaController); 
 app.get('/area', areaEmpresaController); 
-app.get('/isos', isoController); 
-app.get('/companyEconomicActivities', companyEconomicActivityController); 
+app.get('/iso', isoController); 
+app.get('/companyEconomicActivity', companyEconomicActivityController); 
 app.get('/user', userController);
 app.get('/sede', sedeController);
 app.get('/persona', personaController);
 app.get('/pais', paisController);
-
-// app.use('/users', userController, passport.authenticate('oauth2'));
-// // app.use('/company', companyRoutes, passport.authenticate('oauth2'))
-// app.use('/company', companyRoutes)
+// router.post(
+//   '/login',
+//   passport.authenticate('login', { session: false }),
+//   async (req, res, next) => {
+//     res.json({
+//       message: 'Login successful',
+//       user: req.user
+//     });
+//   }
+// );
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log errors

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const personAreaSchema = new mongoose.Schema({
   // Reference to the Company document
-  persons: {
+  personas: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Persona',
     required: true

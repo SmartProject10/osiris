@@ -23,4 +23,13 @@ userSchema.methods.isValidPassword = async function(password) {
   return compare;
 }
 
-module.exports = mongoose.model('User', userSchema);
+userSchema.methods.isEmailValid = async function(email) {
+  const user = this;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isValidEmail = emailRegex.test(email);
+
+  return isValidEmail;
+};
+
+
+module.exports = mongoose.model('user', userSchema);

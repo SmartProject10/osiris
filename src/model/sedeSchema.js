@@ -1,14 +1,8 @@
 const mongoose = require('mongoose');
 
 const sedeSchema = new mongoose.Schema({
-  iId_Sede: {
-    type: Number,
-    required: true,
-    unique: true, 
-    autoincrement: true
-  },
   iId_Ubigeo: {
-    type: Number,
+    type: String,
     required: false
   },
   iId_Estado: {

@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 
 const areaEmpresaSchema = new mongoose.Schema({
-  iId_AreaEmpresa: {
-    type: Number,
-    required: true,
-    unique: true,
-    autoIncrement: true
-  },
   iId_Estado: {
     type: Number,
     required: true,
@@ -23,14 +17,11 @@ const areaEmpresaSchema = new mongoose.Schema({
     required: true,
     maxlength: 50
   },
-  companyAreas: [{
+  companyArea: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'CompanyArea'
-  }],
-  companyAreas: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'personArea'
-  }],
+    ref: 'companyArea',
+    required:false
+  }]
 });
 
 module.exports = mongoose.model('areaEmpresa', areaEmpresaSchema);

@@ -1,115 +1,123 @@
 const mongoose = require('mongoose');
 
 const personaSchema = new mongoose.Schema({
-  iId_Persona: {
-    type: Number,
-    required: true,
-    unique: true, // Primary key based on table definition
-  },
   iId_TipDocumento: {
     type: Number,
-    required: true,
+    required: false,
     enum: [1, 2, 3, 4, 5], 
+  },
+  vEmail: {
+    type: String,
+    required: true,
   },
   iId_GeneroPersona: {
     type: Number,
-    required: true,
+    required: false,
   },
   iId_NivelEstudio: {
     type: Number,
-    required: true,
+    required: false,
   },
   iId_Ubigeo: {
     type: Number,
-    required: true,
+    required: false,
   },
   iId_Estado: {
     type: Number,
-    required: true,
+    required: false,
     enum: [1, 2, 3, 4], // Assuming IDs map to valid states
   },
   iId_EstadoCivil: {
     type: Number,
-    required: true,
+    required: false,
     enum: [1, 2, 3, 4, 5], // Assuming IDs map to civil states
   },
   iId_TipSegMedico: {
     type: Number,
+    required: false,
   },
   iId_SistPension: {
     type: Number,
+    required: false,
   },
   vActaNacimiento: {
     type: String,
+    required: false,
   },
   vComprobanteDomicilio: {
     type: String,
+    required: false,
   },
   vCodigoSegMedico: {
     type: String,
     maxlength: 50,
+    required: false,
   },
   vNombre: {
     type: String,
-    required: true,
+    required: false,
     maxlength: 50,
   },
   vApePaterno: {
     type: String,
-    required: true,
+    required: false,
     maxlength: 50,
   },
   vApeMaterno: {
     type: String,
     maxlength: 50,
+    required: false,
   },
   vNumDocumento: {
     type: String,
-    required: true,
+    required: false,
     maxlength: 20,
   },
   vNacionalidad: {
     type: String,
-    required: true,
+    required: false,
   },
   vNumSeguroSocial: {
     type: String,
     maxlength: 20,
+    required: false,
   },
   vCelular: {
     type: String,
     maxlength: 15,
+    required: false,
   },
   vDireccion: {
     type: String,
-    required: true,
+    required: false,
   },
   dFechaNacimiento: {
     type: Date,
-    required: true,
+    required: false,
   },
   dFechaIngreso: {
     type: Date,
-    required: true,
+    required: false,
   },
   vbFacial: {
     type: Buffer,
+    required: false,
   },
   vbFirmaDigital: {
     type: Buffer,
+    required: false,
   },
-  dFechaRegistro: {
-    type: Date,
-  },
+  dFechaRegistro: { type: Date, default: Date.now, required: true },
   companyAreas: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'personArea'
   }],
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', 
+    ref: 'user', 
+    required:true
   },
   
 });
 
-module.exports = mongoose.model('Persona', personaSchema);
+module.exports = mongoose.model('persona', personaSchema);
