@@ -20,6 +20,16 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.post('/getEmail', async (req, res) => {
+  try {
+    await userService.getEmail(req, res);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+});
+
+
+
 // Get all users route (be cautious with large datasets)
 router.get('/', async (req, res) => {
   try {
