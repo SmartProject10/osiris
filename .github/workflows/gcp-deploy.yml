@@ -1,0 +1,25 @@
+name: Deploy to GCP
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: projects/<TUsunlit-form-430600-n9>/locations/global/workloadIdentityPools/<TU_POOL_ID>
+          service_account: <TU_CUENTA_DE_SERVICIO>@<sunlit-form-430600-n9>.iam.gserviceaccount.com
+      - name: Build the Docker image
+        run: docker build -t gcr.io/sunlit-form-430600-n9/$TAG:$COMMIT_SHA .
+        env:
+          PROJECT_ID: ${{ secrets.sunlit-form-430600-n9 }}
+          COMMIT_SHA: ${{ github.sha }}
+      - name: Push the image to Google Container Registry
+        run: docker push gcr.io/sunlit-form-430600-n9/$TAG:$COMMIT_SHA
+      - name: Deploy to Cloud Run
+        run: gcloud run deploy --image gcr.io/sunlit-form-430600-n9/$TAG:$COMMIT_SHA --service my-service
