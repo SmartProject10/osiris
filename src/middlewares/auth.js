@@ -1,8 +1,8 @@
 // // // src/middlewares/auth.js
-// // module.exports = (req, res, next) => {
-// //     // Authentication logic
-// //     next();
-// //   };
+// module.exports = (req, res, next) => {
+//     // Authentication logic
+//     next();
+//   };
 // const express = require('express');
 // const passport = require('passport');
 // const mongoose = require('mongoose');

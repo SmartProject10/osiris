@@ -16,3 +16,5 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push public.ecr.aws/t3k0z2y6/smartproject10-back-node:latest
+
+
