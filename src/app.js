@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
-const auth = passport.authenticate('jwt', { session: false });
+// const auth = passport.authenticate('jwt', { session: false });
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
 const companyController = require('./controllers/companyController'); 
@@ -14,6 +14,7 @@ const userController = require('./controllers/userController');
 const sedeController = require('./controllers/sedeController');
 const paisController = require('./controllers/paisController');
 const personaController = require('./controllers/personaController');
+const authController = require('./controllers/authController')
 const port = process.env.PORT || 3000;
 const cors  = require('cors');
 
@@ -24,7 +25,7 @@ app.use(passport.initialize());
 app.use(cors())
 
 passport.use(
-  'login',
+  'oauth2',
   new OAuth2Strategy({
     authorizationURL: process.env.AUTHORIZATION_URL,
     tokenURL: process.env.TOKEN_URL,
@@ -40,7 +41,7 @@ function(accessToken, refreshToken, profile, cb) {
 app.get('/auth/callback', 
   passport.authenticate('oauth2', { failureRedirect: '/' }),
   function(req, res) {
-      res.redirect('/');
+      res.redirect('/dashboard');
   }
 
 );
@@ -50,6 +51,7 @@ app.use(errorHandler);
 // Routes
 
 app.use('/auth/provider', passport.authenticate('oauth2'));
+app.use('/auth', authController);
 app.use('/company', companyController); 
 app.use('/cargo', cargoEmpresaController); 
 app.use('/area', areaEmpresaController); 
@@ -70,16 +72,7 @@ app.get('/user', userController);
 app.get('/sede', sedeController);
 app.get('/persona', personaController);
 app.get('/pais', paisController);
-// router.post(
-//   '/login',
-//   passport.authenticate('login', { session: false }),
-//   async (req, res, next) => {
-//     res.json({
-//       message: 'Login successful',
-//       user: req.user
-//     });
-//   }
-// );
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log errors

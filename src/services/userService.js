@@ -44,6 +44,28 @@ const getUserById = async (req, res) => {
   }
 };
 
+const getEmail = async (req, res) => {
+  const client = await MongoClient.connect(process.env.URI);
+  try {
+          const correo = req.body.email;
+          const filter = {email: correo};
+          const coll = client.db('isoDb').collection('user');
+          const user = coll.find(filter);
+          const data = await user.toArray();
+          // console.log(result);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    await client?.close();
+  }
+};
+
 const getAllUser = async (req, res) => {
   const client = await MongoClient.connect(
     process.env.URI
@@ -111,9 +133,12 @@ const deleteUser = async (req, res) => {
 };
 
 
+
+
 module.exports = {
   createUser,
   getUserById,
+  getEmail,
   getAllUser,
   updateUser,
   deleteUser,

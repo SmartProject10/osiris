@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/sunlit-form-430600-n9/osiris:$COMMIT_SHA', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/sunlit-form-430600-n9/osiris:$COMMIT_SHA']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', '--image', 'gcr.io/sunlit-form-430600-n9/osiris:$COMMIT_SHA', '--service', 'my-service']
+
+images: ['gcr.io/sunlit-form-430600-n9/osiris:$COMMIT_SHA']
+
