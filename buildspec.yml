@@ -1,32 +1,20 @@
-# version: 0.2
+version: 0.2
 
-# phases:
-#   pre_build:
-#     commands:
-#       - echo Logging in to Amazon ECR Public...
-#       - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-#   build:
-#     commands:
-#       - echo Build started on `date`
-#       - echo Building the Docker image...
-#       - docker build -t smartproject10-back-node .
-#       - docker tag smartproject10-back-node:latest public.ecr.aws/t3k0z2y6/smartproject10-back-node:latest
-#   post_build:
-#     commands:
-#       - echo Build completed on `date`
-#       - echo Pushing the Docker image...
-#       - docker push public.ecr.aws/t3k0z2y6/smartproject10-back-node:latest
 phases:
   pre_build:
-    # No authentication needed for GCR
+    commands:
+      - echo Logging in to Amazon ECR Public...
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t smartproject10-back-node .
-      - docker tag smartproject10-back-node:latest gcr.io/[PROJECT_ID]/smartproject10-back-node:latest
+      - docker tag smartproject10-back-node:latest public.ecr.aws/t3k0z2y6/smartproject10-back-node:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - gcloud docker --quiet --project [PROJECT_ID] push gcr.io/[PROJECT_ID]/smartproject10-back-node:latest
+      - docker push public.ecr.aws/t3k0z2y6/smartproject10-back-node:latest
+
+
