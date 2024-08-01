@@ -1,17 +1,6 @@
-runtime: nodejs20
+runtime: nodejs16
+api_version: 1.0
 
-env: standard
-
-# Especifica el directorio donde se encuentra tu código
-runtime_config:
-  javascript_runtime: nodejs
-
-# Configura el puerto de escucha de tu servidor Node.js
 handlers:
-- url: /.*
+- url: /
   script: auto
-
-# Configuraciones adicionales (opcional)
-# ...
-
-
