@@ -17,6 +17,8 @@ jobs:
       - name: Build the Docker image
         run: docker build -t gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA .
         env:
+          - name: 'GITHUB_TOKEN'
+            value: '$(secret-manager/versions/projects/${{ secrets.GCP_PROJECT_ID }}/secrets/${{ secrets.GITHUBTOKEN }}/versions/latest)'
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           COMMIT_SHA: ${{ github.sha }}
       - name: Push the image to Google Container Registry
