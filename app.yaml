@@ -1,32 +1,39 @@
-# runtime: nodejs20
-# api_version: 1.0
+runtime: nodejs20
 
-# handlers:
-# - url: /
-#   script: auto
-name: Deploy to GCP
+env: standard
 
-on:
-  push:
-    branches: [main]
+# Variables de entorno
+env_variables:
+  PORT: 8080
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: projects/<TU_PROYECTO_ID>/locations/global/workloadIdentityPools/<TU_POOL_ID>
-          service_account: <TU_CUENTA_DE_SERVICIO>@<TU_PROYECTO_ID>.iam.gserviceaccount.com
-      - name: Build the Docker image
-        run: docker build -t gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA .
-        env:
-          GITHUB_TOKEN: '$(secret-manager/versions/projects/${{ secrets.GCP_PROJECT_ID }}/secrets/${{ secrets.GITHUBTOKEN }}/versions/latest)'
-          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          COMMIT_SHA: ${{ github.sha }}
-      - name: Push the image to Google Container Registry
-        run: docker push gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA
-      - name: Deploy to Cloud Run
-        run: gcloud run deploy --image gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA --service my-service
+# Handlers
+handlers:
+- url: /.*
+  script: auto
+
+# name: Deploy to GCP
+
+# on:
+#   push:
+#     branches: [main]
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Authenticate to Google Cloud
+#         uses: google-github-actions/auth@v2
+#         with:
+#           workload_identity_provider: projects/<TU_PROYECTO_ID>/locations/global/workloadIdentityPools/<TU_POOL_ID>
+#           service_account: <TU_CUENTA_DE_SERVICIO>@<TU_PROYECTO_ID>.iam.gserviceaccount.com
+#       - name: Build the Docker image
+#         run: docker build -t gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA .
+#         env:
+#           GITHUB_TOKEN: '$(secret-manager/versions/projects/${{ secrets.GCP_PROJECT_ID }}/secrets/${{ secrets.GITHUBTOKEN }}/versions/latest)'
+#           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+#           COMMIT_SHA: ${{ github.sha }}
+#       - name: Push the image to Google Container Registry
+#         run: docker push gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA
+#       - name: Deploy to Cloud Run
+#         run: gcloud run deploy --image gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA --service my-service
