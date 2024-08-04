@@ -12,11 +12,12 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: projects/<TU_PROYECTO_ID>/locations/global/workloadIdentityPools/<TU_POOL_ID>
-          service_account: <TU_CUENTA_DE_SERVICIO>@<TU_PROYECTO_ID>.iam.gserviceaccount.com
+          workload_identity_provider: projects/<${{ secrets.GCP_PROJECT_ID }}>/locations/global/workloadIdentityPools/<TU_POOL_ID>
+          service_account: isosmartosh@sunlit-form-430600-n9.iam.gserviceaccount.com
       - name: Build the Docker image
         run: docker build -t gcr.io/$PROJECT_ID/$TAG:$COMMIT_SHA .
         env:
+          GITHUB_TOKEN: $(secret-manager/versions/projects/${{ secrets.GCP_PROJECT_ID }}/secrets/${{ secrets.GITHUBTOKEN }}/versions/latest)'
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           COMMIT_SHA: ${{ github.sha }}
       - name: Push the image to Google Container Registry
