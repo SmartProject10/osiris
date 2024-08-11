@@ -15,7 +15,7 @@ jobs:
           # workload_identity_provider: projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/<TU_POOL_ID>
           service_account: isosmartosh@sunlit-form-430600-n9.iam.gserviceaccount.com
       - name: Build the Docker image
-        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$TAG:$COMMIT_SHA .
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$TAG:${{ github.sha }}  .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
