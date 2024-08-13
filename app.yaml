@@ -10,10 +10,3 @@ env_variables:
 handlers:
 - url: /.*
   script: auto
-
-jobs:
-  build_app: 
-    uses: ./.github/workflows/gcp-deploy.yaml
-    with:
-      input_key: value
-    secrets: inherit
