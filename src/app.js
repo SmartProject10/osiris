@@ -1,11 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
+const cors  = require('cors');
 // const auth = passport.authenticate('jwt', { session: false });
-const errorHandler = require('./middlewares/errorHandler');
-require('dotenv').config();
-const companyController = require('./controllers/CompanyController'); 
+const companyController = require('./controllers/companyController'); 
 const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
 const areaEmpresaController = require('./controllers/areaEmpresaController'); 
 const isoController = require('./controllers/isoController'); 
@@ -15,15 +15,18 @@ const sedeController = require('./controllers/sedeController');
 const paisController = require('./controllers/paisController');
 const personaController = require('./controllers/personaController');
 const authController = require('./controllers/authController')
-const port = process.env.PORT || 3000;
-const cors  = require('cors');
 
+
+const port = process.env.PORT || 3000;
 const app = express();
+
+// Middlewares
 app.use(express.json()); 
 app.use(bodyParser.json());
+app.use(cors());
 app.use(passport.initialize());
-app.use(cors())
 
+// Configurar la estrategia OAuth2
 passport.use(
   'oauth2',
   new OAuth2Strategy({
@@ -32,25 +35,23 @@ passport.use(
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
-},
-
-function(accessToken, refreshToken, profile, cb) {
+  },
+  function(accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
-}));
+  })
+);
+
+// Rutas de autenticación
+app.get('/auth/provider', passport.authenticate('oauth2'));
 
 app.get('/auth/callback', 
   passport.authenticate('oauth2', { failureRedirect: '/' }),
   function(req, res) {
-      res.redirect('/dashboard');
+    res.redirect('/dashboard');
   }
-
 );
 
-app.use(errorHandler);
 
-// Routes
-
-app.use('/auth/provider', passport.authenticate('oauth2'));
 app.use('/auth', authController);
 app.use('/company', companyController); 
 app.use('/cargo', cargoEmpresaController); 
@@ -63,16 +64,6 @@ app.use('/persona', personaController);
 app.use('/pais', paisController);
 
 app.get('/', (req, res) => res.send('Iso Main!'));
-app.get('/company', companyController); 
-app.get('/cargo', cargoEmpresaController); 
-app.get('/area', areaEmpresaController); 
-app.get('/iso', isoController); 
-app.get('/companyEconomicActivity', companyEconomicActivityController); 
-app.get('/user', userController);
-app.get('/sede', sedeController);
-app.get('/persona', personaController);
-app.get('/pais', paisController);
-
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log errors
