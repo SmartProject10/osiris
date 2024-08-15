@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const datosFamiliaresSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+const datosFamiliaresSchema = new mongoose.Schema({
+  fichaUsuarioId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'FichaUsuarios',
     required: true
   },
   nombreCompleto: {
