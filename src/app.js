@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
@@ -27,9 +28,11 @@ connectDB();
 
 app.use(express.json()); 
 app.use(bodyParser.json());
+app.use(cors());
 app.use(passport.initialize());
 app.use(cors());
 
+// Configurar la estrategia OAuth2
 passport.use(
   'oauth2',
   new OAuth2Strategy({
@@ -40,6 +43,8 @@ passport.use(
     callbackURL: process.env.CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, cb) {
+  },
+  function(accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
   })
 );
@@ -47,7 +52,7 @@ passport.use(
 app.get('/auth/callback', 
   passport.authenticate('oauth2', { failureRedirect: '/' }),
   function(req, res) {
-      res.redirect('/dashboard');
+    res.redirect('/dashboard');
   }
 );
 
@@ -80,6 +85,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: 'Internal Server Error' });
 });
 
+// Iniciar el servidor
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
