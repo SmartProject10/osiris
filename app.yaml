@@ -4,9 +4,16 @@ env: standard
 
 # Variables de entorno
 env_variables:
-  PORT: 8080
+  PORT: 3000
 
 # Handlers
 handlers:
 - url: /.*
   script: auto
+
+jobs:
+  build_app: 
+    uses: ./.github/workflows/gcp-deploy.yaml
+    with:
+      input_key: value
+    secrets: inherit

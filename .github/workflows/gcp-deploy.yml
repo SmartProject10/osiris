@@ -15,7 +15,7 @@ jobs:
           # workload_identity_provider: projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/<TU_POOL_ID>
           service_account: isosmartosh@sunlit-form-430600-n9.iam.gserviceaccount.com
       - name: Build the Docker image
-        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$TAG:$COMMIT_SHA .
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$TAG:${{ github.sha }}  .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -23,4 +23,4 @@ jobs:
       - name: Push the image to Google Container Registry
         run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/$TAG:${{ github.sha }}
       - name: Deploy to Cloud Run
-        run: gcloud run deploy --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/$TAG:${{ github.sha }} --service osiris
+        run: gcloud run deploy --image us-central1-docker.pkg.dev/sunlit-form-430600-n9/cloud-run-source-deploy/osiris/osiris:2c7af7a62d2ddb8542b5adfe86753f53a9f64352/${{ secrets.GCP_PROJECT_ID }}/$TAG:${{ github.sha }} --service osiris
