@@ -2,9 +2,11 @@ const express = require('express');
 const passport = require('passport');
 const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
-// const auth = passport.authenticate('jwt', { session: false });
+const cors = require('cors');
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
+const connectDB = require('../src/config/db'); // Importa la función de conexión
+const trabajadorController = require('./controllers/trabajadorController');
 const companyController = require('./controllers/CompanyController'); 
 const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
 const areaEmpresaController = require('./controllers/areaEmpresaController'); 
@@ -15,14 +17,18 @@ const sedeController = require('./controllers/sedeController');
 const paisController = require('./controllers/paisController');
 const personaController = require('./controllers/personaController');
 const authController = require('./controllers/authController')
+
 const port = process.env.PORT || 3000;
-const cors  = require('cors');
 
 const app = express();
+
+// Conecta a la base de datos
+connectDB();
+
 app.use(express.json()); 
 app.use(bodyParser.json());
 app.use(passport.initialize());
-app.use(cors())
+app.use(cors());
 
 passport.use(
   'oauth2',
@@ -32,24 +38,22 @@ passport.use(
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
-},
-
-function(accessToken, refreshToken, profile, cb) {
+  },
+  function(accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
-}));
+  })
+);
 
 app.get('/auth/callback', 
   passport.authenticate('oauth2', { failureRedirect: '/' }),
   function(req, res) {
       res.redirect('/dashboard');
   }
-
 );
 
 app.use(errorHandler);
 
 // Routes
-
 app.use('/auth/provider', passport.authenticate('oauth2'));
 app.use('/auth', authController);
 app.use('/company', companyController); 
@@ -62,17 +66,14 @@ app.use('/sede', sedeController);
 app.use('/persona', personaController);
 app.use('/pais', paisController);
 
-app.get('/', (req, res) => res.send('Iso Main!'));
-app.get('/company', companyController); 
-app.get('/cargo', cargoEmpresaController); 
-app.get('/area', areaEmpresaController); 
-app.get('/iso', isoController); 
-app.get('/companyEconomicActivity', companyEconomicActivityController); 
-app.get('/user', userController);
-app.get('/sede', sedeController);
-app.get('/persona', personaController);
-app.get('/pais', paisController);
+// Rutas de trabajador (montadas correctamente bajo /api)
+app.post('/api/trabajador', trabajadorController.createTrabajador);
+app.get('/api/trabajador/:id', trabajadorController.getTrabajadorById);
+app.get('/api/trabajadores', trabajadorController.getAllTrabajadores);
+app.put('/api/trabajador/:id', trabajadorController.updateTrabajador);
+app.delete('/api/trabajador/:id', trabajadorController.deleteTrabajador);
 
+app.get('/', (req, res) => res.send('Iso Main!'));
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log errors
@@ -84,4 +85,3 @@ app.listen(port, () => {
 });
 
 module.exports = app;
-
