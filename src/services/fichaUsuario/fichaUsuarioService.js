@@ -6,8 +6,8 @@ const { connectToMongoClient } = require("../../config/db");
 const getFichaUsuario = async (req, res) => {
   const { email, id } = req.params;
   try {
-    const client = await connectToMongoClient();
-    const coll = client.db("isoDb").collection("persona");
+    // conexión establecida
+    const coll = await connectToMongoClient("persona");
 
     // Buscar usuario por email
     const usuario = await coll.findOne({ vEmail: email });
