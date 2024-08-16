@@ -15,8 +15,8 @@ const createDatoLaborales = async (req, res) => {
         .json({ message: "Ficha de usuario no encontrada" });
     }
 
-    const client = await connectToMongoClient();
-    const coll = client.db("isoDb").collection("company");
+    // conexión establecida
+    const coll = await connectToMongoClient("company");
 
     // Convertir los IDs a ObjectId usando createFromTime
     const empresaObjectIds = empresaIds.map((id) => new ObjectId(`${id}`));
@@ -64,9 +64,9 @@ const updateDatoLaborales = async (req, res) => {
       return res.status(404).json({ message: "Ficha de usuario no encontrada" });
     }
 
-    const client = await connectToMongoClient();
-    const coll = client.db("isoDb").collection("company");
-
+    // conexión establecida
+    const coll = await connectToMongoClient("company");
+    
     // Convertir los IDs a ObjectId
     const empresaObjectIds = empresaIds.map((id) => new ObjectId(`${id}`));
 

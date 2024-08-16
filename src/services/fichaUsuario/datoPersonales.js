@@ -6,11 +6,11 @@ const createDatoPersonales = async (req, res) => {
   const { usuarioEmail, ...data } = req.body;
 
   try {
-    const client = await connectToMongoClient();
-    const coll = client.db("isoDb").collection("persona");
+    // conexión establecida
+    const coll = await connectToMongoClient("persona");
 
-    // Buscar usuarios por email
-    const usuarios = await coll.find({ vEmail: { $in: usuarioEmail } }).toArray();
+     // Buscar usuarios por email
+     const usuarios = await coll.find({ vEmail: { $in: usuarioEmail } }).toArray();
 
     if (usuarios.length === 0) {
       return res.status(404).json({ message: "Usuarios no encontrados" });
@@ -47,14 +47,15 @@ const updateDatoPersonales = async (req, res) => {
   const { usuarioEmail, ...data } = req.body;
 
   try {
-
     const fichaUsuario = await FichaUsuarios.findById(fichaUsuarioId);
     if (!fichaUsuario) {
-      return res.status(404).json({ message: "Ficha de usuario no encontrada" });
+      return res
+        .status(404)
+        .json({ message: "Ficha de usuario no encontrada" });
     }
 
-    const client = await connectToMongoClient();
-    const coll = client.db("isoDb").collection("persona");
+    // conexión establecida
+    const coll = await connectToMongoClient("persona");
 
     // Buscar usuarios por email
     const usuarios = await coll
