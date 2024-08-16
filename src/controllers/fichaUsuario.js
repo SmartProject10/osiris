@@ -22,11 +22,13 @@ router.post('/datos_familiares/:fichaUsuarioId', datosFamiliares.createDatosFami
 router.patch('/datos_familiares/:fichaUsuarioId/:id', datosFamiliares.updateDatosFamiliares);
 router.get('/datos_familiares/:fichaUsuarioId', datosFamiliares.listDatosFamiliares);
 router.get('/datos_familiares/:fichaUsuarioId/:id', datosFamiliares.getDatoFamiliar);
+router.delete('/datos_familiares/:fichaUsuarioId/:id', datosFamiliares.deleteDatosFamiliares);
 
 // Rutas para datos contactos
 router.post('/datos_contactos/:fichaUsuarioId', datosContactos.createDatosContactos);
 router.patch('/datos_contactos/:fichaUsuarioId/:id', datosContactos.updateDatosContactos);
 router.get('/datos_contactos/:fichaUsuarioId', datosContactos.listDatosContactos);
 router.get('/datos_contactos/:fichaUsuarioId/:id', datosContactos.getDatoContacto);
+router.delete('/datos_contactos/:fichaUsuarioId/:id', datosContactos.deleteDatosContactos);
 
 module.exports = router;
