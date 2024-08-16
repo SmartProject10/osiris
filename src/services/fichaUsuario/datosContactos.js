@@ -132,9 +132,36 @@ const getDatoContacto = async (req, res) => {
   }
 };
 
+const deleteDatosContactos = async (req, res) => {
+  const { fichaUsuarioId, id } = req.params;
+
+  try {
+    // Buscar ficha de usuario por ID
+    const fichaUsuario = await FichaUsuarios.findById(fichaUsuarioId);
+
+    if (fichaUsuario) {
+      // Buscar los datos de contacto existentes por userId y id
+      const datosContactos = await DatosContactos.findByIdAndDelete(id);
+
+      if (datosContactos) {
+        res.status(200).send("Datos de contacto eliminados exitosamente");
+      } else {
+        res.status(404).send("Datos de contacto no encontrados");
+      }
+    } else {
+      res.status(404).send("Usuario no encontrado");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error del servidor");
+  }
+};
+
+
 module.exports = {
   createDatosContactos,
   updateDatosContactos,
   listDatosContactos,
   getDatoContacto,
+  deleteDatosContactos
 };
