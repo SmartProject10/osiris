@@ -132,9 +132,36 @@ const getDatoFamiliar = async (req, res) => {
   }
 };
 
+const deleteDatosFamiliares = async (req, res) => {
+  const { fichaUsuarioId, id } = req.params;
+
+  try {
+    // Buscar ficha de usuario por ID
+    const fichaUsuario = await FichaUsuarios.findById(fichaUsuarioId);
+
+    if (fichaUsuario) {
+      // Buscar los datos familiares existentes por userId y id
+      const datosFamiliares = await DatosFamiliares.findByIdAndDelete(id);
+
+      if (datosFamiliares) {
+        res.status(200).send("Datos familiares eliminados exitosamente");
+      } else {
+        res.status(404).send("Datos familiares no encontrados");
+      }
+    } else {
+      res.status(404).send("Usuario no encontrado");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error del servidor");
+  }
+};
+
+
 module.exports = {
   createDatosFamiliares,
   updateDatosFamiliares,
   listDatosFamiliares,
   getDatoFamiliar,
+  deleteDatosFamiliares,
 };
