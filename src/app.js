@@ -5,8 +5,7 @@ const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const errorHandler = require('./middlewares/errorHandler');
-require('dotenv').config();
-const connectDB = require('../src/config/db'); // Importa la función de conexión
+const { connectToMongoose } = require('../src/config/db');
 const trabajadorController = require('./controllers/trabajadorController');
 const companyController = require('./controllers/CompanyController'); 
 const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
@@ -24,7 +23,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 // Conecta a la base de datos
-connectDB();
+connectToMongoose();
 
 app.use(express.json()); 
 app.use(bodyParser.json());
@@ -41,8 +40,6 @@ passport.use(
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
-  },
-  function(accessToken, refreshToken, profile, cb) {
   },
   function(accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
