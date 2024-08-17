@@ -1,27 +1,27 @@
 const mongoose = require("mongoose");
 
-const sedeSchema = new mongoose.Schema({
-  fichaUsuarioId: {
+const contactInformationSchema = new mongoose.Schema({
+  iUserProfileId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "FichaUsuarios",
+    ref: "UserProfile",
     required: true,
   },
-  direccionActualizada: {
+  vUpdatedAddress: {
     type: String,
     trim: true,
   },
-  personaContacto: {
+  vContactPerson: {
     type: String,
     trim: true,
   },
-  ocupacionLugarTrabajo: {
+  vOccupationWorkplace: {
     type: String,
     trim: true,
   },
-  celular: {
+  vCellphone: {
     type: String,
     trim: true,
   },
 });
 
-module.exports = mongoose.model("DatosContactos", sedeSchema);
+module.exports = mongoose.model("ContactInformation", contactInformationSchema);

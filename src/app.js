@@ -17,7 +17,7 @@ const sedeController = require('./controllers/sedeController');
 const paisController = require('./controllers/paisController');
 const personaController = require('./controllers/personaController');
 const authController = require('./controllers/authController');
-const fichaController = require('./controllers/fichaUsuario');
+const userProfileController = require('./controllers/userProfileController');
 
 const port = process.env.PORT || 3000;
 
@@ -68,7 +68,7 @@ app.use('/user', userController);
 app.use('/sede', sedeController);
 app.use('/persona', personaController);
 app.use('/pais', paisController);
-app.use('/ficha', fichaController);
+app.use('/userProfile', userProfileController);
 
 // Rutas de trabajador (montadas correctamente bajo /api)
 app.post('/api/trabajador', trabajadorController.createTrabajador);
