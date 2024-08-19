@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const personalInformation = require('../services/UserProfile/personalInformationService');
-const UserProfile = require('../services/UserProfile/userProfileService');
-const employmentData = require('../services/UserProfile/employmentDataService');
-const familyData = require('../services/UserProfile/familyDataService');
-const contactInformation = require('../services/UserProfile/contactInformationService');
+const personalInformation = require('../services/userProfile/personalInformationService');
+const userProfile = require('../services/userProfile/userProfileService');
+const employmentData = require('../services/userProfile/employmentDataService');
+const familyData = require('../services/userProfile/familyDataService');
+const contactInformation = require('../services/userProfile/contactInformationService');
+const academicData = require('../services/userProfile/academicDataService');
 
 // user profile
-router.get('/:email/:id', UserProfile.getUserProfileById);
+router.get('/me/:email/:id', userProfile.getUserProfileById);
 
 // Routes for personal information
 router.post('/personal_information/', personalInformation.createPersonalInformation);
@@ -30,5 +31,12 @@ router.patch('/contact_information/:iUserProfileId/:id', contactInformation.upda
 router.get('/contact_information/:iUserProfileId', contactInformation.getAllContactInformations);
 router.get('/contact_information/:iUserProfileId/:id', contactInformation.getContactInformationById);
 router.delete('/contact_information/:iUserProfileId/:id', contactInformation.deleteContactInformation);
+
+// Routes for academic data
+router.post('/academic_data/:iUserProfileId', academicData.createAcademicData);
+router.patch('/academic_data/:iUserProfileId/:id', academicData.updateAcademicData);
+router.get('/academic_data/:iUserProfileId', academicData.getAllAcademicData);
+router.get('/academic_data/:iUserProfileId/:id', academicData.getAcademicDataById);
+router.delete('/academic_data/:iUserProfileId/:id', academicData.deleteAcademicData);
 
 module.exports = router;
