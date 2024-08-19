@@ -68,7 +68,7 @@ app.use('/user', userController);
 app.use('/sede', sedeController);
 app.use('/persona', personaController);
 app.use('/pais', paisController);
-app.use('/userProfile', userProfileController);
+app.use('/profile', userProfileController);
 
 // Rutas de trabajador (montadas correctamente bajo /api)
 app.post('/api/trabajador', trabajadorController.createTrabajador);
