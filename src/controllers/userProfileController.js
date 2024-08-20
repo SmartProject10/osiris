@@ -6,6 +6,7 @@ const employmentData = require('../services/userProfile/employmentDataService');
 const familyData = require('../services/userProfile/familyDataService');
 const contactInformation = require('../services/userProfile/contactInformationService');
 const academicData = require('../services/userProfile/academicDataService');
+const externalTraining = require('../services/userProfile/externalTrainingService');
 
 // user profile
 router.get('/me/:email/:id', userProfile.getUserProfileById);
@@ -38,5 +39,12 @@ router.patch('/academic_data/:iUserProfileId/:id', academicData.updateAcademicDa
 router.get('/academic_data/:iUserProfileId', academicData.getAllAcademicData);
 router.get('/academic_data/:iUserProfileId/:id', academicData.getAcademicDataById);
 router.delete('/academic_data/:iUserProfileId/:id', academicData.deleteAcademicData);
+
+// Routes for external training
+router.post('/external_training/:iUserProfileId', externalTraining.createExternalTraining);
+router.patch('/external_training/:iUserProfileId/:id', externalTraining.updateExternalTraining);
+router.get('/external_training/:iUserProfileId', externalTraining.getAllExternalTraining);
+router.get('/external_training/:iUserProfileId/:id', externalTraining.getExternalTrainingById);
+router.delete('/external_training/:iUserProfileId/:id', externalTraining.deleteExternalTraining);
 
 module.exports = router;
