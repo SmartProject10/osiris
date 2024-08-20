@@ -2,6 +2,7 @@ const UserProfiles = require("../../model/userProfile/userProfileSchema");
 const FamilyData = require("../../model/userProfile/familyDataSchema");
 const ContactInformations = require("../../model/userProfile/contactInformationSchema");
 const AcademicData = require("../../model/userProfile/academicDataSchema");
+const ExternalTraining = require("../../model/userProfile/externalTrainingSchema");
 const { connectToMongoClient } = require("../../config/db");
 
 const getUserProfileById = async (req, res) => {
@@ -30,10 +31,16 @@ const getUserProfileById = async (req, res) => {
       });
     }
 
-    const [familyData, contactInformation, academicData] = await Promise.all([
+    const [
+      familyData,
+      contactInformation,
+      academicData,
+      externalTraining,
+    ] = await Promise.all([
       FamilyData.find({ iUserProfileId: userProfile._id }),
       ContactInformations.find({ iUserProfileId: userProfile._id }),
       AcademicData.find({ iUserProfileId: userProfile._id }),
+      ExternalTraining.find({ iUserProfileId: userProfile._id }),
     ]);
 
     const profile = {
@@ -41,6 +48,7 @@ const getUserProfileById = async (req, res) => {
       familyData,
       contactInformation,
       academicData,
+      externalTraining
     };
 
     res.status(200).json(profile);
