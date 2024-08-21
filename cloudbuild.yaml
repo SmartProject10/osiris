@@ -1,5 +1,5 @@
 substitutions:
-  _REPO_NAME: 'sunlit-form-430600-n9'
+  _REPO_NAME: 'serviceiso'
   _COMMIT_SHA: 'latest'
 
 steps:

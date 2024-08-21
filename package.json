@@ -14,6 +14,7 @@
   "dependencies": {
     "aws-sdk": "^2.1660.0",
     "axios": "^1.7.2",
+    "back-node": "file:",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
