@@ -6,7 +6,7 @@ const userProfileSchema = new mongoose.Schema(
     iUser: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "person",
+        ref: "persona",
         required: false,
       },
     ],
@@ -25,6 +25,11 @@ const userProfileSchema = new mongoose.Schema(
     iEmploymentData: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "EmploymentData",
+      required: false,
+    },
+    iLegajo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Legajo",
       required: false,
     },
   },
