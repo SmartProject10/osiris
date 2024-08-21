@@ -10,17 +10,14 @@ const contactInformationSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  vContactPerson: {
-    type: String,
-    trim: true,
-  },
   vOccupationWorkplace: {
     type: String,
     trim: true,
   },
-  vCellphone: {
-    type: String,
-    trim: true,
+  iContactPerson:   {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "persona",
+    required: true,
   },
 });
 
