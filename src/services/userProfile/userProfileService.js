@@ -3,6 +3,7 @@ const FamilyData = require("../../model/userProfile/familyDataSchema");
 const ContactInformations = require("../../model/userProfile/contactInformationSchema");
 const AcademicData = require("../../model/userProfile/academicDataSchema");
 const ExternalTraining = require("../../model/userProfile/externalTrainingSchema");
+const Language = require("../../model/userProfile/languageSchema");
 const { connectToMongoClient } = require("../../config/db");
 
 const getUserProfileById = async (req, res) => {
@@ -23,24 +24,28 @@ const getUserProfileById = async (req, res) => {
       _id: id,
     })
       .populate("iPersonalInformation")
-      .populate("iEmploymentData");
+      .populate("iEmploymentData")
+      .populate("iLegajo");
 
     if (!userProfile) {
       return res.status(404).json({
         message: "User profile not found for the specified user",
       });
     }
-
+  
+    // TODO : for testing only
     const [
       familyData,
       contactInformation,
       academicData,
       externalTraining,
+      language,
     ] = await Promise.all([
       FamilyData.find({ iUserProfileId: userProfile._id }),
       ContactInformations.find({ iUserProfileId: userProfile._id }),
       AcademicData.find({ iUserProfileId: userProfile._id }),
       ExternalTraining.find({ iUserProfileId: userProfile._id }),
+      Language.find({ iUserProfileId: userProfile._id }),
     ]);
 
     const profile = {
@@ -48,10 +53,13 @@ const getUserProfileById = async (req, res) => {
       familyData,
       contactInformation,
       academicData,
-      externalTraining
+      externalTraining,
+      language
     };
 
     res.status(200).json(profile);
+
+    // res.status(200).json(userProfile);
   } catch (error) {
     console.error(error);
     res.status(500).json({
