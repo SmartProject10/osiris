@@ -1,10 +1,23 @@
 const ContactDetails = require("../../model/userProfile/contactInformationSchema");
 const UserProfiles = require("../../model/userProfile/userProfileSchema");
+const { connectToMongoClient } = require("../../config/db");
+const { ObjectId } = require("mongodb");
 
 const createContactInformation = async (req, res) => {
   const { iUserProfileId } = req.params;
-  const data = req.body;
+  const { iContactPerson, ...data } = req.body;
+
   try {
+    // Connection established
+    const coll = await connectToMongoClient("persona");
+
+    // Find user by id
+    const user = await coll.findOne({ _id: new ObjectId(`${iContactPerson}`) });
+
+    if (!user) {
+      return res.status(404).json({ message: "User profile not found" });
+    }
+
     // Find user profile by ID
     const userProfile = await UserProfiles.findById(iUserProfileId);
 
@@ -15,6 +28,7 @@ const createContactInformation = async (req, res) => {
       }
       // Assign the iUserProfileId to the new contact information object
       data.iUserProfileId = userProfile._id;
+      data.iContactPerson = user._id;
 
       // Create a new contact information entry
       const newContactInformation = new ContactDetails(data);
@@ -31,38 +45,53 @@ const createContactInformation = async (req, res) => {
   }
 };
 
-
 const updateContactInformation = async (req, res) => {
   const { iUserProfileId, id } = req.params;
-  const data = req.body;
+  const { iContactPerson, ...data } = req.body;
 
   try {
+    // Connection established
+    const coll = await connectToMongoClient("persona");
+
+    // Find user by id
+    const user = await coll.findOne({ _id: new ObjectId(`${iContactPerson}`) });
+
+    if (!user) {
+      return res.status(404).json({ message: "User profile not found" });
+    }
+
     // Find user profile by ID
     const userProfile = await UserProfiles.findById(iUserProfileId);
 
     if (userProfile) {
-      // Find existing contact information by userId and id
-      const contactInformation = await ContactDetails.findById(id);
-
-      if (contactInformation) {
-        // Update the contact information with the new data
-        Object.assign(contactInformation, data);
-
-        // Save the changes
-        await contactInformation.save();
-        res.status(200).send(contactInformation);
-      } else {
-        res.status(404).send("Contact information not found");
+      // Validate data
+      if (!data || Object.keys(data).length === 0) {
+        return res.status(400).send("Contact information not provided");
       }
+      // Assign the iUserProfileId and iContactPerson to the updated data
+      data.iUserProfileId = userProfile._id;
+      data.iContactPerson = user._id;
+
+      // Update the contact information
+      const updatedContactInformation = await ContactDetails.findByIdAndUpdate(
+        id,
+        data,
+        { new: true }
+      );
+
+      if (!updatedContactInformation) {
+        return res.status(404).send("Contact information not found");
+      }
+
+      res.status(200).send(updatedContactInformation);
     } else {
-      res.status(404).send("User not found");
+      res.status(404).send("User profile not found");
     }
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
   }
 };
-
 
 const getAllContactInformations = async (req, res) => {
   const { iUserProfileId } = req.params;
@@ -109,7 +138,6 @@ const getAllContactInformations = async (req, res) => {
   }
 };
 
-
 const getContactInformationById = async (req, res) => {
   const { iUserProfileId, id } = req.params;
 
@@ -134,7 +162,6 @@ const getContactInformationById = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
 
 const deleteContactInformation = async (req, res) => {
   const { iUserProfileId, id } = req.params;
@@ -161,12 +188,10 @@ const deleteContactInformation = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   createContactInformation,
   updateContactInformation,
   getAllContactInformations,
   getContactInformationById,
-  deleteContactInformation
+  deleteContactInformation,
 };
