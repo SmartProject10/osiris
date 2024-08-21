@@ -1,7 +1,7 @@
 {
   "name": "back-node",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
@@ -21,7 +21,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.4.4",
+    "mongoose": "^8.5.2",
     "nodemailer": "^6.9.14",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
