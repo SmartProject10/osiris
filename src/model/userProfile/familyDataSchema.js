@@ -1,5 +1,22 @@
 const mongoose = require("mongoose");
 
+const RelationshipEnum = {
+  FATHER: "Father",
+  MOTHER: "Mother",
+  BROTHER: "Brother",
+  SISTER: "Sister",
+  SON: "Son",
+  DAUGHTER: "Daughter",
+  UNCLE: "Uncle",
+  AUNT: "Aunt",
+  COUSIN: "Cousin",
+  GRANDFATHER: "Grandfather",
+  GRANDMOTHER: "Grandmother",
+  NEPHEW: "Nephew",
+  NIECE: "Niece",
+  DEFAULT: "Relative", // Default value
+};
+
 const familyDataSchema = new mongoose.Schema({
   iUserProfileId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -13,6 +30,8 @@ const familyDataSchema = new mongoose.Schema({
   },
   vRelationship: {
     type: String,
+    enum: Object.values(RelationshipEnum),
+    default: RelationshipEnum.DEFAULT,
     required: [true, "Relationship is required"],
     trim: true,
   },
