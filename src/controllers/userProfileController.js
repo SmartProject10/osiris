@@ -7,6 +7,8 @@ const familyData = require('../services/userProfile/familyDataService');
 const contactInformation = require('../services/userProfile/contactInformationService');
 const academicData = require('../services/userProfile/academicDataService');
 const externalTraining = require('../services/userProfile/externalTrainingService');
+const language = require('../services/userProfile/languageService');
+const legajo = require('../services/userProfile/legajoService');
 
 // user profile
 router.get('/me/:email/:id', userProfile.getUserProfileById);
@@ -46,5 +48,16 @@ router.patch('/external_training/:iUserProfileId/:id', externalTraining.updateEx
 router.get('/external_training/:iUserProfileId', externalTraining.getAllExternalTraining);
 router.get('/external_training/:iUserProfileId/:id', externalTraining.getExternalTrainingById);
 router.delete('/external_training/:iUserProfileId/:id', externalTraining.deleteExternalTraining);
+
+// Routes for language
+router.post('/language/:iUserProfileId', language.createLanguage);
+router.patch('/language/:iUserProfileId/:id', language.updateLanguage);
+router.get('/language/:iUserProfileId', language.getAllLanguage);
+router.get('/language/:iUserProfileId/:id', language.getLanguageById);
+router.delete('/language/:iUserProfileId/:id', language.deleteLanguage);
+
+// Routes for legajo
+router.post('/legajo/:iUserProfileId', legajo.upsertLegajo);
+router.delete('/legajo/:iUserProfileId/:id', legajo.deleteLegajo);
 
 module.exports = router;
