@@ -9,6 +9,9 @@ const academicData = require('../services/userProfile/academicDataService');
 const externalTraining = require('../services/userProfile/externalTrainingService');
 const language = require('../services/userProfile/languageService');
 const legajo = require('../services/userProfile/legajoService');
+const courseHistory = require('../services/userProfile/courseHistoryService');
+const performanceEvaluationHistory = require('../services/userProfile/performanceEvaluationHistoryService');
+const informativeDocument = require('../services/userProfile/informativeDocumentService');
 
 // user profile
 router.get('/me/:email/:id', userProfile.getUserProfileById);
@@ -59,5 +62,26 @@ router.delete('/language/:iUserProfileId/:id', language.deleteLanguage);
 // Routes for legajo
 router.post('/legajo/:iUserProfileId', legajo.upsertLegajo);
 router.delete('/legajo/:iUserProfileId/:id', legajo.deleteLegajo);
+
+// Routes for course history
+router.post('/course_history/:iUserProfileId', courseHistory.createCourseHistory);
+router.patch('/course_history/:iUserProfileId/:id', courseHistory.updateCourseHistory);
+router.get('/course_history/:iUserProfileId', courseHistory.getAllCourseHistory);
+router.get('/course_history/:iUserProfileId/:id', courseHistory.getCourseHistoryById);
+router.delete('/course_history/:iUserProfileId/:id', courseHistory.deleteCourseHistory);
+
+// Routes for performance evaluation history
+router.post('/performance_evaluation_history/:iUserProfileId', performanceEvaluationHistory.createPerformanceEvaluationHistory);
+router.patch('/performance_evaluation_history/:iUserProfileId/:id', performanceEvaluationHistory.updatePerformanceEvaluationHistory);
+router.get('/performance_evaluation_history/:iUserProfileId', performanceEvaluationHistory.getAllPerformanceEvaluationHistory);
+router.get('/performance_evaluation_history/:iUserProfileId/:id', performanceEvaluationHistory.getPerformanceEvaluationHistoryById);
+router.delete('/performance_evaluation_history/:iUserProfileId/:id', performanceEvaluationHistory.deletePerformanceEvaluationHistory);
+
+// Routes for informative documents
+router.post('/informative_document/:iUserProfileId', informativeDocument.createInformativeDocument);
+router.patch('/informative_document/:iUserProfileId/:id', informativeDocument.updateInformativeDocument);
+router.get('/informative_document/:iUserProfileId', informativeDocument.getAllInformativeDocuments);
+router.get('/informative_document/:iUserProfileId/:id', informativeDocument.getInformativeDocumentById);
+router.delete('/informative_document/:iUserProfileId/:id', informativeDocument.deleteInformativeDocument);
 
 module.exports = router;
