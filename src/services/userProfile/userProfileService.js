@@ -1,9 +1,13 @@
 const UserProfiles = require("../../model/userProfile/userProfileSchema");
+// TODO : for testing only
 const FamilyData = require("../../model/userProfile/familyDataSchema");
 const ContactInformations = require("../../model/userProfile/contactInformationSchema");
 const AcademicData = require("../../model/userProfile/academicDataSchema");
 const ExternalTraining = require("../../model/userProfile/externalTrainingSchema");
 const Language = require("../../model/userProfile/languageSchema");
+const CourseHistory = require("../../model/userProfile/courseHistorySchema");
+const PerformanceEvaluationHistory = require("../../model/userProfile/performanceEvaluationHistorySchema");
+const InformativeDocument = require("../../model/userProfile/informativeDocumentSchema");
 const { connectToMongoClient } = require("../../config/db");
 
 const getUserProfileById = async (req, res) => {
@@ -32,7 +36,7 @@ const getUserProfileById = async (req, res) => {
         message: "User profile not found for the specified user",
       });
     }
-  
+
     // TODO : for testing only
     const [
       familyData,
@@ -40,12 +44,18 @@ const getUserProfileById = async (req, res) => {
       academicData,
       externalTraining,
       language,
+      courseHistory,
+      performanceEvaluationHistory,
+      informativeDocument,
     ] = await Promise.all([
       FamilyData.find({ iUserProfileId: userProfile._id }),
       ContactInformations.find({ iUserProfileId: userProfile._id }),
       AcademicData.find({ iUserProfileId: userProfile._id }),
       ExternalTraining.find({ iUserProfileId: userProfile._id }),
       Language.find({ iUserProfileId: userProfile._id }),
+      CourseHistory.find({ iUserProfileId: userProfile._id }),
+      PerformanceEvaluationHistory.find({ iUserProfileId: userProfile._id }),
+      InformativeDocument.find({ iUserProfileId: userProfile._id }),
     ]);
 
     const profile = {
@@ -54,7 +64,10 @@ const getUserProfileById = async (req, res) => {
       contactInformation,
       academicData,
       externalTraining,
-      language
+      language,
+      courseHistory,
+      performanceEvaluationHistory,
+      informativeDocument,
     };
 
     res.status(200).json(profile);
