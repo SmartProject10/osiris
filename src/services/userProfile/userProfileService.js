@@ -1,14 +1,14 @@
 const UserProfiles = require("../../model/userProfile/userProfileSchema");
-// TODO : for testing only
-const FamilyData = require("../../model/userProfile/familyDataSchema");
-const ContactInformations = require("../../model/userProfile/contactInformationSchema");
-const AcademicData = require("../../model/userProfile/academicDataSchema");
-const ExternalTraining = require("../../model/userProfile/externalTrainingSchema");
-const Language = require("../../model/userProfile/languageSchema");
-const CourseHistory = require("../../model/userProfile/courseHistorySchema");
-const PerformanceEvaluationHistory = require("../../model/userProfile/performanceEvaluationHistorySchema");
-const InformativeDocument = require("../../model/userProfile/informativeDocumentSchema");
 const { connectToMongoClient } = require("../../config/db");
+// TODO : for testing only
+// const FamilyData = require("../../model/userProfile/familyDataSchema");
+// const ContactInformations = require("../../model/userProfile/contactInformationSchema");
+// const AcademicData = require("../../model/userProfile/academicDataSchema");
+// const ExternalTraining = require("../../model/userProfile/externalTrainingSchema");
+// const Language = require("../../model/userProfile/languageSchema");
+// const CourseHistory = require("../../model/userProfile/courseHistorySchema");
+// const PerformanceEvaluationHistory = require("../../model/userProfile/performanceEvaluationHistorySchema");
+// const InformativeDocument = require("../../model/userProfile/informativeDocumentSchema");
 
 const getUserProfileById = async (req, res) => {
   const { email, id } = req.params;
@@ -38,41 +38,41 @@ const getUserProfileById = async (req, res) => {
     }
 
     // TODO : for testing only
-    const [
-      familyData,
-      contactInformation,
-      academicData,
-      externalTraining,
-      language,
-      courseHistory,
-      performanceEvaluationHistory,
-      informativeDocument,
-    ] = await Promise.all([
-      FamilyData.find({ iUserProfileId: userProfile._id }),
-      ContactInformations.find({ iUserProfileId: userProfile._id }),
-      AcademicData.find({ iUserProfileId: userProfile._id }),
-      ExternalTraining.find({ iUserProfileId: userProfile._id }),
-      Language.find({ iUserProfileId: userProfile._id }),
-      CourseHistory.find({ iUserProfileId: userProfile._id }),
-      PerformanceEvaluationHistory.find({ iUserProfileId: userProfile._id }),
-      InformativeDocument.find({ iUserProfileId: userProfile._id }),
-    ]);
+    // const [
+    //   familyData,
+    //   contactInformation,
+    //   academicData,
+    //   externalTraining,
+    //   language,
+    //   courseHistory,
+    //   performanceEvaluationHistory,
+    //   informativeDocument,
+    // ] = await Promise.all([
+    //   FamilyData.find({ iUserProfileId: userProfile._id }),
+    //   ContactInformations.find({ iUserProfileId: userProfile._id }),
+    //   AcademicData.find({ iUserProfileId: userProfile._id }),
+    //   ExternalTraining.find({ iUserProfileId: userProfile._id }),
+    //   Language.find({ iUserProfileId: userProfile._id }),
+    //   CourseHistory.find({ iUserProfileId: userProfile._id }),
+    //   PerformanceEvaluationHistory.find({ iUserProfileId: userProfile._id }),
+    //   InformativeDocument.find({ iUserProfileId: userProfile._id }),
+    // ]);
 
-    const profile = {
-      userProfile,
-      familyData,
-      contactInformation,
-      academicData,
-      externalTraining,
-      language,
-      courseHistory,
-      performanceEvaluationHistory,
-      informativeDocument,
-    };
+    // const profile = {
+    //   userProfile,
+    //   familyData,
+    //   contactInformation,
+    //   academicData,
+    //   externalTraining,
+    //   language,
+    //   courseHistory,
+    //   performanceEvaluationHistory,
+    //   informativeDocument,
+    // };
 
-    res.status(200).json(profile);
+    // res.status(200).json(profile);
 
-    // res.status(200).json(userProfile);
+    res.status(200).json(userProfile);
   } catch (error) {
     console.error(error);
     res.status(500).json({
