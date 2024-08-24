@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 let mongoClient;
+let coll;
 
-async function connectToMongoClient() {
+async function connectToMongoClient(name = '') {
   if (!mongoClient) {
     mongoClient = await MongoClient.connect(process.env.URI);
+    coll = mongoClient.db("isoDb").collection(`${name}`);
   }
-  return mongoClient;
+  return coll;
 }
 
 async function connectToMongoose() {
