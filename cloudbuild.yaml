@@ -1,5 +1,6 @@
+
 substitutions:
-  _REPO_NAME: 'sunlit-form-430600-n9'
+  _REPO_NAME: 'osiris'
   _COMMIT_SHA: 'latest'
 
 steps:
@@ -7,4 +8,8 @@ steps:
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/$_REPO_NAME:$_COMMIT_SHA', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/$_REPO_NAME:$_COMMIT_SHA']
+
 images: ['gcr.io/$PROJECT_ID/$_REPO_NAME:$_COMMIT_SHA']
+
+options:
+  logging: CLOUD_LOGGING_ONLY
