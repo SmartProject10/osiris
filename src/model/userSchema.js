@@ -51,8 +51,8 @@ userSchema.methods.assignRole = async function(roleId) {
 
 // Method to check if the user has a specific role
 userSchema.methods.hasRole = async function(roleName) {
-  await this.populate('roles').execPopulate();
-  return this.roles.some(role => role.name === roleName);
+  await this.populate('roles');
+  return this.roles.some(role => role.vName === roleName);
 };
 
 // Method to remove a role from the user
@@ -64,7 +64,7 @@ userSchema.methods.removeRole = async function(roleId) {
 
 // Method to get all roles of the user
 userSchema.methods.getRoles = async function() {
-  await this.populate('roles').execPopulate();
+  await this.populate('roles');
   return this.roles;
 };
 
