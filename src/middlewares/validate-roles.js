@@ -5,19 +5,19 @@ const checkAdminOrSelf = async (req, res, next) => {
   const userId = req.params.id;
 
   try {
-    // Validación del ID
+    // ID Validation
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    // Encontrar al usuario solicitante y poblar roles
+    // Find the requesting user and populate roles
     const requestingUser = await User.findById(userId);
 
     if (!requestingUser) {
       return res.status(404).json({ message: "Requesting user not found" });
     }
 
-    // Verificar si el usuario solicitante es admin o el mismo usuario
+    // Check if the requesting user is admin or the same user
     const isAdmin = requestingUser.hasRole("admin");
     const isSameUser = requestingUser._id.equals(userId);
 
