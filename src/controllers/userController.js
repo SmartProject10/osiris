@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../services/userService'); 
+const userService = require('../services/userService');
+const roles = require('../middlewares/validate-roles');
 
 // Create user route
 router.post('/', async (req, res) => {
@@ -12,7 +13,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get user by ID route
-router.get('/:id', async (req, res) => {
+router.get('/:id', [roles.checkAdminOrSelf], async (req, res) => {
   try {
     await userService.getUserById(req, res);
   } catch (error) {
@@ -20,7 +21,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/getEmail', async (req, res) => {
+router.post('/getEmail', [roles.checkEmailAdminOrSelf], async (req, res) => {
   try {
     await userService.getEmail(req, res);
   } catch (error) {
@@ -28,10 +29,8 @@ router.post('/getEmail', async (req, res) => {
   }
 });
 
-
-
 // Get all users route (be cautious with large datasets)
-router.get('/', async (req, res) => {
+router.get('/', [roles.validateAdminAccess], async (req, res) => {
   try {
     await userService.getAllUser(req, res);
   } catch (error) {
@@ -40,7 +39,7 @@ router.get('/', async (req, res) => {
 });
 
 // Update user route
-router.put('/:id', async (req, res) => {
+router.put('/:id', [roles.checkAdminOrSelf], async (req, res) => {
   try {
     await userService.updateUser(req, res);
   } catch (error) {
@@ -49,7 +48,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete user route
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [roles.checkAdminOrSelf], async (req, res) => {
   try {
     await userService.deleteUser(req, res);
   } catch (error) {
