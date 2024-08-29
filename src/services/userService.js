@@ -15,7 +15,7 @@ const createUser = async (req, res) => {
     }
 
     // Get the default "user" role if no roles are specified
-    const defaultRole = await Role.findOne({ name: 'user' });
+    const defaultRole = await Role.findOne({ vName: 'user' });
     if (!defaultRole) {
       return res.status(500).json({ message: 'Default role not found' });
     }
@@ -46,22 +46,10 @@ const getUserById = async (req, res) => {
       return res.status(400).json({ message: 'Invalid user ID' });
     }
 
-    // Find the requesting user and populate roles
-    const requestingUser = await User.findById(userId);
-
-    if (!requestingUser) {
-      return res.status(404).json({ message: 'Requesting user not found' });
-    }
-
-    // Check if the requesting user is admin or the same user
-    const isAdmin = requestingUser.hasRole('admin');
-    const isSameUser = requestingUser._id.equals(userId);
-
-    if (!isAdmin && !isSameUser) {
-      return res.status(403).json({ message: 'Access denied. Admins or the user themselves only.' });
-    }
-
     const user = await User.findById(userId).populate('roles');
+
+    // Remove password from user object
+    user.password = undefined;
 
     if (!user) {
       return res.status(404).json({ message: 'Requesting user not found' });
@@ -80,30 +68,14 @@ const getEmail = async (req, res) => {
   try {
     const { email } = req.body;
 
-    if (!email) {
-      return res.status(400).json({ message: 'Email is required' });
-    }
-
-    // Find the requesting user and populate roles
-    const requestingUser = await User.findOne({ email });
-
-    if (!requestingUser) {
-      return res.status(404).json({ message: 'Requesting user not found' });
-    }
-
-    // Check if the requesting user is admin or the same user
-    const isAdmin = requestingUser.hasRole('admin');
-    const isSameUser = requestingUser.email === email;
-
-    if (!isAdmin && !isSameUser) {
-      return res.status(403).json({ message: 'Access denied. Admins or the user themselves only.' });
-    }
-
     const user = await User.findOne({ email }).populate('roles');
 
     if (!user) {
       return res.status(404).json({ message: 'Requesting user not found' });
     }
+
+    // Remove password from user object
+    user.password = undefined;
 
     res.status(200).json(user);
   } catch (error) {
@@ -116,20 +88,7 @@ const getEmail = async (req, res) => {
 
 const getAllUser = async (req, res) => {
   try {
-    // Get the user making the request
-    const requestingUser = await User.findById(req.userId);
-
-    if (!requestingUser) {
-      return res.status(404).json({ message: 'Requesting user not found' });
-    }
-
-    // Validate if the user making the request is an administrator
-    const isAdmin = await requestingUser.hasRole('admin');
-
-    if (!isAdmin) {
-      return res.status(403).json({ message: 'Access denied. Admins only.' });
-    }
-
+    
     // Get all users
     const users = await User.find({});
 
@@ -160,21 +119,6 @@ const updateUser = async (req, res) => {
       return res.status(400).json({ message: 'No data provided to update' });
     }
 
-    // Find the requesting user and populate roles
-    const requestingUser = await User.findById(userId);
-
-    if (!requestingUser) {
-      return res.status(404).json({ message: 'Requesting user not found' });
-    }
-
-    // Check if the requesting user is admin or the same user
-    const isAdmin = requestingUser.hasRole('admin');
-    const isSameUser = requestingUser._id.equals(userId);
-
-    if (!isAdmin && !isSameUser) {
-      return res.status(403).json({ message: 'Access denied. Admins or the user themselves only.' });
-    }
-
     // Update the user
     const user = await User.findByIdAndUpdate(
       userId,
@@ -202,21 +146,6 @@ const deleteUser = async (req, res) => {
     // ID validation
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: 'Invalid user ID' });
-    }
-
-    // Find the requesting user and populate roles
-    const requestingUser = await User.findById(userId);
-
-    if (!requestingUser) {
-      return res.status(404).json({ message: 'Requesting user not found' });
-    }
-
-    // Check if the requesting user is admin or the same user
-    const isAdmin = requestingUser.hasRole('admin');
-    const isSameUser = requestingUser._id.equals(userId);
-
-    if (!isAdmin && !isSameUser) {
-      return res.status(403).json({ message: 'Access denied. Admins or the user themselves only.' });
     }
 
     // Delete the user
