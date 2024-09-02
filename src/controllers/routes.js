@@ -12,6 +12,13 @@ const sedeController = require('../controllers/sedeController');
 const paisController = require('../controllers/paisController');
 const personaController = require('../controllers/personaController');
 const trabajadorController = require('../controllers/trabajadorController'); // Importa el controlador de trabajador
+const {
+  crearObjetivoGeneral,
+  encontrarObjetivosGenerales,
+  encontrarObjetivoGeneral,
+  modificarObjetivoGeneral,
+  eliminarObjetivoGeneral,
+} = require('../controllers/objetivosGeneralesHooks')
 
 // Define routes
 router.use('/auth', authController);
@@ -31,5 +38,12 @@ router.get('/trabajador/:id', trabajadorController.getTrabajadorById);
 router.get('/trabajadores', trabajadorController.getAllTrabajadores);
 router.put('/trabajador/:id', trabajadorController.updateTrabajador);
 router.delete('/trabajador/:id', trabajadorController.deleteTrabajador);
+
+//Rutas Objetivos Generales
+router.post('/objetivosGenerales', crearObjetivoGeneral)
+router.get('/objetivosGenerales', encontrarObjetivosGenerales)
+router.get('/objetivosGenerales/:id', encontrarObjetivoGeneral)
+router.put('/objetivosGenerales/:id', modificarObjetivoGeneral)
+router.delete('/objetivosGenerales/:id', eliminarObjetivoGeneral)
 
 module.exports = router;
