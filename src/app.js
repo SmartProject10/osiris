@@ -71,11 +71,11 @@ app.use('/pais', paisController);
 app.use('/profile', userProfileController);
 
 // Rutas de trabajador (montadas correctamente bajo /api)
-app.post('/api/trabajador', trabajadorController.createTrabajador);
-app.get('/api/trabajador/:id', trabajadorController.getTrabajadorById);
-app.get('/api/trabajadores', trabajadorController.getAllTrabajadores);
-app.put('/api/trabajador/:id', trabajadorController.updateTrabajador);
-app.delete('/api/trabajador/:id', trabajadorController.deleteTrabajador);
+app.post('/trabajador', trabajadorController.createTrabajador);
+app.get('/trabajador/:id', trabajadorController.getTrabajadorById);
+app.get('/trabajadores', trabajadorController.getAllTrabajadores);
+app.put('/trabajador/:id', trabajadorController.updateTrabajador);
+app.delete('/trabajador/:id', trabajadorController.deleteTrabajador);
 
 app.get('/', (req, res) => res.send('Iso Main!'));
 
