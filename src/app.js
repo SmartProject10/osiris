@@ -11,6 +11,7 @@ const companyController = require('./controllers/CompanyController');
 const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
 const areaEmpresaController = require('./controllers/areaEmpresaController'); 
 const distritoController = require('./controllers/distritoController'); 
+const menuController = require('./controllers/menuEmpresaController'); 
 const isoController = require('./controllers/isoController'); 
 const companyEconomicActivityController = require('./controllers/companyEconomicActivity.controller'); 
 const userController = require('./controllers/userController');
@@ -71,6 +72,7 @@ app.use('/persona', personaController);
 app.use('/pais', paisController);
 app.use('/profile', userProfileController);
 app.use('/distrito', distritoController);
+app.use('/menu', menuController);
 
 // Rutas de trabajador (montadas correctamente bajo /api)
 app.post('/api/trabajador', trabajadorController.createTrabajador);

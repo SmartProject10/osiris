@@ -50,7 +50,7 @@ const loginLocal = async (req, res) => {
         try {
           const correo = req.body.email;
           const clave = req.body.password;
-          const db = client.db("isoDb");
+          const db = client.db("test");
           const collection = db.collection("user");
           const filter = { email: correo, password: clave };
           const user = await collection.findOne(filter);
