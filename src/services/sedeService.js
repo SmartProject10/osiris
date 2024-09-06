@@ -1,13 +1,9 @@
 const Sede = require('../model/sedeSchema');
 
-const createSede = async (req, res) => {
-  const newSede = new Sede(req.body);
-  try {
-    await newSede.save();
-    res.status(201).json({ message: 'Sede created successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+const createSede = async (data) => {
+  const newSede = new Sede(data);
+  return await newSede.save();
+    // res.status(201).json({ message: 'Sede created successfully' });
 };
 
 const getSedeById = async (req, res) => {
@@ -22,6 +18,15 @@ const getSedeById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// const getAllSedes = async () => {
+//   try {
+//     return await Sede.find();
+//     // res.status(200).json(Sedes);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 const getAllSedes = async (req, res) => {
   try {

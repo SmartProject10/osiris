@@ -18,6 +18,11 @@ const paisSchema = new mongoose.Schema({
     required: true,
     maxlength: 50, // Varchar length from table definition
   },
+  vNacionalidad: {
+    type: String,
+    required: true,
+    maxlength: 50, // Varchar length from table definition
+  },
   iId_Estado: {
     type: String,
     required: true,

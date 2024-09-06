@@ -1,4 +1,5 @@
 const Cargo = require('../model/cargoEmpresaSchema');
+const mongoose = require('mongoose');
 
 const createCargo = async (req, res) => {
   const newCargo = new Cargo(req.body);
@@ -18,6 +19,17 @@ const getCargoById = async (req, res) => {
       return res.status(404).json({ message: 'Cargo not found' });
     }
     res.status(200).json(Cargo);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+};
+
+const getCargoByIdarea = async (filtros) => {
+  const query = {};
+  query.iId_AreaEmpresa = new mongoose.Types.ObjectId(filtros.iId_AreaEmpresa);
+  
+  try {
+    return await Cargo.find(query);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -63,4 +75,5 @@ module.exports = {
   getAllCargos,
   updateCargo,
   deleteCargo,
+  getCargoByIdarea
 };
