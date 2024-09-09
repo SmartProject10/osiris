@@ -27,6 +27,21 @@ const menuEmpresaSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  pais:  [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'pais',
+    required: false
+  }],
+  company:  [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'company',
+    required: false
+  }],
+  iso: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'companyIso',
+    required: false
+  }],
   submenusarray: [
     {
         iId_Estado: {

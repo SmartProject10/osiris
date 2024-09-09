@@ -4,16 +4,12 @@ const connectToDatabase = require('../utils/connectToDatabase');
 require('dotenv').config();
 
 const createUser = async (req, res) => {
+  const newUser = new User(req.body);
   try {
-    const db = await connectToDatabase();
-    const coll = db.collection('user');
-    const newUser = new User(req.body);
-    const result = await coll.insertOne(newUser);
-    console.log(`New user inserted with ID: ${result.insertedId}`);
-    res.status(201).json({ message: 'User created successfully', id: result.insertedId });
+      await newUser.save();
+      res.status(201).json({ message: 'Usuario created successfully' });
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: error.message });
+      res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
@@ -22,7 +18,7 @@ const getUserById = async (req, res) => {
   try {
     const db = await connectToDatabase();
     const userId = req.params.id;
-    const collection = db.collection('user');
+    const collection = db.collection('users');
     const filter = { _id: new ObjectId(userId) }; 
     const user = await collection.findOne(filter);
 
@@ -42,7 +38,7 @@ const getEmail = async (req, res) => {
     const db = await connectToDatabase();
     const correo = req.body.email;
     const filter = { email: correo };
-    const coll = db.collection('user');
+    const coll = db.collection('users');
     const user = coll.find(filter);
     const data = await user.toArray();
 
@@ -59,15 +55,10 @@ const getEmail = async (req, res) => {
 
 const getAllUser = async (req, res) => {
   try {
-    const db = await connectToDatabase();
-    const coll = db.collection('user');
-    const cursor = coll.find({});
-    const data = await cursor.toArray();
-    res.json(data);
-  } catch (err) {
-    res.status(500).send({
-      message: err.message || "Error al realizar la búsqueda"
-    });
+    const Usuarios = await User.find();
+    res.status(201).json(Usuarios);
+  } catch (error) { 
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
@@ -77,7 +68,7 @@ const updateUser = async (req, res) => {
     const userId = req.params.id;
     const updatedUser = req.body;
     const filter = { _id: new ObjectId(userId) };
-    await db.collection('user').findOneAndUpdate(
+    await db.collection('users').findOneAndUpdate(
       filter,
       { $set: updatedUser },
       { returnDocument: 'after' }
@@ -94,7 +85,7 @@ const deleteUser = async (req, res) => {
     const db = await connectToDatabase();
     const userId = req.params.id;
     const filter = { _id: new ObjectId(userId) };
-    await db.collection('user').findOneAndDelete(filter);
+    await db.collection('users').findOneAndDelete(filter);
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

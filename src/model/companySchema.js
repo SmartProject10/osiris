@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 
 const companySchema = new mongoose.Schema({
-  iId_Estado: { type: Number, required: false },
-  iId_TipDocumento: { type: Number, required: false },
+  iId_Estado: { type: Number, required: true },
+  vRazonsocial: { type: String, required: false },
+  iId_TipDocumento: { type: String, required: false },
   vNumDocumento: { type: String, required: true, unique: true },
   vNombre: { type: String, required: true },
   vContacto: { type: String },

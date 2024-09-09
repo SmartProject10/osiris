@@ -4,20 +4,13 @@ const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config();
 
 const createCompany = async (req, res) => {
-  const client = await MongoClient.connect(
-    process.env.URI
-  );
+  const newCompany = new Company(req.body);
     try {
-      await client.connect();
-      const newCompany = new Company(req.body);
-      const coll = client.db('isoDb').collection('company');
-      const result = await coll.insertOne(newCompany);
-      console.log(`New company inserted with ID: ${result.insertedId}`);
+      const result = await newCompany.save();
+      console.log(`New company inserted with ID: ${result._id}`);
       res.status(201).json({ message: 'Company created successfully' });
     } catch (error) {
       res.status(500).json({ error: error.message });
-    }finally{
-      await client.close();
     }
     
 };
@@ -25,7 +18,7 @@ const getCompanyById = async (req, res) => {
   const client = await MongoClient.connect(process.env.URI);
   try {
     const companyId = req.params.id;
-    const db = client.db('isoDb');
+    const db = client.db('test');
     const collection = db.collection('company');
     const filter = { _id: new ObjectId(companyId) }; 
     const company = await collection.findOne(filter);
@@ -44,24 +37,15 @@ const getCompanyById = async (req, res) => {
   }
 };
 const getAllCompanys = async (req, res) => {
-  const client = await MongoClient.connect(
-    process.env.URI
-  );
-        try {
-          await client.connect();
-          const filter = {};
-          const companies = client.db('isoDb').collection('company');
-          const cursor = companies.find(filter);
-          const data = await cursor.toArray();
-          res.status(200).json(data);
-        } catch (err) {
-            res.status(500).send({
-                message:
-                    err.message || "Error al realizar la búsqueda"
-            });
-        }finally{
-          await client?.close();
-        }
+    try {
+      const data = await Company.find();
+      res.status(200).json(data);
+    } catch (err) {
+        res.status(500).send({
+            message:
+                err.message || "Error al realizar la búsqueda"
+        });
+    }
 };
 const updateCompany = async (req, res) => {
   const client = await MongoClient.connect(
@@ -69,7 +53,7 @@ const updateCompany = async (req, res) => {
   );
 try {
 await client.connect();
-const db = client.db('isoDb'); 
+const db = client.db('test'); 
 const collection = db.collection('company');
 const companyId = req.params._id; 
 const updatedCompany = req.body;
@@ -95,7 +79,7 @@ const deleteCompany = async (req, res) => {
   );
   try {
     await client.connect();
-    const db = client.db('isoDb'); 
+    const db = client.db('test'); 
     const companies = db.collection('company');
     const companyId = req.params.id; 
     const filter = { _id: new ObjectId(companyId) }; 

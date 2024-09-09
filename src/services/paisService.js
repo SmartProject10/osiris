@@ -3,20 +3,13 @@ const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config();
 
 const createPais = async (req, res) => {
-  const client = await MongoClient.connect(
-    process.env.URI
-  );
+  const newPais = new Pais(req.body);
     try {
-      await client.connect();
-      const newPais = new Pais(req.body);
-      const coll = client.db('isoDb').collection('pais');
-      const result = await coll.insertOne(newPais);
-      console.log(`New user inserted with ID: ${result.insertedId}`);
-      res.status(201).json({ message: 'Country created successfully' });
+      const result = await newPais.save();
+      console.log(`New user inserted with ID: ${result._id}`);
+      res.status(201).json({ message: 'Pais created successfully' });
     } catch (error) {
       res.status(500).json({ error: error.message });
-    }finally{
-      await client.close();
     }
 
 };

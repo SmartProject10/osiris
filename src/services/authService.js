@@ -11,7 +11,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const userService = require('../services/userService');
-const userSchema = require('../model/userSchema');
+const User = require('../model/userSchema');
 // function generateRandomToken(length = 3) {
 //   return crypto.randomBytes(length).toString("hex");
 // }
@@ -38,42 +38,34 @@ const transporter = nodemailer.createTransport({
 });
 
 const loginLocal = async (req, res) => {
-  passport.use(
-    'oauth2',
-    new LocalStrategy(
-      {
-        usernameField: "email",
-        passwordField: "password",
-      },
-      async (email, password, done) => {
-        const client = await MongoClient.connect(process.env.URI);
-        try {
-          const correo = req.body.email;
-          const clave = req.body.password;
-          const db = client.db("test");
-          const collection = db.collection("user");
-          const filter = { email: correo, password: clave };
-          const user = await collection.findOne(filter);
+  try {
+    const correo = req.body.email;
+    const clave = req.body.password;
+    const filter = { email: correo };
+    const usersearch = await User.findOne(filter);
+    
 
-          if (!user) {
-            return done(null, false, { message: "User not found" });
-          }
+    if (!usersearch) {
+      return res.status(400).json("Usuario no encontrado");;
+    }
 
-          const isMatch = await bcrypt.compare(password, user.password);
-          if (!isMatch) {
-            return done(null, false, { message: "Incorrect password" });
-          }
+    const isMatch = await bcrypt.compare(clave, usersearch.password);
+    if (!isMatch) {
+      return res.status(400).json("Contraseña incorrecta");
+    }
 
-          return done(null, user);
-        } catch (error) {
-          console.error("Error fetching iso:", error);
-          res.status(500).json({ error: "Internal server error" });
-        } finally {
-          await client?.close();
-        }
-      }
-    )
-  );
+    const payload = {
+      _id: usersearch._id,
+      email: usersearch.email,
+      rolid: usersearch.roles
+    }; 
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+
+    return res.status(201).json(token);
+  } catch (error) {
+    console.error("Error fetching iso:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } 
 };
 
 const getTokenJwt = async (req, res) => {

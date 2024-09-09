@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authService = require('../services/authService'); // Assuming you have a service module
+const userService = require('../services/userService');
 require('dotenv').config();
 const passport = require('passport');
 
