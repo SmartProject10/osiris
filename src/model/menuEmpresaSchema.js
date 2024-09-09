@@ -42,6 +42,11 @@ const menuEmpresaSchema = new mongoose.Schema({
     ref: 'companyIso',
     required: false
   }],
+  usuario: [{ 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+    required: false
+  }],
   submenusarray: [
     {
         iId_Estado: {
