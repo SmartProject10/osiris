@@ -8,7 +8,7 @@ let coll;
 async function connectToMongoClient(name = '') {
   if (!mongoClient) {
     mongoClient = await MongoClient.connect(process.env.URI);
-    coll = mongoClient.db("isoDb").collection(`${name}`);
+    coll = mongoClient.db("test").collection(`${name}`);
   }
   return coll;
 }

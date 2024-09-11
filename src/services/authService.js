@@ -37,36 +37,79 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// const loginLocal = async (req, res) => {
+//   try {
+//     const correo = req.body.email;
+//     const clave = req.body.password;
+//     const filter = { email: correo };
+//     const usersearch = await User.findOne(filter);
+    
+
+//     if (!usersearch) {
+//       return res.status(401).json({message: "Usuario no encontrado"});;
+//     }
+
+//     const isMatch = await bcrypt.compare(clave, usersearch.password);
+//     if (!isMatch) {
+//       return res.status(401).json({message: "Contraseña incorrecta"});
+//     }
+
+//     const payload = {
+//       _id: usersearch._id,
+//       email: usersearch.email,
+//       rolid: usersearch.roles
+//     }; 
+//     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+
+//     return res.status(201).json({token: token});
+//   } catch (error) {
+//     console.error("Error fetching iso:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   } 
+// };
+
+
 const loginLocal = async (req, res) => {
   try {
     const correo = req.body.email;
     const clave = req.body.password;
     const filter = { email: correo };
     const usersearch = await User.findOne(filter);
-    
 
     if (!usersearch) {
-      return res.status(400).json("Usuario no encontrado");;
+      return res.status(401).json({ message: "Usuario no encontrado" });
     }
 
     const isMatch = await bcrypt.compare(clave, usersearch.password);
     if (!isMatch) {
-      return res.status(400).json("Contraseña incorrecta");
+      return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
     const payload = {
       _id: usersearch._id,
       email: usersearch.email,
       rolid: usersearch.roles
-    }; 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+    };
 
-    return res.status(201).json(token);
+    // Generar el token de acceso
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Generar el token de refresco
+    const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+    // Actualizar el refreshToken en el usuario existente
+    usersearch.refreshToken = refreshToken;
+    await usersearch.save(); // Aquí guardamos el usuario sin crear uno nuevo
+
+    // Enviar tokens al cliente
+    return res.status(201).json({ token: token, refreshToken: refreshToken });
+
   } catch (error) {
-    console.error("Error fetching iso:", error);
+    console.error("Error en el login:", error);
     res.status(500).json({ error: "Internal server error" });
-  } 
+  }
 };
+
 
 const getTokenJwt = async (req, res) => {
   try {
@@ -74,13 +117,15 @@ const getTokenJwt = async (req, res) => {
       _id: req.body._id,
       email: req.body.email,
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); 
-    console.log(token);
+    const usersearch = await User.findOne(payload);
+    if (!usersearch) {
+      return res.status(401).json({message: "Usuario no encontrado"});;
+    }
+    const token = jwt.sign(usersearch, process.env.JWT_SECRET, { expiresIn: '1h' }); 
     res.status(200).json(token);
-    await sendEmail();
+    // await sendEmail();
   } catch (error) {
-    console.error("Error generating JWT:", error);
-    throw error; 
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
