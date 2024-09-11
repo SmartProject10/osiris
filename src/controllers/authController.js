@@ -33,6 +33,14 @@ router.post('/up', async (req, res) => {
       res.status(error.statusCode || 500).json({ error: error.message });
     }
   });
+
+  router.post('/me', async (req, res) => {
+    try {
+      await authService.verifyME(req, res);
+    } catch (error) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  });
   
   // router.get('/login', async (req, res) => {
   //   try {

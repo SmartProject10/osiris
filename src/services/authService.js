@@ -12,6 +12,8 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const userService = require('../services/userService');
 const User = require('../model/userSchema');
+const Trabajador = require('../model/trabajadorSchema');
+const rol = require('../model/rolesSchema');
 // function generateRandomToken(length = 3) {
 //   return crypto.randomBytes(length).toString("hex");
 // }
@@ -88,7 +90,8 @@ const loginLocal = async (req, res) => {
     const payload = {
       _id: usersearch._id,
       email: usersearch.email,
-      rolid: usersearch.roles
+      rolid: usersearch.roles,
+      trabajadorid: usersearch.trabajador
     };
 
     // Generar el token de acceso
@@ -176,6 +179,37 @@ const receipJwt = async(req, res) => {
     res.status(200).json(req.body);
   })(req, res);
 };
+
+const verifyME = async (req, res) => {
+  const bearerHeader = req.headers["authorization"];
+  
+  if (typeof bearerHeader !== 'undefined') {
+    const token = bearerHeader.split(" ")[1];
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const obtenertrabajador = await Trabajador.findById(decoded.trabajadorid);
+      // const obtenerrol = await rol.findById(decoded.rolid);
+
+      // const resp_decoded = {
+      //   _id: decoded._id,
+      //   email: decoded.email,
+      //   rolid: decoded.rolid,
+      //   nombrerol: obtenerrol.vName,
+      //   trabajadorid: decoded.trabajadorid,
+      //   nombretrabajador: obtenertrabajador.nombres +' ' + obtenertrabajador.apellidoPaterno +' ' + obtenertrabajador.apellidoMaterno
+      // }
+      res.status(200).json({ success: true, obtenertrabajador });
+    } catch (err) {
+      // Si el token no es válido o ha expirado
+      res.status(403).json({ success: false, message: 'Token no válido' });
+    }
+  } else {
+    // Si no se encuentra el token
+    res.status(403).json({ success: false, message: 'No token provided' });
+  }
+};
+
 
 // const generateToken = async(req, res) => {
 // const opts = {};
@@ -270,5 +304,6 @@ module.exports = {
   loginOther,
   receipJwt,
   loginLocal,
-  getTokenJwt
+  getTokenJwt,
+  verifyME
 };

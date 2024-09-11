@@ -7,7 +7,7 @@ const rolUsuarioSchema = new mongoose.Schema({
     enum: [1, 2], // 1: Activo, 2: Inactivo
     default: 1
   },
-  vNombre: {
+  vName: {
     type: String,
     required: true
   }

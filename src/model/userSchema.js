@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'roles',
     required: true
+  },
+  trabajador: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Trabajador',
+    required: true
   }
 });
 
