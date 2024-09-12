@@ -90,13 +90,6 @@ router.post('/up', async (req, res) => {
     }
   });
 
-  router.post('/token-jwt', async (req, res) => {
-    try {
-      await authService.getTokenJwt(req, res);
-    } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
-    }
-  });
  
   router.get('/protected', passport.authenticate('oauth2', { session: false }), (req, res) => {
     res.json({ message: 'Acceso concedido' });
