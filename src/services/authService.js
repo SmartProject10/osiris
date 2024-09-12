@@ -121,14 +121,22 @@ const getTokenJwt = async (req, res) => {
       email: req.body.email,
     };
     const usersearch = await User.findOne(payload);
+
+    const payloadobtenido = {
+      _id: usersearch._id,
+      email: usersearch.email,
+      rolid: usersearch.roles,
+      trabajadorid: usersearch.trabajador
+    };
+    
     if (!usersearch) {
       return res.status(401).json({message: "Usuario no encontrado"});;
     }
-    const token = jwt.sign(usersearch, process.env.JWT_SECRET, { expiresIn: '1h' }); 
-    res.status(200).json(token);
+    const token = jwt.sign(payloadobtenido, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+    res.status(201).json({refreshToken: token});
     // await sendEmail();
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    es.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
@@ -209,35 +217,6 @@ const verifyME = async (req, res) => {
     res.status(403).json({ success: false, message: 'No token provided' });
   }
 };
-
-
-// const generateToken = async(req, res) => {
-// const opts = {};
-// opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-// opts.secretOrKey = process.env.JWT_SECRET; 
-// payload = {
-//   _id: req.body._id,
-//   password: req.body.password,
-//   email: req.body.email,
-// };
-// passport.use(
-//   new JwtStrategy(opts, (payload, done) => {
-//     userService.findById(payload._id)
-//       .then(user => {
-//         if (user) {
-//           return done(null, user);
-
-//         } else {
-//           return done(null, false);
-//         }
-//       })
-//       .catch(err => {
-//         console.error('Error al buscar usuario:', err);
-//         return done(err, false);
-//       });
-//   })
-// );
-// }
 
 const generateToken = async (req, res) => {
   try {

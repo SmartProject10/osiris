@@ -41,14 +41,14 @@ router.post('/up', async (req, res) => {
       res.status(error.statusCode || 500).json({ error: error.message });
     }
   });
-  
-  // router.get('/login', async (req, res) => {
-  //   try {
-  //     await authService.loginLocal(req, res);
-  //   } catch (error) {
-  //     res.status(error.statusCode || 500).json({ error: error.message });
-  //   }
-  // });
+
+  router.post('/token-jwt', async (req, res) => {
+    try {
+      await authService.getTokenJwt(req, res);
+    } catch (error) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  });
 
   router.post('/local', async (req, res) => {
     try {

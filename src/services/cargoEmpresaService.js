@@ -14,11 +14,11 @@ const createCargo = async (req, res) => {
 const getCargoById = async (req, res) => {
   const CargoId = req.params.id;
   try {
-    const Cargo = await Cargo.findById(CargoId);
-    if (!Cargo) {
+    const Cargos = await Cargo.findById(CargoId);
+    if (!Cargos) {
       return res.status(404).json({ message: 'Cargo not found' });
     }
-    res.status(200).json(Cargo);
+    res.status(201).json(Cargos);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -49,11 +49,11 @@ const updateCargo = async (req, res) => {
   const CargoId = req.params.id;
   const updatedCargo = req.body;
   try {
-    const Cargo = await Cargo.findByIdAndUpdate(CargoId, updatedCargo, { new: true });
-    if (!Cargo) {
+    const Cargos = await Cargo.findByIdAndUpdate(CargoId, updatedCargo, { new: true });
+    if (!Cargos) {
       return res.status(404).json({ message: 'Cargo not found' });
     }
-    res.status(200).json(Cargo);
+    res.status(201).json(Cargos);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
