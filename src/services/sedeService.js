@@ -1,4 +1,5 @@
 const Sede = require('../model/sedeSchema');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const createSede = async (req, res) => {
   const newSede = new Sede(req.body);
@@ -6,18 +7,18 @@ const createSede = async (req, res) => {
     await newSede.save();
     res.status(201).json({ message: 'Sede created successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
 const getSedeById = async (req, res) => {
   const SedeId = req.params.id;
   try {
-    const Sede = await Sede.findById(SedeId);
-    if (!Sede) {
-      return res.status(404).json({ message: 'Sede not found' });
+    const Sedes = await Sede.findById(SedeId);
+    if (!Sedes) {
+      return res.status(400).json({ message: 'Sede not found' });
     }
-    res.status(200).json(Sede);
+    res.status(201).json(Sedes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -26,7 +27,7 @@ const getSedeById = async (req, res) => {
 const getAllSedes = async (req, res) => {
   try {
     const Sedes = await Sede.find();
-    res.status(200).json(Sedes);
+    res.status(201).json(Sedes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -36,11 +37,18 @@ const updateSede = async (req, res) => {
   const SedeId = req.params.id;
   const updatedSede = req.body;
   try {
-    const Sede = await Sede.findByIdAndUpdate(SedeId, updatedSede, { new: true });
-    if (!Sede) {
-      return res.status(404).json({ message: 'Sede not found' });
+    const filter = { _id: new ObjectId(SedeId) };
+    const Sedes = await Sede.findOneAndUpdate(
+      filter,
+      { $set: updatedSede },
+      { returnDocument: 'after' }
+    );
+    console.log(Sedes);
+    
+    if (!Sedes) {
+      return res.status(400).json({ message: 'Sede not found' });
     }
-    res.status(200).json(Sede);
+    res.status(201).json({ message: 'Sede edit successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -50,7 +58,7 @@ const deleteSede = async (req, res) => {
   const SedeId = req.params.id;
   try {
     await Sede.findByIdAndDelete(SedeId);
-    res.status(200).json({ message: 'Sede deleted successfully' });
+    res.status(201).json({ message: 'Sede deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -10,6 +10,8 @@ const trabajadorController = require('./controllers/trabajadorController');
 const companyController = require('./controllers/CompanyController'); 
 const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
 const areaEmpresaController = require('./controllers/areaEmpresaController'); 
+const distritoController = require('./controllers/distritoController'); 
+const menuController = require('./controllers/menuEmpresaController'); 
 const isoController = require('./controllers/isoController'); 
 const companyEconomicActivityController = require('./controllers/companyEconomicActivity.controller'); 
 const userController = require('./controllers/userController');
@@ -19,6 +21,7 @@ const personaController = require('./controllers/personaController');
 const authController = require('./controllers/authController');
 const userProfileController = require('./controllers/userProfileController');
 
+const authenticateToken = require('./middlewares/verifyToken');
 const port = process.env.PORT || 3000;
 
 const app = express();
@@ -59,16 +62,18 @@ app.use(errorHandler);
 // Routes
 app.use('/auth/provider', passport.authenticate('oauth2'));
 app.use('/auth', authController);
-app.use('/company', companyController); 
-app.use('/cargo', cargoEmpresaController); 
-app.use('/area', areaEmpresaController); 
-app.use('/iso', isoController); 
-app.use('/companyEconomicActivity', companyEconomicActivityController); 
-app.use('/user', userController);
-app.use('/sede', sedeController);
-app.use('/persona', personaController);
-app.use('/pais', paisController);
-app.use('/profile', userProfileController);
+app.use('/company', authenticateToken, companyController); 
+app.use('/cargo', authenticateToken, cargoEmpresaController); 
+app.use('/area', authenticateToken, areaEmpresaController); 
+app.use('/iso', authenticateToken, isoController); 
+app.use('/companyEconomicActivity', authenticateToken, companyEconomicActivityController); 
+app.use('/user', authenticateToken, userController);
+app.use('/sede', authenticateToken, sedeController);
+app.use('/persona', authenticateToken, personaController);
+app.use('/pais', authenticateToken, paisController);
+app.use('/profile', authenticateToken, userProfileController);
+app.use('/distrito', authenticateToken, distritoController);
+app.use('/menu', authenticateToken, menuController);
 
 // Rutas de trabajador (montadas correctamente bajo /api)
 app.post('/api/trabajador', trabajadorController.createTrabajador);

@@ -11,7 +11,9 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const userService = require('../services/userService');
-const userSchema = require('../model/userSchema');
+const User = require('../model/userSchema');
+const Trabajador = require('../model/trabajadorSchema');
+const rol = require('../model/rolesSchema');
 // function generateRandomToken(length = 3) {
 //   return crypto.randomBytes(length).toString("hex");
 // }
@@ -37,44 +39,80 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// const loginLocal = async (req, res) => {
+//   try {
+//     const correo = req.body.email;
+//     const clave = req.body.password;
+//     const filter = { email: correo };
+//     const usersearch = await User.findOne(filter);
+    
+
+//     if (!usersearch) {
+//       return res.status(401).json({message: "Usuario no encontrado"});;
+//     }
+
+//     const isMatch = await bcrypt.compare(clave, usersearch.password);
+//     if (!isMatch) {
+//       return res.status(401).json({message: "Contraseña incorrecta"});
+//     }
+
+//     const payload = {
+//       _id: usersearch._id,
+//       email: usersearch.email,
+//       rolid: usersearch.roles
+//     }; 
+//     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+
+//     return res.status(201).json({token: token});
+//   } catch (error) {
+//     console.error("Error fetching iso:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   } 
+// };
+
+
 const loginLocal = async (req, res) => {
-  passport.use(
-    'oauth2',
-    new LocalStrategy(
-      {
-        usernameField: "email",
-        passwordField: "password",
-      },
-      async (email, password, done) => {
-        const client = await MongoClient.connect(process.env.URI);
-        try {
-          const correo = req.body.email;
-          const clave = req.body.password;
-          const db = client.db("isoDb");
-          const collection = db.collection("user");
-          const filter = { email: correo, password: clave };
-          const user = await collection.findOne(filter);
+  try {
+    const correo = req.body.email;
+    const clave = req.body.password;
+    const filter = { email: correo };
+    const usersearch = await User.findOne(filter);
 
-          if (!user) {
-            return done(null, false, { message: "User not found" });
-          }
+    if (!usersearch) {
+      return res.status(401).json({ message: "Usuario no encontrado" });
+    }
 
-          const isMatch = await bcrypt.compare(password, user.password);
-          if (!isMatch) {
-            return done(null, false, { message: "Incorrect password" });
-          }
+    const isMatch = await bcrypt.compare(clave, usersearch.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Contraseña incorrecta" });
+    }
 
-          return done(null, user);
-        } catch (error) {
-          console.error("Error fetching iso:", error);
-          res.status(500).json({ error: "Internal server error" });
-        } finally {
-          await client?.close();
-        }
-      }
-    )
-  );
+    const payload = {
+      _id: usersearch._id,
+      email: usersearch.email,
+      rolid: usersearch.roles,
+      trabajadorid: usersearch.trabajador
+    };
+
+    // Generar el token de acceso
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Generar el token de refresco
+    const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+    // Actualizar el refreshToken en el usuario existente
+    usersearch.refreshToken = refreshToken;
+    await usersearch.save(); // Aquí guardamos el usuario sin crear uno nuevo
+
+    // Enviar tokens al cliente
+    return res.status(201).json({ token: token, refreshToken: refreshToken });
+
+  } catch (error) {
+    console.error("Error en el login:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
+
 
 const getTokenJwt = async (req, res) => {
   try {
@@ -82,13 +120,23 @@ const getTokenJwt = async (req, res) => {
       _id: req.body._id,
       email: req.body.email,
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); 
-    console.log(token);
-    res.status(200).json(token);
-    await sendEmail();
+    const usersearch = await User.findOne(payload);
+
+    const payloadobtenido = {
+      _id: usersearch._id,
+      email: usersearch.email,
+      rolid: usersearch.roles,
+      trabajadorid: usersearch.trabajador
+    };
+    
+    if (!usersearch) {
+      return res.status(401).json({message: "Usuario no encontrado"});;
+    }
+    const token = jwt.sign(payloadobtenido, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+    res.status(201).json({refreshToken: token});
+    // await sendEmail();
   } catch (error) {
-    console.error("Error generating JWT:", error);
-    throw error; 
+    es.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
@@ -140,33 +188,35 @@ const receipJwt = async(req, res) => {
   })(req, res);
 };
 
-// const generateToken = async(req, res) => {
-// const opts = {};
-// opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-// opts.secretOrKey = process.env.JWT_SECRET; 
-// payload = {
-//   _id: req.body._id,
-//   password: req.body.password,
-//   email: req.body.email,
-// };
-// passport.use(
-//   new JwtStrategy(opts, (payload, done) => {
-//     userService.findById(payload._id)
-//       .then(user => {
-//         if (user) {
-//           return done(null, user);
+const verifyME = async (req, res) => {
+  const bearerHeader = req.headers["authorization"];
+  
+  if (typeof bearerHeader !== 'undefined') {
+    const token = bearerHeader.split(" ")[1];
 
-//         } else {
-//           return done(null, false);
-//         }
-//       })
-//       .catch(err => {
-//         console.error('Error al buscar usuario:', err);
-//         return done(err, false);
-//       });
-//   })
-// );
-// }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const obtenertrabajador = await Trabajador.findById(decoded.trabajadorid);
+      // const obtenerrol = await rol.findById(decoded.rolid);
+
+      // const resp_decoded = {
+      //   _id: decoded._id,
+      //   email: decoded.email,
+      //   rolid: decoded.rolid,
+      //   nombrerol: obtenerrol.vName,
+      //   trabajadorid: decoded.trabajadorid,
+      //   nombretrabajador: obtenertrabajador.nombres +' ' + obtenertrabajador.apellidoPaterno +' ' + obtenertrabajador.apellidoMaterno
+      // }
+      res.status(200).json({ success: true, obtenertrabajador });
+    } catch (err) {
+      // Si el token no es válido o ha expirado
+      res.status(403).json({ success: false, message: 'Token no válido' });
+    }
+  } else {
+    // Si no se encuentra el token
+    res.status(403).json({ success: false, message: 'No token provided' });
+  }
+};
 
 const generateToken = async (req, res) => {
   try {
@@ -233,5 +283,6 @@ module.exports = {
   loginOther,
   receipJwt,
   loginLocal,
-  getTokenJwt
+  getTokenJwt,
+  verifyME
 };

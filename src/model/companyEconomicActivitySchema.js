@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const companyEconomicActivitySchema = new mongoose.Schema({
-  iId_Estado: { type: Number, required: false },
+  iId_Estado: { type: Number, required: true },
   dFechaRegistro: { type: Date, default: Date.now },
 });
 

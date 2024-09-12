@@ -10,6 +10,16 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  roles: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'roles',
+    required: true
+  },
+  trabajador: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Trabajador',
+    required: true
   }
 });
 
@@ -38,4 +48,4 @@ userSchema.methods.isEmailValid = async function(email) {
 };
 
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('users', userSchema);

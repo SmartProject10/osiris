@@ -21,8 +21,26 @@ const getTrabajadorById = async (req, res) => {
 
 const getAllTrabajadores = async (req, res) => {
   try {
-    const trabajadores = await trabajadorService.getAllTrabajadores();
-    res.status(200).json(trabajadores);
+    const filtros = {
+      area: req.query.area,
+      cargo: req.query.cargo,
+      dni: req.query.dni,
+      apellidoPaterno: req.query.apellidoPaterno,
+      apellidoMaterno: req.query.apellidoMaterno,
+      estadoCivil: req.query.estadoCivil,
+      genero: req.query.genero,
+      nacionalidad: req.query.nacionalidad,
+      distrito: req.query.distrito,
+      direccion: req.query.direccion,
+      status: req.query.status,
+    };
+    // Extraer parámetros de paginación
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    // Llamar al servicio de trabajadores con los filtros y la paginación
+    const result = await trabajadorService.getAllTrabajadores(filtros, page, limit);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authService = require('../services/authService'); // Assuming you have a service module
+const userService = require('../services/userService');
 require('dotenv').config();
 const passport = require('passport');
 
@@ -32,14 +33,22 @@ router.post('/up', async (req, res) => {
       res.status(error.statusCode || 500).json({ error: error.message });
     }
   });
-  
-  // router.get('/login', async (req, res) => {
-  //   try {
-  //     await authService.loginLocal(req, res);
-  //   } catch (error) {
-  //     res.status(error.statusCode || 500).json({ error: error.message });
-  //   }
-  // });
+
+  router.post('/me', async (req, res) => {
+    try {
+      await authService.verifyME(req, res);
+    } catch (error) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  });
+
+  router.post('/token-jwt', async (req, res) => {
+    try {
+      await authService.getTokenJwt(req, res);
+    } catch (error) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  });
 
   router.post('/local', async (req, res) => {
     try {
@@ -81,13 +90,6 @@ router.post('/up', async (req, res) => {
     }
   });
 
-  router.post('/token-jwt', async (req, res) => {
-    try {
-      await authService.getTokenJwt(req, res);
-    } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
-    }
-  });
  
   router.get('/protected', passport.authenticate('oauth2', { session: false }), (req, res) => {
     res.json({ message: 'Acceso concedido' });
