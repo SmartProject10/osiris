@@ -5,37 +5,22 @@ const OAuth2Strategy = require('passport-oauth2').Strategy;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const errorHandler = require('./middlewares/errorHandler');
-const { connectToMongoose } = require('../src/config/db');
-const trabajadorController = require('./controllers/trabajadorController');
-const companyController = require('./controllers/CompanyController'); 
-const cargoEmpresaController = require('./controllers/cargoEmpresaController'); 
-const areaEmpresaController = require('./controllers/areaEmpresaController'); 
-const distritoController = require('./controllers/distritoController'); 
-const menuController = require('./controllers/menuEmpresaController'); 
-const isoController = require('./controllers/isoController'); 
-const companyEconomicActivityController = require('./controllers/companyEconomicActivity.controller'); 
-const userController = require('./controllers/userController');
-const sedeController = require('./controllers/sedeController');
-const paisController = require('./controllers/paisController');
-const personaController = require('./controllers/personaController');
-const authController = require('./controllers/authController');
-const userProfileController = require('./controllers/userProfileController');
-
-const authenticateToken = require('./middlewares/verifyToken');
-const port = process.env.PORT || 3000;
+const { connectToMongoose } = require('./config/db');
+const routes = require('./controllers/routes'); // Importar las rutas centralizadas
 
 const app = express();
+const port = process.env.PORT || 3000;
 
-// Conecta a la base de datos
+// Conectar a la base de datos
 connectToMongoose();
 
-app.use(express.json()); 
+// Middleware
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
-app.use(cors());
 
-// Configurar la estrategia OAuth2
+// Configurar OAuth2
 passport.use(
   'oauth2',
   new OAuth2Strategy({
@@ -50,42 +35,18 @@ passport.use(
   })
 );
 
-app.get('/auth/callback', 
-  passport.authenticate('oauth2', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/dashboard');
-  }
-);
-
-app.use(errorHandler);
-
-// Routes
+// Rutas
 app.use('/auth/provider', passport.authenticate('oauth2'));
-app.use('/auth', authController);
-app.use('/company', authenticateToken, companyController); 
-app.use('/cargo', authenticateToken, cargoEmpresaController); 
-app.use('/area', authenticateToken, areaEmpresaController); 
-app.use('/iso', authenticateToken, isoController); 
-app.use('/companyEconomicActivity', authenticateToken, companyEconomicActivityController); 
-app.use('/user', authenticateToken, userController);
-app.use('/sede', authenticateToken, sedeController);
-app.use('/persona', authenticateToken, personaController);
-app.use('/pais', authenticateToken, paisController);
-app.use('/profile', authenticateToken, userProfileController);
-app.use('/distrito', authenticateToken, distritoController);
-app.use('/menu', authenticateToken, menuController);
+app.use('/auth/callback', 
+  passport.authenticate('oauth2', { failureRedirect: '/' }),
+  (req, res) => res.redirect('/dashboard')
+);
+app.use('/', routes);
 
-// Rutas de trabajador (montadas correctamente bajo /api)
-app.post('/api/trabajador', trabajadorController.createTrabajador);
-app.get('/api/trabajador/:id', trabajadorController.getTrabajadorById);
-app.get('/api/trabajadores', trabajadorController.getAllTrabajadores);
-app.put('/api/trabajador/:id', trabajadorController.updateTrabajador);
-app.delete('/api/trabajador/:id', trabajadorController.deleteTrabajador);
-
-app.get('/', (req, res) => res.send('Iso Main!'));
-
+// Error handling
+app.use(errorHandler);
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Log errors
+  console.error(err.stack);
   res.status(err.status || 500).json({ message: 'Internal Server Error' });
 });
 
