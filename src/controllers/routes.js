@@ -8,7 +8,7 @@ const companyDataController = require('../controllers/companyDataController');
 const companyAcquisitionController = require('../controllers/companyAcquisitionController');
 const companySiteController = require('../controllers/companySiteController');
 const companyAreaController = require('../controllers/companyAreaController');
-//const authController= require('../controllers/authController');
+const {companytest}= require('../tests/companyTestController');
 
 // Middlewares
 const authenticateToken = require('../middlewares/validateToken');
@@ -27,6 +27,10 @@ router.use('/companyArea', authenticateToken , companyAreaController);
 router.post('/auth/register',authController.register);
 router.post('/auth/login',authController.login);
 router.post('/auth/logout',authController.logout);
+router.post('/auth/verify_token',authController.verify_token);
+
+//Otros
 router.get('/auth/profile', authenticateToken,authController.profile);
+router.get('/companies', authenticateToken,companytest);
 
 module.exports = router;
