@@ -1,10 +1,11 @@
 const User = require('../model/userSchema');
 const bcrypt = require('bcryptjs');
 const { createAccessToken } = require('../lib/jwt.js');
+const jwt = require('jsonwebtoken');
 
 const register = async (req, res) => {
 
-  const { email, password,lastname,firstname } = req.body;
+  const { email, password, lastname, firstname } = req.body;
 
   try {
     const passwordHash = await bcrypt.hash(password, 10);
@@ -21,6 +22,7 @@ const register = async (req, res) => {
     res.cookie('token', token);
 
     res.json({
+      token: token,
       message: 'User created successfully',
     });
 
@@ -51,6 +53,7 @@ const login = async (req, res) => {
     res.cookie('token', token)
 
     res.json({
+      token: token,
       message: 'User login successfully',
     });
 
@@ -66,7 +69,7 @@ const logout = async (req, res) => {
 }
 
 const profile = async (req, res) => {
-  
+
   try {
 
     const userFound = await User.findById(req.user.payload.id);
@@ -90,10 +93,38 @@ const profile = async (req, res) => {
 
 }
 
+const verify_token = async (req, res) => {
+
+
+  const token = req.headers['authorization'] != undefined ? req.headers['authorization'] : req.headers['Authorization'];
+
+
+  if (!token) return res.status(401).json({ message: "Unauthorized _1" });
+
+  jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
+    if (err) return res.status(401).json({ message: "Unauthorized _2" });
+
+    const userFound = await User.findById(user.payload.id);
+
+    if (!userFound) return res.status(401).json({ message: "Unauthorized _3" });
+
+    return res.json({
+      id: userFound.id,
+      firstname: userFound.firstname,
+      lastname: userFound.lastname,
+      email: userFound.email,
+      createdAt: userFound.createdAt,
+      updatedAt: userFound.updatedAt
+    });
+  })
+
+}
+
 
 module.exports = {
   register,
   login,
   logout,
-  profile
+  profile,
+  verify_token
 };
