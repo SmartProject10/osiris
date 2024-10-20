@@ -30,16 +30,9 @@ router.put('/trabajador/:id', authenticateToken ,updateTrabajador);
 router.delete('/trabajador/:id',authenticateToken, deleteTrabajador);
 
 // Autenticacion y registro de usuarios
-router.post('/auth/register',register);
-router.post('/auth/login',login);
-router.post('/auth/logout',logout);
-
-//Otros
-router.get('/companies', authenticateToken,companies);
-router.get('/auth/profile', authenticateToken,profile);
-router.post('/auth/verify_token',verify_token);
-
-// Rol
-router.post('/rol', createRole);
+router.post('/auth/register',authController.register);
+router.post('/auth/login',authController.login);
+router.post('/auth/logout',authController.logout);
+router.get('/auth/profile', authenticateToken,authController.profile);
 
 module.exports = router;

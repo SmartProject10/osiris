@@ -1,7 +1,7 @@
 const User = require('../model/userSchema');
 const bcrypt = require('bcryptjs');
-const { createAccessToken } = require('../lib/jwt.js');
 const jwt = require('jsonwebtoken');
+const { createAccessToken } = require('../lib/jwt.js');
 
 const register = async (req, res) => {
 
@@ -20,11 +20,12 @@ const register = async (req, res) => {
     const token = await createAccessToken({ id: UserSaved._id });
 
     res.cookie('token', token);
-
     res.json({
-      token: token,
       message: 'User created successfully',
     });
+    /* res.json({
+        message: 'User created successfully',
+      });*/
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -50,10 +51,8 @@ const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound._id });
 
-    res.cookie('token', token)
-
+    res.cookie('token', token);
     res.json({
-      token: token,
       message: 'User login successfully',
     });
 
@@ -88,8 +87,37 @@ const profile = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({ message: "Error: " + error.message });
+    res.status(500).json({ message: error.message });
   }
+
+}
+
+const verify_token = async (req, res) => {
+  const token = req.headers.authorization
+//console.log(token);
+
+  if (!token) return res.status(401).json({ message: "Unauthorized_1" });
+
+  jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+
+    if (err) {
+      console.log(err)
+      return res.status(401).json({ message: "Unauthorized_2" })
+    };
+
+   // console.log(user.payload);
+
+    const userFound = await User.findById(user.payload.id)
+
+    if (!userFound) return res.status(401).json({ message: "Unauthorized_3" });
+
+    return res.status(200).json({
+      id: userFound._id,
+      username: userFound.username,
+      email: userFound.email
+    });
+  });
+
 
 }
 
