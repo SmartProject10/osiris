@@ -54,6 +54,9 @@ const trabajadorEmpresaSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'rol',
   },
+  tallaPantalon: {type: Number, required: true, min:0,max:99},
+  tallaPolo: {type: Number, required: true, min:0,max:99},
+  tallaZapato: {type: Number, required: true, min:0,max:99},
 }, { timestamps: true });
 
 module.exports = mongoose.model('TrabajadorEmpresa', trabajadorEmpresaSchema);
