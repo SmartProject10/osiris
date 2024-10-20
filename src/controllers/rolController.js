@@ -1,4 +1,4 @@
-const Rol = require('../model/rolesSchema.js');
+const Rol = require('../model/rolUsuarioSchema.js');
 
 const createRole = async (req, res) => {
   const rol = new Rol(req.body);

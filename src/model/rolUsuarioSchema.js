@@ -19,4 +19,4 @@ const rolUsuarioSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('roles', rolUsuarioSchema);
+module.exports = mongoose.model('rolUsuario', rolUsuarioSchema);

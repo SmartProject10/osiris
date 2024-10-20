@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Importar controladores
 const {register,login,logout,profile,verify_token} = require('../controllers/authController');
-const {createTrabajador,getTrabajadorById,getAllTrabajadores,updateTrabajador,deleteTrabajador} = require('../controllers/trabajadorController');
+const {createTrabajadorEmpresa,getTrabajadorEmpresaById,updateTrabajadorEmpresa,deleteTrabajadorEmpresa} = require('../controllers/trabajadorEmpresaController');
 const companyRegisterController = require('../controllers/companyRegisterController');
 const companyDataController = require('../controllers/companyDataController');
 const companyAcquisitionController = require('../controllers/companyAcquisitionController');
@@ -23,11 +23,10 @@ router.use('/companySite' , companySiteController);
 router.use('/companyArea' , companyAreaController);
 
 // Rutas de trabajador
-router.post('/trabajador', authenticateToken, createTrabajador);
-router.get('/trabajador/:id', authenticateToken, getTrabajadorById);
-router.get('/trabajadores', authenticateToken ,getAllTrabajadores);
-router.put('/trabajador/:id', authenticateToken ,updateTrabajador);
-router.delete('/trabajador/:id',authenticateToken, deleteTrabajador);
+router.post('/trabajadorEmpresa', authenticateToken, createTrabajadorEmpresa);
+router.get('/trabajadorEmpresa/:id', authenticateToken, getTrabajadorEmpresaById);
+router.put('/trabajadorEmpresa/:id', authenticateToken ,updateTrabajadorEmpresa);
+router.delete('/trabajadorEmpresa/:id',authenticateToken, deleteTrabajadorEmpresa);
 
 // Autenticacion y registro de usuarios
 router.post('/auth/register',register);
