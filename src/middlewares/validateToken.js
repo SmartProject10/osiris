@@ -11,7 +11,9 @@ const authenticateToken = (req, res, next) => {
  
    const token = cookie.split('=')[1];
    */
-  const {token} = req.cookies;
+  //const {token} = req.cookies;
+  const token = req.headers['authorization'] != undefined ? req.headers['authorization'] : req.headers['Authorization'];
+
 
   if (!token) return res.status(401).json({ message: "Token requerido" });
 
