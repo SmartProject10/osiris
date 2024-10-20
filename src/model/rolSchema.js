@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const rolUsuarioSchema = new mongoose.Schema({
+const rolSchema = new mongoose.Schema({
   iId_Estado: {
     type: Number,
     required: true,
@@ -13,4 +13,4 @@ const rolUsuarioSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('roles', rolUsuarioSchema);
+module.exports = mongoose.model('rol', rolSchema);
