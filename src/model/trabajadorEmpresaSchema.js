@@ -8,7 +8,7 @@ const trabajadorEmpresaSchema = new mongoose.Schema({
   fechaNacimiento: {type: Date, required: true},
   area: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'companyArea',
+    ref: 'areaEmpresa',
   },
   cargo: {type: String, required: true},
   fechaIngresoEmpresa: {type: Date, required: true},

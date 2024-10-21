@@ -1,30 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const companySiteService = require('../services/companySiteService');
+const sedeEmpresaService = require('../services/sedeEmpresaService');
 
-// Create a new company site
 router.post('/', async (req, res) => {
   try {
-    await companySiteService.createCompanySite(req, res);
+    await sedeEmpresaService.createSedeEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 
 });
 
-// Read all company site
 router.get('/', async (req, res) => {
   try {
-    await companySiteService.getAllCompanySite(req, res);
+    await sedeEmpresaService.getAllSedeEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Read a specific company site by ID
 router.get('/:id', async (req, res) => {
   try {
-    await companySiteService.getCompanySiteById(req, res);
+    await sedeEmpresaService.getSedeEmpresaById(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -32,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await companySiteService.deleteCompanySite(req, res);
+    await sedeEmpresaService.deleteSedeEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

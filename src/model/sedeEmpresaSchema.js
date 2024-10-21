@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
 
-const companySiteSchema = new mongoose.Schema({
-  vName: {
+const sedeEmpresaSchema = new mongoose.Schema({
+  nombre: {
     type: String,
     required: true
   },
-  vAddress: {
+  direccion: {
     type: String,
     required: true 
   },
-  vCity: {
+  ciudad: {
     type: String,
     required: true
   },
-  vProvince: {
+  provincia: {
     type: String,
     required: true 
   },
 });
 
-module.exports = mongoose.model('companySite', companySiteSchema);
+module.exports = mongoose.model('sedeEmpresa', sedeEmpresaSchema);
