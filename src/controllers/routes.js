@@ -4,11 +4,11 @@ const router = express.Router();
 // Importar controladores
 const {register,login,logout,profile,verify_token} = require('../controllers/authController');
 const {createTrabajadorEmpresa,getTrabajadorEmpresaById,updateTrabajadorEmpresa,deleteTrabajadorEmpresa} = require('../controllers/trabajadorEmpresaController');
-const companyRegisterController = require('../controllers/companyRegisterController');
-const companyDataController = require('../controllers/companyDataController');
-const companyAcquisitionController = require('../controllers/companyAcquisitionController');
-const companySiteController = require('../controllers/companySiteController');
-const companyAreaController = require('../controllers/companyAreaController');
+const registroEmpresaController = require('../controllers/registroEmpresaController');
+const datoEmpresaController = require('../controllers/datoEmpresaController');
+const adquisicionEmpresaController = require('../controllers/adquisicionEmpresaController');
+const sedeEmpresaController = require('../controllers/sedeEmpresaController');
+const areaEmpresaController = require('../controllers/areaEmpresaController');
 const {createRole} = require('../controllers/rolController');
 const {companies} = require('../tests/companyTestController');
 
@@ -16,11 +16,11 @@ const {companies} = require('../tests/companyTestController');
 const authenticateToken = require('../middlewares/validateToken');
 
 // Rutas de empresa
-router.use('/companyRegister', companyRegisterController);
-router.use('/companyData' , companyDataController);
-router.use('/companyAcquisition' , companyAcquisitionController);
-router.use('/companySite' , companySiteController);
-router.use('/companyArea' , companyAreaController);
+router.use('/registroEmpresa', registroEmpresaController);
+router.use('/datoEmpresa' , datoEmpresaController);
+router.use('/adquisicionEmpresa' , adquisicionEmpresaController);
+router.use('/sedeEmpresa' , sedeEmpresaController);
+router.use('/areaEmpresa' , areaEmpresaController);
 
 // Rutas de trabajador
 router.post('/trabajadorEmpresa', authenticateToken, createTrabajadorEmpresa);

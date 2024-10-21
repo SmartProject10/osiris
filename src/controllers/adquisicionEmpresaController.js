@@ -1,30 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const companyDataService = require('../services/companyDataService');
+const adquisicionEmpresaService = require('../services/adquisicionEmpresaService');
 
-// Create a new company data
 router.post('/', async (req, res) => {
   try {
-    await companyDataService.createCompanyData(req, res);
+    await adquisicionEmpresaService.createAdquisicionEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 
 });
 
-// Read all company data
 router.get('/', async (req, res) => {
   try {
-    await companyDataService.getAllCompanyData(req, res);
+    await adquisicionEmpresaService.getAllAdquisicionEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Read a specific company data by ID
 router.get('/:id', async (req, res) => {
   try {
-    await companyDataService.getCompanyDataById(req, res);
+    await adquisicionEmpresaService.getAdquisicionEmpresaById(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -32,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await companyDataService.deleteCompanyData(req, res);
+    await adquisicionEmpresaService.deleteAdquisicionEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

@@ -1,30 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const companyRegisterService = require('../services/companyRegisterService');
+const registroEmpresaService = require('../services/registroEmpresaService');
 
-// Create a new company
 router.post('/', async (req, res) => {
   try {
-    await companyRegisterService.createCompany(req, res);
+    await registroEmpresaService.createEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 
 });
 
-// Read all company
 router.get('/', async (req, res) => {
   try {
-    await companyRegisterService.getAllCompanies(req, res);
+    await registroEmpresaService.getAllEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Read a specific company by ID
 router.get('/:id', async (req, res) => {
   try {
-    await companyRegisterService.getCompanyById(req, res);
+    await registroEmpresaService.getEmpresaById(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -32,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await companyRegisterService.deleteCompany(req, res);
+    await registroEmpresaService.deleteEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

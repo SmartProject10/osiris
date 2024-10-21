@@ -1,30 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const companyAreaService = require('../services/companyAreaService');
+const datoEmpresaService = require('../services/datoEmpresaService');
 
-// Create a new company area
 router.post('/', async (req, res) => {
   try {
-    await companyAreaService.createCompanyArea(req, res);
+    await datoEmpresaService.createDatoEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 
 });
 
-// Read all company area
 router.get('/', async (req, res) => {
   try {
-    await companyAreaService.getAllCompanyArea(req, res);
+    await datoEmpresaService.getAllDatoEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });
 
-// Read a specific company area by ID
 router.get('/:id', async (req, res) => {
   try {
-    await companyAreaService.getCompanyAreaById(req, res);
+    await datoEmpresaService.getDatoEmpresaById(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -32,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await companyAreaService.deleteCompanyArea(req, res);
+    await datoEmpresaService.deleteDatoEmpresa(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
