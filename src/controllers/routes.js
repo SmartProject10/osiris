@@ -12,8 +12,22 @@ const areaEmpresaController = require('../controllers/areaEmpresaController');
 const {createRole} = require('../controllers/rolController');
 const {companies} = require('../tests/companyTestController');
 
+//modulo gestion de actividades
+const actividadController = require('../controllers/actividadController');
+const fechaCumpActividadController = require('../controllers/fechaCumpActividadController');
+const isoController = require('../controllers/isoController');
+const objetivoEspecificoController = require('../controllers/objetivoEspecificoController');
+const objetivoGeneralController = require('../controllers/objetivoGeneralController');
+
 // Middlewares
 const authenticateToken = require('../middlewares/validateToken');
+
+// Rutas modulo gestion de actividades
+router.use('/actividadController', actividadController);
+router.use('/fechaCumpActividadController' , fechaCumpActividadController);
+router.use('/isoController' , isoController);
+router.use('/objetivoEspecificoController' , objetivoEspecificoController);
+router.use('/objetivoGeneralController' , objetivoGeneralController);
 
 // Rutas de empresa
 router.use('/registroEmpresa', registroEmpresaController);
