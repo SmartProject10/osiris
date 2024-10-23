@@ -8,7 +8,6 @@ const subempresaSchema = new mongoose.Schema({
   tamañoEmpresa:{type: String, required: true},
   fechaDeIngreso:{type: Date, required: true},
   fechaDeTerminoDeContrato:{type: Date, required: true},
-  pdfContrato:{type: String, required: true},
 });
 
 module.exports = mongoose.model('subempresa', subempresaSchema);
