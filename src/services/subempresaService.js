@@ -1,10 +1,9 @@
 const subempresaSchema = require('../model/subempresaSchema');
 
 const createSubempresa = async (req, res) => {
-  const newSubempresa = new subempresaSchema(req.body);
   try {
-    await newSubempresa.save();
-    res.status(201).json({ message: 'Subempresa creada satisfactoriamente' });
+    const newSubempresa = await new subempresaSchema(req.body).save();
+    res.status(201).json(newSubempresa);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

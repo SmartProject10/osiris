@@ -6,13 +6,9 @@ const trabajadorSubempresaSchema = new mongoose.Schema({
   apellidoMaterno: {type: String, required: true},
   apellidoPaterno: {type: String, required: true},
   fechaNacimiento: {type: Date, required: true},
-  area: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'areaEmpresa',
-  },
+  nombreProyecto:{type: String, required: true},
   cargo: {type: String, required: true},
   fechaIngresoEmpresa: {type: Date, required: true},
-  fechaIngresoÁrea: {type: Date, required: true},
   direccion: {type: String, required: true},
   distrito: {type: String, required: true},
   emailCorporativo: {
@@ -50,10 +46,6 @@ const trabajadorSubempresaSchema = new mongoose.Schema({
     required: true
   },
   sedeDeTrabajo: {type: String, required: true},
-  rol: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'rol',
-  },
   tallaPantalon: {type: Number, required: true, min:0,max:99},
   tallaPolo: {type: Number, required: true, min:0,max:99},
   tallaZapato: {type: Number, required: true, min:0,max:99},

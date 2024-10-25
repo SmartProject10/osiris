@@ -9,6 +9,7 @@ const datoEmpresaController = require('../controllers/datoEmpresaController');
 const adquisicionEmpresaController = require('../controllers/adquisicionEmpresaController');
 const sedeEmpresaController = require('../controllers/sedeEmpresaController');
 const areaEmpresaController = require('../controllers/areaEmpresaController');
+const subempresaController = require('../controllers/subempresaController');
 const {createRole} = require('../controllers/rolController');
 const {companies} = require('../tests/companyTestController');
 
@@ -35,6 +36,9 @@ router.use('/datoEmpresa' , datoEmpresaController);
 router.use('/adquisicionEmpresa' , adquisicionEmpresaController);
 router.use('/sedeEmpresa' , sedeEmpresaController);
 router.use('/areaEmpresa' , areaEmpresaController);
+
+// Ruta subempresa
+router.use('/subempresa' , subempresaController);
 
 // Rutas de trabajador
 router.post('/trabajadorEmpresa', authenticateToken, createTrabajadorEmpresa);
