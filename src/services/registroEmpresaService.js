@@ -1,10 +1,17 @@
 const registroEmpresa = require('../model/registroEmpresaSchema');
+const { createAccessToken } = require('../lib/jwt.js');
+const jwt = require('jsonwebtoken');
 
 const createEmpresa = async (req, res) => {
-  const newEmpresa = new registroEmpresa(req.body);
+ 
   try {
-    await newEmpresa.save();
-    res.status(201).json({ message: 'Empresa creada correctamente' });
+    const newEmpresa = new registroEmpresa(req.body);
+   const newEmpresaa= await newEmpresa.save();
+   const token = await createAccessToken({ id: newEmpresaa._id });
+   res.json({
+    token: token,
+    message: 'Empresa creada correctamente',
+  });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
