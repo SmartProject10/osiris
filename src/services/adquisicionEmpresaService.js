@@ -1,10 +1,9 @@
 const adquisicionEmpresa = require('../model/adquisicionEmpresaSchema');
 
 const createAdquisicionEmpresa = async (req, res) => {
-  const newAdquisicionEmpresa = new adquisicionEmpresa(req.body);
   try {
-    await newAdquisicionEmpresa.save();
-    res.status(201).json({ message: 'Adquisición creada satisfactoriamente' });
+    const newAdquisicionEmpresa = await new adquisicionEmpresa(req.body).save();
+    res.status(201).json(newAdquisicionEmpresa.id);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }

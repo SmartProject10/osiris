@@ -23,7 +23,7 @@ const trabajadorSubempresaSchema = new mongoose.Schema({
     unique: true,
     match: /^[^\s@]+@gmail\.com$/,
   },
-  nacionalidad: {
+  nacionalidadTrabajadorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'nacionalidadTrabajador',
   },

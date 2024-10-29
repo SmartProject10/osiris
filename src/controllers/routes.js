@@ -4,21 +4,22 @@ const router = express.Router();
 // Importar controladores
 const {register,login,logout,profile,verify_token} = require('../controllers/authController');
 const {createTrabajadorEmpresa,getTrabajadorEmpresaById,updateTrabajadorEmpresa,deleteTrabajadorEmpresa} = require('../controllers/trabajadorEmpresaController');
-const registroEmpresaController = require('../controllers/registroEmpresaController');
-const datoEmpresaController = require('../controllers/datoEmpresaController');
+const empresaController = require('./empresaController');
 const adquisicionEmpresaController = require('../controllers/adquisicionEmpresaController');
 const sedeEmpresaController = require('../controllers/sedeEmpresaController');
 const areaEmpresaController = require('../controllers/areaEmpresaController');
 const subempresaController = require('../controllers/subempresaController');
-const {createRole} = require('../controllers/rolController');
+const {createRole} = require('./rolTrabajadorController');
 const {companies} = require('../tests/companyTestController');
+const isoController = require('../controllers/isoController')
+const paisController = require('../controllers/paisController')
+const tipoDeAdquisicionController = require('../controllers/tipoDeAdquisicionController')
 
 // Middlewares
 const authenticateToken = require('../middlewares/validateToken');
 
 // Rutas de empresa
-router.use('/registroEmpresa', registroEmpresaController);
-router.use('/datoEmpresa' , datoEmpresaController);
+router.use('/empresa', empresaController);
 router.use('/adquisicionEmpresa' , adquisicionEmpresaController);
 router.use('/sedeEmpresa' , sedeEmpresaController);
 router.use('/areaEmpresa' , areaEmpresaController);
@@ -26,11 +27,21 @@ router.use('/areaEmpresa' , areaEmpresaController);
 // Ruta subempresa
 router.use('/subempresa' , subempresaController);
 
+// Ruta iso
+router.use('/iso' , isoController);
+
+// Ruta pais
+router.use('/pais' , paisController);
+
+// Ruta tipo de adquisicion
+router.use('/tipodeadquisicion' , tipoDeAdquisicionController);
+
 // Rutas de trabajador
 router.post('/trabajadorEmpresa', authenticateToken, createTrabajadorEmpresa);
 router.get('/trabajadorEmpresa/:id', authenticateToken, getTrabajadorEmpresaById);
 router.put('/trabajadorEmpresa/:id', authenticateToken ,updateTrabajadorEmpresa);
 router.delete('/trabajadorEmpresa/:id',authenticateToken, deleteTrabajadorEmpresa);
+
 
 // Autenticacion y registro de usuarios
 router.post('/auth/register',register);
