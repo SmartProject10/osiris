@@ -16,7 +16,7 @@ const sedeEmpresaSchema = new mongoose.Schema({
   provincia: {
     type: String,
     required: true 
-  },
+  }
 });
 
 module.exports = mongoose.model('sedeEmpresa', sedeEmpresaSchema);

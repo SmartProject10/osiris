@@ -1,16 +1,16 @@
-const isoSchema = require('../model/IsoSchema');
+const isoSchema = require('../model/isoSchema');
 
-const createiso = async (req, res) => {
-  const newiso = new isoSchema(req.body);
+const createIso = async (req, res) => {
+  const newIso = new isoSchema(req.body);
   try {
-    await newiso.save();
-    res.status(201).json({ message: 'iso creada satisfactoriamente' });
+    await newIso.save();
+    res.status(201).json({ message: 'Iso creada correctamente' });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
-const getAllisos = async (req, res) => {
+const getAllIso = async (req, res) => {
     try {
       const isos = await isoSchema.find();
       res.status(200).json(isos);
@@ -20,12 +20,12 @@ const getAllisos = async (req, res) => {
     }
   };
 
-const getisoById = async (req, res) => {
+const getIsoById = async (req, res) => {
   const isoId = req.params.id;
   try {
     const iso = await isoSchema.findById(isoId);
     if (!iso) {
-      return res.status(404).json({ message: 'iso no encontrada' });
+      return res.status(404).json({ message: 'Iso no encontrada' });
     }
     res.status(201).json(iso);
   } catch (error) {
@@ -33,19 +33,19 @@ const getisoById = async (req, res) => {
   }
 };
 
-const deleteiso = async (req, res) => {
+const deleteIso = async (req, res) => {
   const isoId = req.params.id;
   try {
     await isoSchema.findByIdAndDelete(isoId);
-    res.status(200).json({ message: 'iso eliminada satisfactoriamente' });
+    res.status(200).json({ message: 'Iso eliminada correctamente' });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
 module.exports = {
-  createiso,
-  getAllisos,
-  getisoById,
-  deleteiso
+    createIso,
+    getAllIso,
+    getIsoById,
+    deleteIso
 };

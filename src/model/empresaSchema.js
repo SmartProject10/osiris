@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const registroEmpresaSchema = new mongoose.Schema({
+const empresaSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true,
     validate: {
     validator: function(v) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); // Validación del formato de email
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
     },
     message: props => `${props.value} no es un email válido!`
   }},
@@ -16,10 +16,27 @@ const registroEmpresaSchema = new mongoose.Schema({
       message: props => `${props.value} no es una contraseña válida! Debe tener al menos 8 caracteres.`
     } 
   },
-  datoEmpresa: {
+  ruc: {type: String, unique: true},
+  razonSocial: {type: String},
+  paisId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'datoEmpresa',
+    ref: 'pais'
   },
+  actividadEconomica: {type: String},
+  sectorEconomico: {type: String},
+  tamañoEmpresa: {type: String},
+  adquisicionIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'adquisicionEmpresa',
+  }],
+  sedeEmpresaIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'sedeEmpresa',
+  }],
+  areaEmpresaIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'areaEmpresa',
+  }]
 });
 
 //VALIDACIONES
@@ -30,7 +47,7 @@ function validatePasswordLength(v){
 }
 
 // Encriptar la contraseña antes de guardar
-registroEmpresaSchema.pre('save', async function(next) {
+empresaSchema.pre('save', async function(next) {
   if (this.isModified('contraseña')) {
     const salt = await bcrypt.genSalt(10);
     this.contraseña = await bcrypt.hash(this.contraseña, salt);
@@ -38,4 +55,4 @@ registroEmpresaSchema.pre('save', async function(next) {
   next();
 });
 
-module.exports = mongoose.model('registroEmpresa', registroEmpresaSchema);
+module.exports = mongoose.model('empresa', empresaSchema);

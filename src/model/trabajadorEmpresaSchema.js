@@ -6,7 +6,7 @@ const trabajadorEmpresaSchema = new mongoose.Schema({
   apellidoMaterno: {type: String, required: true},
   apellidoPaterno: {type: String, required: true},
   fechaNacimiento: {type: Date, required: true},
-  area: {
+  areaEmpresaId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'areaEmpresa',
   },
@@ -27,7 +27,7 @@ const trabajadorEmpresaSchema = new mongoose.Schema({
     unique: true,
     match: /^[^\s@]+@gmail\.com$/,
   },
-  nacionalidad: {
+  nacionalidadTrabajadorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'nacionalidadTrabajador',
   },
@@ -50,13 +50,13 @@ const trabajadorEmpresaSchema = new mongoose.Schema({
     required: true
   },
   sedeDeTrabajo: {type: String, required: true},
-  rol: {
+  rolTrabajadorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'rol',
+    ref: 'rolTrabajador',
   },
   tallaPantalon: {type: Number, required: true, min:0,max:99},
   tallaPolo: {type: Number, required: true, min:0,max:99},
-  tallaZapato: {type: Number, required: true, min:0,max:99},
+  tallaZapato: {type: Number, required: true, min:0,max:99}
 }, { timestamps: true });
 
-module.exports = mongoose.model('TrabajadorEmpresa', trabajadorEmpresaSchema);
+module.exports = mongoose.model('trabajadorEmpresa', trabajadorEmpresaSchema);

@@ -13,7 +13,7 @@ const nodemailer = require("nodemailer");
 const userService = require('../services/userService');
 const User = require('../model/userSchema');
 const Trabajador = require('../model/trabajadorEmpresaSchema');
-const rolUsuario = require('../model/rolUsuarioSchema');
+const rolTrabajador = require('../model/rolTrabajadorSchema');
 // function generateRandomToken(length = 3) {
 //   return crypto.randomBytes(length).toString("hex");
 // }
@@ -59,7 +59,7 @@ const transporter = nodemailer.createTransport({
 //     const payload = {
 //       _id: usersearch._id,
 //       email: usersearch.email,
-//       rolid: usersearch.rolUsuario
+//       rolid: usersearch.rolTrabajador
 //     }; 
 //     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }); 
 
@@ -90,7 +90,7 @@ const loginLocal = async (req, res) => {
     const payload = {
       _id: usersearch._id,
       email: usersearch.email,
-      rolid: usersearch.rolUsuario,
+      rolid: usersearch.rolTrabajador,
       trabajadorid: usersearch.trabajador
     };
 
@@ -197,7 +197,7 @@ const verifyME = async (req, res) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const obtenertrabajador = await Trabajador.findById(decoded.trabajadorid);
-      // const obtenerrol = await rolUsuario.findById(decoded.rolid);
+      // const obtenerrol = await rolTrabajador.findById(decoded.rolid);
 
       // const resp_decoded = {
       //   _id: decoded._id,
