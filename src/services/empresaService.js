@@ -1,18 +1,22 @@
-const empresa = require('../model/empresaSchema');
+const empresaSchema = require('../model/empresaSchema');
+const { createAccessToken } = require('../lib/jwt.js');
 
 const createEmpresa = async (req, res) => {
-  const newEmpresa = new empresa(req.body);
   try {
-    await newEmpresa.save();
-    res.status(201).json({ message: 'Empresa creada correctamente' });
+    const newEmpresa = new empresaSchema(req.body);
+    const newEmpresaa= await newEmpresa.save();
+    const token = await createAccessToken({ id: newEmpresaa._id });
+    res.json({
+      token: token,
+      message: 'Empresa creada correctamente',
+  });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
-};
 
 const getAllEmpresa = async (req, res) => {
     try {
-      const empresas = await empresa.find();
+      const empresas = await empresaSchema.find();
       res.status(200).json(empresas);
     } catch (error) { 
       // res.status(error.statusCode || 500).json({ error: error.message });
@@ -23,7 +27,7 @@ const getAllEmpresa = async (req, res) => {
 const getEmpresaById = async (req, res) => {
   const empresaId = req.params.id;
   try {
-    const empresa = await empresa.findById(empresaId);
+    const empresa = await empresaSchema.findById(empresaId);
     if (!empresa) {
       return res.status(404).json({ message: 'Empresa no encontrada' });
     }
@@ -36,7 +40,7 @@ const getEmpresaById = async (req, res) => {
 const deleteEmpresa = async (req, res) => {
   const empresaId = req.params.id;
   try {
-    await empresa.findByIdAndDelete(empresaId);
+    await empresaSchema.findByIdAndDelete(empresaId);
     res.status(200).json({ message: 'Empresa eliminada satisfactoriamente' });
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
@@ -46,7 +50,7 @@ const deleteEmpresa = async (req, res) => {
 const getAllAreasEmpresa = async (req, res) => {
   const empresaId = req.params.id;
   try {
-    const empresa = await empresa.findById(empresaId).populate('areaEmpresaIds')
+    const empresa = await empresaSchema.findById(empresaId).populate('areaEmpresaIds')
     if (!empresa) {
       return res.status(404).json({ message: 'Empresa no encontrada' });
     }
