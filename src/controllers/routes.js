@@ -11,7 +11,6 @@ const areaEmpresaController = require('../controllers/areaEmpresaController');
 const subempresaController = require('../controllers/subempresaController');
 const {createRole} = require('./rolTrabajadorController');
 const {companies} = require('../tests/companyTestController');
-const isoController = require('../controllers/isoController')
 const paisController = require('../controllers/paisController')
 const tipoDeAdquisicionController = require('../controllers/tipoDeAdquisicionController')
 
