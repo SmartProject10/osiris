@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const isoService = require('../services/isoService');
+const objetivoEspecificoService = require('../services/objetivoEspecificoService');
 
 router.post('/', async (req, res) => {
   try {
-    await isoService.createIso(req, res);
+    await objetivoEspecificoService.createobjetivoEspecifico(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    await isoService.getAllIso(req, res);
+    await objetivoEspecificoService.getAllobjetivoEspecificos(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    await isoService.getIsoById(req, res);
+    await objetivoEspecificoService.getobjetivoEspecificoById(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -29,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await isoService.deleteIso(req, res);
+    await objetivoEspecificoService.deleteobjetivoEspecifico(req, res);
   } catch (error) {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
@@ -38,4 +38,3 @@ router.delete('/:id', async (req, res) => {
 
 
 module.exports = router;
-
