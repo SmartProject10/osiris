@@ -1,6 +1,6 @@
 const empresaSchema = require('./empresaSchema.js');
 const bcrypt = require('bcryptjs');
-const { createCompanyToken } = require('../../../Token/jwt.js');
+const { createCompanyToken } = require('../../../token/jwt.js');
 
 //TOKEN
 

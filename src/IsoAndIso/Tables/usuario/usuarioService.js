@@ -1,6 +1,6 @@
 const usuarioSchema = require('./usuarioSchema');
 const bcrypt = require('bcryptjs');
-const { createUserToken } = require('../../../Token/jwt');
+const { createUserToken } = require('../../../token/jwt.js');
 
 //TOKEN
 

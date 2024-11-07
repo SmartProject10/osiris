@@ -1,6 +1,6 @@
 const trabajadorSchema = require('./trabajadorSchema.js');
 const bcrypt = require('bcryptjs');
-const { createWorkerToken } = require('../../../Token/jwt.js');
+const { createWorkerToken } = require('../../../token/jwt.js');
 
 //TOKEN
 
