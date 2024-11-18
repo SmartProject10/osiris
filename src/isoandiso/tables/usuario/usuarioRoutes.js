@@ -10,7 +10,7 @@ const usuarioController = require('./usuarioController');
 //RUTAS
 router.post('/usuario/register', usuarioController.register);
 router.post('/usuario/login', usuarioController.login);
-router.post('/usuario/logout', usuarioController.logout);
+router.post('/usuario/logout', verifyUserToken, usuarioController.logout);
 router.get('/usuario/profile', verifyUserToken, usuarioController.profile);
 router.get('/usuario', verifyUserToken, usuarioController.getAllUsers);
 router.get('/usuario/:id', verifyUserToken, usuarioController.getUserById);

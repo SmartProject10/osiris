@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
 
-async function createUserToken(payload) {
+function createUserToken(payload) {
   return jwt.sign(payload, process.env.TOKEN_SECRET_USER, { expiresIn: "1d" });
 }
 
-async function createWorkerToken(payload) {
+function createWorkerToken(payload) {
   return jwt.sign(payload, process.env.TOKEN_SECRET_WORKER, { expiresIn: "1d" });
 }
 
-async function createCompanyToken(payload) {
+function createCompanyToken(payload) {
   return jwt.sign(payload, process.env.TOKEN_SECRET_COMPANY, { expiresIn: "1d" });
 }
 

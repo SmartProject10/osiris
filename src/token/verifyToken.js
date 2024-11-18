@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const verifyUserToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "Token requerido" });
   }
@@ -15,9 +14,8 @@ const verifyUserToken = (req, res, next) => {
   });
 };
 
-const verifyWorkerToken= (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+const verifyWorkerToken = (req, res, next) => {
+  const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "Token requerido" });
   }
@@ -30,9 +28,8 @@ const verifyWorkerToken= (req, res, next) => {
   });
 };
 
-const verifyCompanyToken= (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+const verifyCompanyToken = (req, res, next) => {
+  const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "Token requerido" });
   }
