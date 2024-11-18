@@ -21,30 +21,30 @@ const register = async (req) => {
   trabajador.apellido = apellido;
   trabajador.contraseña = passwordHash;
   const trabajadorActualizado = await trabajador.save();
-  const token = createWorkerToken({ id: trabajadorActualizado._id });
-  return { token, trabajador: trabajadorActualizado};
+  const workerObject = trabajadorActualizado.toObject();
+  delete workerObject.contraseña;
+  const token = createWorkerToken({ id: workerObject._id });
+  return { token, trabajador: workerObject};
 };
 
 const login = async (req) => {
   const { email, contraseña } = req.body;
   const trabajadorEncontrado = await trabajadorSchema.findOne({ email });
   if (!trabajadorEncontrado) {
-    const error = new Error("Trabajador no encontrado");
+    const error = new Error("Algunos de los datos son incorrectos o no está registrado");
     error.statusCode = 404;
     throw error;
   }
   const isMatch = await bcrypt.compare(contraseña, trabajadorEncontrado.contraseña);
   if (!isMatch) {
-    const error = new Error("Contraseña incorrecta");
+    const error = new Error("Algunos de los datos son incorrectos o no está registrado");
     error.statusCode = 400;
     throw error;
   }
   const token = createWorkerToken({ id: trabajadorEncontrado._id });
-  return { token, trabajador: trabajadorEncontrado };
-};
-
-const logout = async (res) => {
-  res.cookie('token', '', { expires: new Date(0), httpOnly: true });
+  const workerObject = trabajadorEncontrado.toObject();
+  delete workerObject.contraseña;
+  return { token, trabajador: workerObject };
 };
 
 const profile = async (req) => {
@@ -54,12 +54,9 @@ const profile = async (req) => {
     error.statusCode = 404;
     throw error;
   }
-  return {
-    id: trabajadorEncontrado._id,
-    email: trabajadorEncontrado.email,
-    createdAt: trabajadorEncontrado.createdAt,
-    updatedAt: trabajadorEncontrado.updatedAt,
-  };
+  const workerObject = trabajadorEncontrado.toObject();
+  delete workerObject.contraseña;
+  return workerObject;
 };
 
 //COMMONS
@@ -101,7 +98,6 @@ const deleteCompanyWorkerById = async (req) => {
 module.exports = {
   register,
   login,
-  logout,
   profile,
   getAllCompanyWorkers,
   getCompanyWorkerById,

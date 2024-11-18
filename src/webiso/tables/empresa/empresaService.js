@@ -9,30 +9,30 @@ const register = async (req) => {
   const passwordHash = await bcrypt.hash(contraseña, 10);
   const newCompany = new empresaSchema({ email, telefono, contraseña: passwordHash });
   const companySaved = await newCompany.save();
+  const companyObject = companySaved.toObject();
+  delete companyObject.contraseña;
   const token = createCompanyToken({ id: companySaved._id });
-  return { token, empresa: companySaved};
+  return { token, empresa: companyObject};
 };
 
 const login = async (req) => {
   const { email, contraseña } = req.body;
   const empresa = await empresaSchema.findOne({ email });
   if (!empresa) {
-    const error = new Error("Empresa no encontrada");
+    const error = new Error("Algunos de los datos son incorrectos o no está registrado");
     error.statusCode = 404;
     throw error;
   }
   const isMatch = await bcrypt.compare(contraseña, empresa.contraseña);
   if (!isMatch) {
-    const error = new Error("Contraseña incorrecta");
+    const error = new Error("Algunos de los datos son incorrectos o no está registrado");
     error.statusCode = 400;
     throw error;
   }
   const token = createCompanyToken({ id: empresa._id });
-  return { token, empresa: empresa };
-};
-
-const logout = async (res) => {
-  res.cookie('token', '', { expires: new Date(0), httpOnly: true });
+  const companyObject = empresa.toObject();
+  delete companyObject.contraseña;
+  return { token, empresa: companyObject };
 };
 
 const profile = async (req) => {
@@ -42,12 +42,9 @@ const profile = async (req) => {
     error.statusCode = 404;
     throw error;
   }
-  return {
-    id: empresa._id,
-    email: empresa.email,
-    createdAt: empresa.createdAt,
-    updatedAt: empresa.updatedAt,
-  };
+  const companyObject = empresa.toObject();
+  delete companyObject.contraseña;
+  return companyObject
 };
 
 //COMMONS
@@ -89,7 +86,6 @@ const deleteCompanyById = async (req, res) => {
 module.exports = {
   register,
   login,
-  logout,
   profile,
   getCompanyById,
   getAllCompanies,

@@ -4,7 +4,12 @@ const empresaService = require('./empresaService');
 const register = async (req, res) => {
   try {
     const { token, empresa } = await empresaService.register(req);
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false, //cambiar a true cuando este proyecto de backend esté subido a un servidor https
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'Lax' //cambiar a None cuando este proyecto de backend esté subido a un servidor https
+    });
     res.status(201).json(empresa);
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error registrando a la empresa', error: error.message });
@@ -15,7 +20,12 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { token, empresa } = await empresaService.login(req);
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false, //cambiar a true cuando este proyecto de backend esté subido a un servidor https
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'Lax' //cambiar a None cuando este proyecto de backend esté subido a un servidor https
+    });
     res.status(200).json(empresa);
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error logeándose con la empresa', error: error.message });
@@ -23,9 +33,9 @@ const login = async (req, res) => {
 };
 
 //Cerrar sesión de empresa
-const logout = async (res) => {
+const logout = async (req, res) => {
   try {
-    await empresaService.logout(res);
+    res.clearCookie('token');
     res.status(200).json({ message: 'Deslogeo de la empresa satisfactorio' });
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error deslogeándose con la empresa', error: error.message });

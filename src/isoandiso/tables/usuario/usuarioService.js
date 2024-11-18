@@ -9,30 +9,30 @@ const register = async (req) => {
   const passwordHash = await bcrypt.hash(contraseña, 10);
   const newUser = new usuarioSchema({ nombre, apellido, email, contraseña: passwordHash });
   const userSaved = await newUser.save();
-  const token = createUserToken({ id: userSaved._id });
-  return { token, usuario: userSaved};
+  const userObject = userSaved.toObject();
+  delete userObject.contraseña;
+  const token = createUserToken({ id: userObject._id });
+  return { token, usuario: userObject};
 };
 
 const login = async (req) => {
   const { email, contraseña } = req.body;
   const usuario = await usuarioSchema.findOne({ email });
   if (!usuario) {
-    const error = new Error("Usuario no encontrado");
+    const error = new Error("Algunos de los datos son incorrectos o no está registrado");
     error.statusCode = 404;
     throw error;
   }
   const isMatch = await bcrypt.compare(contraseña, usuario.contraseña);
   if (!isMatch) {
-    const error = new Error("Contraseña incorrecta");
+    const error = new Error("Algunos de los datos son incorrectos o no está registrado");
     error.statusCode = 400;
     throw error;
   }
-  const token = createUserToken({ id: usuario._id });
-  return { token, usuario: usuario };
-};
-
-const logout = async (res) => {
-  res.cookie('token', '', { expires: new Date(0), httpOnly: true });
+  const userObject = usuario.toObject();
+  delete userObject.contraseña;
+  const token = createUserToken({ id: userObject._id });
+  return { token, usuario: userObject };
 };
 
 const profile = async (req) => {
@@ -42,14 +42,9 @@ const profile = async (req) => {
     error.statusCode = 404;
     throw error;
   }
-  return {
-    id: usuario._id,
-    nombre: usuario.nombre,
-    apellido: usuario.apellido,
-    email: usuario.email,
-    createdAt: usuario.createdAt,
-    updatedAt: usuario.updatedAt,
-  };
+  const userObject = usuario.toObject();
+  delete userObject.contraseña;
+  return userObject;
 };
 
 //COMMONS
@@ -91,7 +86,6 @@ const deleteUser = async (req, res) => {
 module.exports = {
   register,
   login,
-  logout,
   profile,
   getUserById,
   getAllUsers,

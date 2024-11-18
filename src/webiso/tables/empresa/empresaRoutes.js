@@ -10,7 +10,7 @@ const empresaController = require('./empresaController');
 //RUTAS
 router.post('/empresa/register', empresaController.register);
 router.post('/empresa/login', empresaController.login);
-router.post('/empresa/logout', empresaController.logout);
+router.post('/empresa/logout',verifyCompanyToken, empresaController.logout);
 router.get('/empresa/profile', verifyCompanyToken, empresaController.profile);
 router.get('/empresa/', verifyCompanyToken, empresaController.getAllCompanies);
 router.get('/empresa/:id', verifyCompanyToken, empresaController.getCompanyById);

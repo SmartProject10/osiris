@@ -7,18 +7,19 @@ const trabajadorSchema = new mongoose.Schema({
   apellido:{
     type: String,
   },
-  email: {
-    type: String,
-    required: true,
+  email: { 
+    type: String, 
+    required: true, 
     unique: true,
-    match: /^[^\s@]+@gmail\.com$/,
+    lowercase: true,
+    validate: {
+      validator: function(v) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) && v.endsWith('@gmail.com');
+      },
+      message: `El email debe ser una dirección de Gmail válida`
+    }
   },
-  contraseña: { type: String, 
-    validate: { 
-      validator: validatePasswordLength,
-      message: props => `${props.value} no es una contraseña válida! Debe tener al menos 8 caracteres.`
-    } 
-  },
+  contraseña: { type: String },
   dni: {type: String, required: true},
   apellidoMaterno: {type: String, required: true},
   apellidoPaterno: {type: String, required: true},
@@ -81,11 +82,20 @@ const trabajadorSchema = new mongoose.Schema({
   timestamps: true 
 });
 
-//VALIDACIONES
+// Middleware pre-save para convertir el email a minúsculas
+trabajadorSchema.pre('save', function(next) {
+  this.email = this.email.toLowerCase();
+  next();
+});
 
-//Longitud de la contraseña
-function validatePasswordLength(v){
-  return v.length >= 8;
-}
+// Manejo de errores de unicidad
+trabajadorSchema.post('save', function(error, doc, next) {
+  if (error.name === 'MongoServerError' && error.code === 11000) {
+    if (error.keyPattern && error.keyPattern.email) {
+      return next(new Error('El email ya existe'));
+    }
+  }
+  next(error);
+});
 
 module.exports = mongoose.model('trabajador', trabajadorSchema);

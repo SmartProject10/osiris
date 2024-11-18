@@ -4,7 +4,12 @@ const usuarioService = require('./usuarioService');
 const register = async (req, res) => {
   try {
     const { token, usuario } = await usuarioService.register(req);
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false, //cambiar a true cuando este proyecto de backend esté subido a un servidor https
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'Lax' //cambiar a None cuando este proyecto de backend esté subido a un servidor https
+    });
     res.status(201).json(usuario);
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error registrando al usuario', error: error.message });
@@ -15,7 +20,12 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { token, usuario } = await usuarioService.login(req);
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false, //cambiar a true cuando este proyecto de backend esté subido a un servidor https
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'Lax' //cambiar a None cuando este proyecto de backend esté subido a un servidor https
+    });
     res.status(200).json(usuario);
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error logeandose con el usuario', error: error.message });
@@ -25,7 +35,7 @@ const login = async (req, res) => {
 //Logout de usuario
 const logout = async (req, res) => {
   try {
-    await usuarioService.logout(res);
+    res.clearCookie('token');
     res.status(200).json({ message: 'Deslogeo del usuario satisfactorio' });
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error deslogeandose con el usuario', error: error.message });
