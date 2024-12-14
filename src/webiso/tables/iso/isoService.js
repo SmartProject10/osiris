@@ -11,13 +11,13 @@ const getAllIsos = async () => {
     return isos;
 };
 
-const getIsoById = async (req) => {
+const getIso = async (req) => {
   const isoId = req.params.id;
   const iso = await isoSchema.findById(isoId);
   return iso;
 };
 
-const deleteisoById = async (req) => {
+const deleteIso = async (req) => {
   const isoId = req.params.id;
   await isoSchema.findByIdAndDelete(isoId);
 };
@@ -25,6 +25,6 @@ const deleteisoById = async (req) => {
 module.exports = {
   createIso,
   getAllIsos,
-  getIsoById,
-  deleteisoById
+  getIso,
+  deleteIso
 };

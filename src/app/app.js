@@ -19,23 +19,22 @@ app.use(cookieParser());
 
 // Rutas
 const rutas = [
-  require('../isoandiso/tables/actividad/actividadRoutes'),
-  require('../isoandiso/tables/fechacumplimientoactividad/fechaCumplimientoActividadRoutes'),
-  require('../isoandiso/tables/objetivoespecifico/objetivoEspecificoRoutes'),
-  require('../isoandiso/tables/objetivogeneral/objetivoGeneralRoutes'),
-  require('../isoandiso/tables/subempresa/subempresaRoutes'),
-  require('../isoandiso/tables/trabajador/trabajadorRoutes'),
-  require('../isoandiso/tables/trabajadorsubempresa/trabajadorSubempresaRoutes'),
-  require('../isoandiso/tables/usuario/usuarioRoutes'),
-  require('../webiso/tables/adquisicionempresa/adquisicionEmpresaRoutes'),
-  require('../webiso/tables/areaempresa/areaEmpresaRoutes'),
-  require('../webiso/tables/empresa/empresaRoutes'),
+  require('../isoandiso/tables/activity/activityRoutes'),
+  require('../isoandiso/tables/activitycompletiondate/activityCompletionDateRoutes'),
+  require('../isoandiso/tables/specificobjective/specificObjectiveRoutes'),
+  require('../isoandiso/tables/generalobjective/generalObjectiveRoutes'),
+  require('../isoandiso/tables/subcompany/subcompanyRoutes'),
+  require('../isoandiso/tables/worker/workerRoutes'),
+  require('../isoandiso/tables/subcompanyworker/subcompanyWorkerRoutes'),
+  require('../isoandiso/tables/user/userRoutes'),
+  require('../webiso/tables/companyacquisition/companyAcquisitionRoutes'),
+  require('../webiso/tables/companyarea/companyAreaRoutes'),
+  require('../webiso/tables/company/companyRoutes'),
   require('../webiso/tables/iso/isoRoutes'),
-  require('../webiso/tables/nacionalidad/nacionalidadRoutes'),
-  require('../webiso/tables/pais/paisRoutes'),
+  require('../webiso/tables/companycountry/companyCountryRoutes'),
   require('../webiso/tables/rol/rolRoutes'),
-  require('../webiso/tables/sede/sedeRoutes'),
-  require('../webiso/tables/tipodeadquisicion/tipoDeAdquisicionRoutes'),
+  require('../webiso/tables/companysite/companySiteRoutes'),
+  require('../webiso/tables/acquisitiontype/acquisitionTypeRoutes'),
 ];
 rutas.forEach(route => app.use(route));
 
