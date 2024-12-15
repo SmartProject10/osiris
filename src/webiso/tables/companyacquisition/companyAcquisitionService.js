@@ -1,30 +1,30 @@
 const companyAcquisitionSchema = require('./companyAcquisitionSchema');
 
-const createAcquisition = async (req) => {
-  const acquisition = new companyAcquisitionSchema(req.body);
-  await acquisition.save();
-  return acquisition;
+const createCompanyAcquisition = async (req) => {
+  const companyAcquisition = new companyAcquisitionSchema(req.body);
+  await companyAcquisition.save();
+  return companyAcquisition;
 };
 
-const getAllAcquisitions = async () => {
-    const acquisitions = await companyAcquisitionSchema.find();
-    return acquisitions;
+const getAllCompanyAcquisitions = async () => {
+    const companyAcquisitions = await companyAcquisitionSchema.find();
+    return companyAcquisitions;
 };
 
-const getAcquisition = async (req) => {
-  const adquisicionId = req.params.id;
-  const acquisition = await companyAcquisitionSchema.findById(adquisicionId);
-  return acquisition;
+const getCompanyAcquisition = async (req) => {
+  const companyAcquisitionId = req.params.id;
+  const companyAcquisition = await companyAcquisitionSchema.findById(companyAcquisitionId);
+  return companyAcquisition;
 };
 
-const deleteAcquisition = async (req) => {
-  const adquisicionId = req.params.id;
-  await companyAcquisitionSchema.findByIdAndDelete(adquisicionId);
+const deleteCompanyAcquisition = async (req) => {
+  const companyAcquisitionId = req.params.id;
+  await companyAcquisitionSchema.findByIdAndDelete(companyAcquisitionId);
 };
 
 module.exports = {
-  createAcquisition,
-  getAllAcquisitions,
-  getAcquisition,
-  deleteAcquisition
+  createCompanyAcquisition,
+  getAllCompanyAcquisitions,
+  getCompanyAcquisition,
+  deleteCompanyAcquisition
 };

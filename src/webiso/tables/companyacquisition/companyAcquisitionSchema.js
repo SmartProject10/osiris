@@ -6,9 +6,9 @@ const companyAcquisitionSchema = new mongoose.Schema({
       ref: 'iso',
       required: true
     }],
-    acquisitionTypeId: {
+    companyAcquisitionTypeId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'acquisitionType',
+      ref: 'companyAcquisitionType',
       required: true
     },
     acquisitionDate: { type: Date, required: true, default: Date.now },
@@ -22,16 +22,16 @@ companyAcquisitionSchema.index({ InvoiceLink: 1 }, { unique: true, partialFilter
 //Pre-save hook para calcular expirationDate
 companyAcquisitionSchema.pre('save', async function (next) {
   try {
-      const acquisitionTypeId = await mongoose.model('acquisitionType').findById(this.acquisitionTypeId);
-      if (!acquisitionTypeId) {
+      const companyAcquisitionTypeId = await mongoose.model('companyAcquisitionType').findById(this.companyAcquisitionTypeId);
+      if (!companyAcquisitionTypeId) {
           throw new Error('Tipo de adquisición no encontrado');
       }
 
-      const acquisitionTypeName = acquisitionTypeId.acquisitionTypeName;
+      const companyAcquisitionTypeName = companyAcquisitionTypeId.companyAcquisitionTypeName;
 
-      if (acquisitionTypeName !== 'Compra') {
+      if (companyAcquisitionTypeName !== 'Compra') {
           let aditionalMonths;
-          switch (acquisitionTypeName) {
+          switch (companyAcquisitionTypeName) {
             case "Gratuito":
               aditionalMonths = 2;
               break;

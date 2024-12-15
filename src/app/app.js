@@ -33,8 +33,9 @@ const rutas = [
   require('../webiso/tables/iso/isoRoutes'),
   require('../webiso/tables/companycountry/companyCountryRoutes'),
   require('../webiso/tables/rol/rolRoutes'),
+  require('../webiso/tables/workerNationality/workerNationalityRoutes'),
   require('../webiso/tables/companysite/companySiteRoutes'),
-  require('../webiso/tables/acquisitiontype/acquisitionTypeRoutes'),
+  require('../webiso/tables/companyacquisitiontype/companyAcquisitionTypeRoutes'),
 ];
 rutas.forEach(route => app.use(route));
 

@@ -18,7 +18,7 @@ const register = async (req) => {
     { path: 'acquisitionIds',
       populate: [
         { path: 'isoIds' },
-        { path: 'acquisitionTypeId' },
+        { path: 'companyAcquisitionTypeId' },
       ] 
     },
     { path: 'companySiteIds' },
@@ -44,7 +44,7 @@ const login = async (req) => {
     { path: 'acquisitionIds',
       populate: [
         { path: 'isoIds' },
-        { path: 'acquisitionTypeId' },
+        { path: 'companyAcquisitionTypeId' },
       ] 
     },
     { path: 'companySiteIds' },
@@ -81,7 +81,7 @@ const profile = async (req) => {
     { path: 'acquisitionIds',
       populate: [
         { path: 'isoIds' },
-        { path: 'acquisitionTypeId' },
+        { path: 'companyAcquisitionTypeId' },
       ] 
     },
     { path: 'companySiteIds' },
@@ -124,7 +124,7 @@ const deleteCompany = async (req, res) => {
 const getCompanyCountry = async (req, res) => {
   const companyId = req.params.id;
   const company = await companySchema.findById(companyId).populate('countryId');
-  const country = company.countryId
+  const companyCountry = company.countryId
   return country;
 };
 
@@ -359,7 +359,7 @@ const addSite = async (req) => {
 const addArea = async (req) => {
   const { companyAreaId } = req.body;
   if (!companyAreaId) {
-    const error = new Error("La nueva area no está definida");
+    const error = new Error("La nueva área no está definida");
     error.statusCode = 400;
     throw error;
   }

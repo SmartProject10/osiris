@@ -1,48 +1,48 @@
 const companyCountryService = require('./companyCountryService');
 
 //Crear País
-const createCountry = async (req, res) => {
+const createCompanyCountry = async (req, res) => {
   try {
-    const country = await companyCountryService.createCountry(req);
-    res.status(201).json(country);
+    const companyCountry = await companyCountryService.createCompanyCountry(req);
+    res.status(201).json(companyCountry);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error registrando el país', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error registrando el país de la empresa', error: error.message });
   }
 };
 
 //Obtener todos los Países
-const getAllCountries = async (req, res) => {
+const getAllCompanyCountries = async (req, res) => {
   try {
-    const countries = await companyCountryService.getAllCountries();
-    res.status(200).json(countries);
+    const companyCountries = await companyCountryService.getAllCompanyCountries();
+    res.status(200).json(companyCountries);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todos los países', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todos los países de la empresa', error: error.message });
   }
 };
 
 //Obtener todas las isos del país ID
-const getAllIsosOfCountry = async (req, res) => {
+const getAllIsosOfCompanyCountry = async (req, res) => {
   try {
-    const isos = await companyCountryService.getAllIsosOfCountry();
+    const isos = await companyCountryService.getAllIsosOfCompanyCountry();
     res.status(200).json(isos);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todas las isos del país', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todas las isos del país de la empresa', error: error.message });
   }
 };
 
 //Obtener los countries con al menos una iso habilitadas
-const getAllCountriesWithIsos = async (req, res) => {
+const getAllCompanyCountriesWithIsos = async (req, res) => {
   try {
-    const countries = await companyCountryService.getAllCountriesWithIsos();
-    res.status(200).json(countries);
+    const companyCountries = await companyCountryService.getAllCompanyCountriesWithIsos();
+    res.status(200).json(companyCountries);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todos los countries con al menos una iso', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todos los países con al menos una iso', error: error.message });
   }
 };
 
 module.exports = {
-  createCountry,
-  getAllCountries,
-  getAllIsosOfCountry,
-  getAllCountriesWithIsos
+  createCompanyCountry,
+  getAllCompanyCountries,
+  getAllIsosOfCompanyCountry,
+  getAllCompanyCountriesWithIsos
 };
