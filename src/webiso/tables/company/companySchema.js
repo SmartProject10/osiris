@@ -32,12 +32,12 @@ const companySchema = new mongoose.Schema({
     ref: 'companyAcquisition',
     default: null,
   }],
-  companySiteIds: [{
+  siteIds: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companySite',
     default: null,
   }],
-  companyAreaIds: [{
+  areaIds: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companyArea',
     default: null,

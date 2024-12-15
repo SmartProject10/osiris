@@ -6,7 +6,7 @@ const companyAcquisitionSchema = new mongoose.Schema({
       ref: 'iso',
       required: true
     }],
-    companyAcquisitionTypeId: {
+    acquisitionTypeId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'companyAcquisitionType',
       required: true
