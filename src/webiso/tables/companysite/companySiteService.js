@@ -1,23 +1,23 @@
 const companySiteSchema = require('./companySiteSchema');
 
-const createSite = async (req) => {
-  const site = new companySiteSchema(req.body);
-  await site.save();
-  return site;
+const createCompanySite = async (req) => {
+  const companySite = new companySiteSchema(req.body);
+  await companySite.save();
+  return companySite;
 };
 
-const getAllSites = async () => {
-    const sites = await companySiteSchema.find();
-    return sites;
+const getAllCompanySites = async () => {
+    const companySites = await companySiteSchema.find();
+    return companySites;
 };
 
-const deleteSite = async (req, res) => {
-  const siteId = req.params.id;
-  await companySiteSchema.findByIdAndDelete(siteId);
+const deleteCompanySite = async (req, res) => {
+  const companySiteId = req.params.id;
+  await companySiteSchema.findByIdAndDelete(companySiteId);
 };
 
 module.exports = {
-  createSite,
-  getAllSites,
-  deleteSite
+  createCompanySite,
+  getAllCompanySites,
+  deleteCompanySite
 };

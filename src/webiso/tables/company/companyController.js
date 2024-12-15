@@ -78,8 +78,8 @@ const getCompany = async (req, res) => {
 //Obtener el pais de la empresa por ID de la empresa
 const getCompanyCountry = async (req, res) => {
   try {
-    const country = await companyService.getCompanyCountry(req);
-    res.status(200).json(country);
+    const companyCountry = await companyService.getCompanyCountry(req);
+    res.status(200).json(companyCountry);
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error al querer tomar el pais de la empresa', error: error.message });
   }
@@ -118,8 +118,8 @@ const updatePassword = async (req, res) => {
 //Acualizar país de la empresa por la empresa ID
 const updateCountry = async (req, res) => {
   try {
-    const country = await companyService.updateCountry(req, res);
-    res.status(200).json(country);
+    const companyCountry = await companyService.updateCountry(req, res);
+    res.status(200).json(companyCountry);
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: 'Error actualizando el pais de la empresa', error: error.message });
   }

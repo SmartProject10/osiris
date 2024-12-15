@@ -8,9 +8,9 @@ const { verifyCompanyToken } = require('../../../token/verifyToken');
 const companyAcquisitionController = require('./companyAcquisitionController');
 
 //RUTAS
-router.post('/companyAcquisition', verifyCompanyToken, companyAcquisitionController.createAcquisition);
-router.get('/companyAcquisition', verifyCompanyToken, companyAcquisitionController.getAllAcquisitions);
-router.get('/companyAcquisition/:id', verifyCompanyToken, companyAcquisitionController.getAcquisition);
-router.delete('/companyAcquisition/:id', verifyCompanyToken, companyAcquisitionController.deleteAcquisition);
+router.post('/companyAcquisition', verifyCompanyToken, companyAcquisitionController.createCompanyAcquisition);
+router.get('/companyAcquisition', verifyCompanyToken, companyAcquisitionController.getAllCompanyAcquisitions);
+router.get('/companyAcquisition/:id', verifyCompanyToken, companyAcquisitionController.getCompanyAcquisition);
+router.delete('/companyAcquisition/:id', verifyCompanyToken, companyAcquisitionController.deleteCompanyAcquisition);
 
 module.exports = router;

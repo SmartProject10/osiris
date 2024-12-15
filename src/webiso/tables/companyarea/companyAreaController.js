@@ -1,35 +1,35 @@
 const companyAreaService = require('./companyAreaService');
 
 //Crear área
-const createArea = async (req, res) => {
+const createCompanyArea = async (req, res) => {
   try {
-    const area = await companyAreaService.createArea(req);
-    res.status(201).json(area);
+    const companyArea = await companyAreaService.createCompanyArea(req);
+    res.status(201).json(companyArea);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error registrando el área', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error registrando el área de la empresa', error: error.message });
   }
 };
 
 //Obtener todas las áreas
-const getAllAreas = async (req, res) => {
+const getAllCompanyAreas = async (req, res) => {
   try {
-    const areas = await companyAreaService.getAllAreas();
-    res.status(200).json(areas);
+    const companyAreas = await companyAreaService.getAllCompanyAreas();
+    res.status(200).json(companyAreas);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todas las áreas', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo todas las áreas de las empresas', error: error.message });
   }
 };
 
 //Obtener área por ID
-const getArea = async (req, res) => {
+const getCompanyArea = async (req, res) => {
   try {
-    const area = await companyAreaService.getArea(req);
-    if (!area) {
-      return res.status(404).json({ message: 'Área no encontrada' });
+    const companyArea = await companyAreaService.getCompanyArea(req);
+    if (!companyArea) {
+      return res.status(404).json({ message: 'Área de la empresa no encontrada' });
     }
-    res.status(200).json(area);
+    res.status(200).json(companyArea);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error obteniendo el área', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo el área de la empresa', error: error.message });
   }
 };
 
@@ -39,28 +39,28 @@ const getChargeOfHigherHierarchyOfArea = async (req, res) => {
     const chargeOfHigherHierarchyOfArea = await companyAreaService.getChargeOfHigherHierarchyOfArea(req);
     res.status(200).json(chargeOfHigherHierarchyOfArea);
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error obteniendo el cargo de mayor jerarquía', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo el cargo de mayor jerarquía del área de la empresa', error: error.message });
   }
 };
 
 
 //Eliminar área por ID
-const deleteArea = async (req, res) => {
+const deleteCompanyArea = async (req, res) => {
   try {
-    await companyAreaService.deleteArea(req);
-    res.status(200).json({ message: 'Área eliminada satisfactoriamente' });
+    await companyAreaService.deleteCompanyArea(req);
+    res.status(200).json({ message: 'Área de la empresa eliminada satisfactoriamente' });
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error eliminando el área', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error eliminando el área de la empresa', error: error.message });
   }
 };
 
 //Eliminar iso del área
-const deleteIsoOfArea = async (req, res) => {
+const deleteIsoOfCompanyArea = async (req, res) => {
   try {
-    await companyAreaService.deleteIsoOfArea(req);
-    res.status(200).json({ message: 'Iso del área eliminada satisfactoriamente' });
+    await companyAreaService.deleteIsoOfCompanyArea(req);
+    res.status(200).json({ message: 'Iso del área de la empresa eliminada satisfactoriamente' });
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error eliminando la iso del área', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error eliminando la iso del área de la empresa', error: error.message });
   }
 };
 
@@ -68,18 +68,18 @@ const deleteIsoOfArea = async (req, res) => {
 const updateIso = async (req, res) => {
   try {
     await companyAreaService.updateIso(req);
-    res.status(200).json({ message: 'iso del área actualizada correctamente' });
+    res.status(200).json({ message: 'iso del área de la empresa actualizada correctamente' });
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error actualizando el iso del área', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error actualizando el iso del área de la empresa', error: error.message });
   }
 };
 
 module.exports = {
-  createArea,
-  getAllAreas,
-  getArea,
+  createCompanyArea,
+  getAllCompanyAreas,
+  getCompanyArea,
   getChargeOfHigherHierarchyOfArea,
-  deleteArea,
-  deleteIsoOfArea,
+  deleteCompanyArea,
+  deleteIsoOfCompanyArea,
   updateIso,
 };

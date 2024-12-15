@@ -1,31 +1,31 @@
 const companyCountrySchema = require('./companyCountrySchema');
 
-const createCountry = async (req) => {
-  const country = new companyCountrySchema(req.body);
-  await country.save();
-  return country;
+const createCompanyCountry = async (req) => {
+  const companyCountry = new companyCountrySchema(req.body);
+  await companyCountry.save();
+  return companyCountry;
 };
 
-const getAllCountries = async () => {
-    const countries = await companyCountrySchema.find();
-    return countries;
+const getAllCompanyCountries = async () => {
+    const companyCountries = await companyCountrySchema.find();
+    return companyCountries;
 };
 
-const getAllIsosOfCountry = async (req) => {
+const getAllIsosOfCompanyCountry = async (req) => {
   const countryId = req.params.id;
-  const country = await companyCountrySchema.findById(countryId).populate('isoIds');
-  const isos = country.isoIds
+  const companyCountry = await companyCountrySchema.findById(countryId).populate('isoIds');
+  const isos = companyCountry.isoIds
   return isos;
 };
 
-const getAllCountriesWithIsos = async (req) => {
-  const countries = await companyCountrySchema.find({ isoIds: { $ne: null } }).populate('isoIds');
-  return countries;
+const getAllCompanyCountriesWithIsos = async (req) => {
+  const companyCountries = await companyCountrySchema.find({ isoIds: { $ne: null } }).populate('isoIds');
+  return companyCountries;
 };
 
 module.exports = {
-  createCountry,
-  getAllCountries,
-  getAllIsosOfCountry,
-  getAllCountriesWithIsos
+  createCompanyCountry,
+  getAllCompanyCountries,
+  getAllIsosOfCompanyCountry,
+  getAllCompanyCountriesWithIsos
 };

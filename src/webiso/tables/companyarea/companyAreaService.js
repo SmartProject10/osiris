@@ -1,43 +1,43 @@
 const companyAreaSchema = require('./companyAreaSchema');
 
-const createArea = async (req) => {
-  const area = new companyAreaSchema(req.body);
-  await area.save();
-  return area;
+const createCompanyArea = async (req) => {
+  const companyArea = new companyAreaSchema(req.body);
+  await companyArea.save();
+  return companyArea;
 };
 
-const getAllAreas = async () => {
-    const areas = await companyAreaSchema.find();
-    return areas;
+const getAllCompanyAreas = async () => {
+    const companyAreas = await companyAreaSchema.find();
+    return companyAreas;
 };
 
-const getArea = async (req) => {
-  const areaId = req.params.id;
-  const area = await companyAreaSchema.findById(areaId);
-  return area;
+const getCompanyArea = async (req) => {
+  const companyAreaId = req.params.id;
+  const companyArea = await companyAreaSchema.findById(companyAreaId);
+  return companyArea;
 };
 
 const getChargeOfHigherHierarchyOfArea = async (req) => {
-  const areaId = req.params.id;
-  const area = await companyAreaSchema.findById(areaId);
-  const chargeOfHigherHierarchyOfArea = area.cargos[0];
+  const companyAreaId = req.params.id;
+  const companyArea = await companyAreaSchema.findById(companyAreaId);
+  const chargeOfHigherHierarchyOfArea = companyArea.cargos[0];
   return chargeOfHigherHierarchyOfArea;
 };
 
-const deleteArea = async (req) => {
-  const areaId = req.params.id;
-  await companyAreaSchema.findByIdAndDelete(areaId);
+const deleteCompanyArea = async (req) => {
+  const companyAreaId = req.params.id;
+  await companyAreaSchema.findByIdAndDelete(companyAreaId);
 };
 
-const deleteIsoOfArea = async (req) => {
-  const areaId = req.params.id;
+const deleteIsoOfCompanyArea = async (req) => {
+  const companyAreaId = req.params.id;
   const updatedArea = await companyAreaSchema.findByIdAndUpdate(
-    areaId,
+    companyAreaId,
     { $set: { isoId: null } },
     { new: true }
   );
   if (!updatedArea) {
-    const error = new Error("Área no encontrada");
+    const error = new Error("Área de la empresa no encontrada");
     error.statusCode = 404;
     throw error;
   }
@@ -45,27 +45,27 @@ const deleteIsoOfArea = async (req) => {
 };
 
 const updateIso = async (req) => {
-  const areaId = req.params.id;
+  const companyAreaId = req.params.id;
   const { isoId } = req.body;
-  const area = await companyAreaSchema.findByIdAndUpdate(
-    areaId,
+  const companyArea = await companyAreaSchema.findByIdAndUpdate(
+    companyAreaId,
     { $set: { isoId: isoId } },
     { new: true }
   );
-  if (!area) {
-    const error = new Error("Área no encontrado");
+  if (!companyArea) {
+    const error = new Error("Área de la empresa no encontrada");
     error.statusCode = 404;
     throw error;
   }
-  return area;
+  return companyArea;
 };
 
 module.exports = {
-  createArea,
-  getAllAreas,
-  getArea,
+  createCompanyArea,
+  getAllCompanyAreas,
+  getCompanyArea,
   getChargeOfHigherHierarchyOfArea,
-  deleteArea,
-  deleteIsoOfArea,
+  deleteCompanyArea,
+  deleteIsoOfCompanyArea,
   updateIso
 };

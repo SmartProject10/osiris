@@ -8,8 +8,8 @@ const { verifyCompanyToken } = require('../../../token/verifyToken');
 const companySiteController = require('./companySiteController');
 
 // RUTAS
-router.post('/companySite', verifyCompanyToken, companySiteController.createSite);
-router.get('/companySite', verifyCompanyToken, companySiteController.getAllSites);
-router.delete('/companySite/:id', verifyCompanyToken, companySiteController.deleteSite);
+router.post('/companySite', verifyCompanyToken, companySiteController.createCompanySite);
+router.get('/companySite', verifyCompanyToken, companySiteController.getAllCompanySites);
+router.delete('/companySite/:id', verifyCompanyToken, companySiteController.deleteCompanySite);
 
 module.exports = router;
