@@ -1,6 +1,21 @@
 const workerService = require('./workerService');
 
+//Creación del trabajador
+/*la creación se hará en la página webiso en el cual se ponen todos los campos excepto "nombre","apellido" y "contraseña" que sí se pondrán cuando se registre el trabajor desde la página "iso and iso"*/
+// const create = async (req, res) => {
+//   try {
+//     const worker = await workerService.create(req);
+//     res.status(201).json(worker);
+//   } catch (error) {
+//     res.status(error.statusCode || 500).json({ message: 'Error creando el trabajador', error: error.message });
+//   }
+// };
+
 //Registro de trabajador
+/*
+(el trabajador ya se habrá creado antes desde la página webiso con todos los campos exceptuando los campos "nombre","apellido"
+ y "contraseña", los cuales se asignarán acá, cuando se ingresé acá desde la página isoandiso)
+*/
 const register = async (req, res) => {
   try {
     const { token, worker } = await workerService.register(req);
@@ -75,6 +90,19 @@ const getCompanyWorker = async (req, res) => {
   }
 };
 
+//Obtener trabajador por email
+const getCompanyWorkerByEmail = async (req, res) => {
+  try {
+    const worker = await workerService.getCompanyWorkerByEmail(req);
+    if (!worker) {
+      return res.status(404).json({ message: 'Trabajador no encontrado' });
+    }
+    res.status(200).json(worker);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo el trabajador', error: error.message });
+  }
+};
+
 //Actualizar trabajador por ID
 const updateCompanyWorker = async (req, res) => {
   try {
@@ -102,6 +130,7 @@ module.exports = {
   profile,
   getAllCompanyWorkers,
   getCompanyWorker,
+  getCompanyWorkerByEmail,
   updateCompanyWorker,
   deleteCompanyWorker,
 };

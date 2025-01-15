@@ -12,7 +12,6 @@ const workerSchema = new mongoose.Schema({
   email: { 
     type: String, 
     required: true, 
-    unique: true,
     lowercase: true,
     validate: {
       validator: function(v) {
@@ -22,9 +21,9 @@ const workerSchema = new mongoose.Schema({
     }
   },
   password: { type: String, default: null },
-  dni: {type: String, required: true},
-  mothers_lastname: {type: String, required: true},
-  fathers_lastname: {type: String, required: true},
+  dni: {type: String, required: true, match:[/^[A-Za-z0-9- ]{5,15}$/, "Dni no válido"], maxlength: 20},
+  mothers_lastname: {type: String, required: true, maxlength: 20},
+  fathers_lastname: {type: String, required: true, maxlength: 20},
   birthDate: {type: Date, required: true},
   companyAreaId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -33,16 +32,29 @@ const workerSchema = new mongoose.Schema({
   },
   charge: {type: String, required: true},
   entryDate: {type: Date, required: true},
-  contractTerminationDate : {type: Date, required: true},
+  contractTerminationDate : {
+    type: Date,
+    validate: {
+      validator: function (v) {
+        if(v!==null){
+          return v > this.entryDate;
+        }
+      },
+      message: props => `La fecha de término de contrato (${props.value}) debe ser mayor a la fecha de ingreso (${this.entryDate}).`,
+    },
+    default: null,
+  },
   areaEntryDate: {type: Date, required: true},
-  address: {type: String, required: true},
-  district: {type: String, required: true},
+  province: { type: String, maxlength: 50, required:true, match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo provincia no acepta números.'] },
+  city: { type: String, maxlength: 100, required:true, match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo ciudad no acepta números.'] },
+  address: { type: String, maxlength: 200, required:true, match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.-]+$/, 'La dirección solo puede contener letras, números, espacios, puntos y guiones.'] },
+  district: { type: String, maxlength: 200, required:true, match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.-]+$/, 'El distrito solo puede contener letras, números, espacios, puntos y guiones.'] },
   corporateEmail: {
     type: String,
     required: true,
-    match: /^[^\s@]+@gmail\.com$/,
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
-  nationalityWorkerId: {
+  nationalityId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'nationalityWorker',
     required: true
@@ -54,10 +66,10 @@ const workerSchema = new mongoose.Schema({
   },
   civilStatus: { 
     type: String, 
-    enum: ['Soltero', 'Casado','Divorciado','Conviviente','Viudo/da'],
+    enum: ['Soltero/a', 'Casado/a','Divorciado/a','Conviviente','Viudo/a'],
     required: true
   },
-  personalPhone: {type: String, required: true},
+  personalPhone: {type: String, required: true, match: [/^[+()\-.\s\d]+$/, "Número de teléfono inválido. Solo se permiten dígitos, espacios, paréntesis, guiones y el símbolo '+' para prefijos internacionales."]},
   facialRecognition: {type: String, default: null},
   digitalSignature: {type: String, default: null},
   status: { 
@@ -65,15 +77,19 @@ const workerSchema = new mongoose.Schema({
     enum: ['Activo', 'Inactivo'],
     required: true
   },
-  workSite: {type: String, required: true},
+  workSiteId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'companySite',
+    required: true
+  },
   rolId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'rol',
     required: true
   },
-  sizePants: {type: Number, required: true, min:0,max:99},
-  sizePolo: {type: Number, required: true, min:0,max:99},
-  sizeShoe: {type: Number, required: true, min:0,max:99},
+  sizePants: {type: Number, required: true, enum: [26, 28, 30, 32, 34, 36, 38, 40, 42, 44]},
+  sizePolo: {type: String, required: true, enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']},
+  sizeShoe: {type: Number, required: true, enum: [36, 38, 40, 42, 44]},
   companyIds:[{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'company',
@@ -88,16 +104,6 @@ const workerSchema = new mongoose.Schema({
 workerSchema.pre('save', function(next) {
   this.email = this.email.toLowerCase();
   next();
-});
-
-// Manejo de errores de unicidad
-workerSchema.post('save', function(error, doc, next) {
-  if (error.name === 'MongoServerError' && error.code === 11000) {
-    if (error.keyPattern && error.keyPattern.email) {
-      return next(new Error('El email ya existe'));
-    }
-  }
-  next(error);
 });
 
 module.exports = mongoose.model('worker', workerSchema);

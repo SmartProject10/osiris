@@ -12,8 +12,10 @@ router.post('/companyArea', verifyCompanyToken, companyAreaController.createComp
 router.get('/companyArea', verifyCompanyToken, companyAreaController.getAllCompanyAreas);
 router.get('/companyArea/:id', verifyCompanyToken, companyAreaController.getCompanyArea);
 router.get('/companyArea/:id/getChargeOfHigherHierarchyOfArea', verifyCompanyToken, companyAreaController.getChargeOfHigherHierarchyOfArea);
-router.put('/companyArea/:id/updateIso', verifyCompanyToken, companyAreaController.updateIso);
+router.put('/companyArea/:id/addIso', verifyCompanyToken, companyAreaController.addIso);
+router.put('/companyArea/:id/updateResponsibleWorker', verifyCompanyToken, companyAreaController.updateResponsibleWorker);
 router.delete('/companyArea/:id', verifyCompanyToken, companyAreaController.deleteCompanyArea);
-router.delete('/companyArea/:id/deleteIsoId', verifyCompanyToken, companyAreaController.deleteIsoOfCompanyArea);
+router.delete('/companyArea/:id/deleteIsos', verifyCompanyToken, companyAreaController.deleteIsos);
+router.delete('/companyArea/:id/deleteWorker', verifyCompanyToken, companyAreaController.deleteWorker);
 
 module.exports = router;

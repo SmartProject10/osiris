@@ -1,4 +1,5 @@
 const companySchema = require('./companySchema.js');
+const workerSchema = require('../../../isoandiso/tables/worker/workerSchema.js');
 const bcrypt = require('bcryptjs');
 const { createCompanyToken } = require('../../../token/jwt.js');
 
@@ -14,17 +15,22 @@ const register = async (req) => {
   const populatedCompany = await companySchema
   .findById(companySaved._id)
   .populate([
-    { path: 'countryId' },
+    { path: 'countryId',
+      populate: [
+        { path: 'isoIds' },
+      ]
+     },
     { path: 'acquisitionIds',
       populate: [
         { path: 'isoIds' },
-        { path: 'companyAcquisitionTypeId' },
+        { path: 'acquisitionTypeId' },
       ] 
     },
-    { path: 'companySiteIds' },
-    { path: 'companyAreaIds',
+    { path: 'siteIds' },
+    { path: 'areaIds',
       populate: [
-        { path: 'isoId' },
+        { path: 'isoIds' },
+        { path: 'responsibleWorkerId' },
       ]  },
   ])
   .exec();
@@ -40,17 +46,22 @@ const login = async (req) => {
 
   //(hago que se tomen también los datos completos de los campos siguientes)
   const company = await companySchema.findOne({ email }).populate([
-    { path: 'countryId' },
+    { path: 'countryId',
+      populate: [
+        { path: 'isoIds' },
+      ]
+     },
     { path: 'acquisitionIds',
       populate: [
         { path: 'isoIds' },
-        { path: 'companyAcquisitionTypeId' },
+        { path: 'acquisitionTypeId' },
       ] 
     },
-    { path: 'companySiteIds' },
-    { path: 'companyAreaIds',
+    { path: 'siteIds' },
+    { path: 'areaIds',
       populate: [
-        { path: 'isoId' },
+        { path: 'isoIds' },
+        { path: 'responsibleWorkerId' },
       ]  },
   ])
   .exec();
@@ -77,17 +88,22 @@ const profile = async (req) => {
 
   //(hago que se tomen también los datos completos de los campos siguientes)
   const company = await companySchema.findById(req.profile.id).populate([
-    { path: 'countryId' },
+    { path: 'countryId',
+      populate: [
+        { path: 'isoIds' },
+      ]
+     },
     { path: 'acquisitionIds',
       populate: [
         { path: 'isoIds' },
-        { path: 'companyAcquisitionTypeId' },
+        { path: 'acquisitionTypeId' },
       ] 
     },
-    { path: 'companySiteIds' },
-    { path: 'companyAreaIds',
+    { path: 'siteIds' },
+    { path: 'areaIds',
       populate: [
-        { path: 'isoId' },
+        { path: 'isoIds' },
+        { path: 'responsibleWorkerId' },
       ]  },
   ])
   .exec();
@@ -125,7 +141,7 @@ const getCompanyCountry = async (req, res) => {
   const companyId = req.params.id;
   const company = await companySchema.findById(companyId).populate('countryId');
   const companyCountry = company.countryId
-  return country;
+  return companyCountry;
 };
 
 const getCompanyAcquisitions = async (req, res) => {
@@ -186,6 +202,26 @@ const updateSocialReason = async (req) => {
   const updatedCompany = await companySchema.findByIdAndUpdate(
     req.params.id,
     { $set: { socialReason: socialReason } },
+    { new: true }
+  );
+  if (!updatedCompany) {
+    const error = new Error("Empresa no encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
+  return updatedCompany;
+};
+
+const updateProvince = async (req) => {
+  const { province } = req.body;
+  if (!province) {
+    const error = new Error("La provincia no está definida");
+    error.statusCode = 400;
+    throw error;
+  }
+  const updatedCompany = await companySchema.findByIdAndUpdate(
+    req.params.id,
+    { $set: { province: province } },
     { new: true }
   );
   if (!updatedCompany) {
@@ -297,15 +333,15 @@ const updateCompanySize = async (req) => {
 };
 
 const updateCountry = async (req) => {
-  const { country } = req.body;
-  if (!country) {
+  const { countryId } = req.body;
+  if (!countryId) {
     const error = new Error("El id país no está definido");
     error.statusCode = 400;
     throw error;
   }
   const updatedCompany = await companySchema.findByIdAndUpdate(
     req.params.id,
-    { $set: { country: country } },
+    { $set: { countryId: countryId } },
     { new: true }
   );
   if (!updatedCompany) {
@@ -345,7 +381,7 @@ const addSite = async (req) => {
   }
   const updatedCompany = await companySchema.findByIdAndUpdate(
     req.params.id,
-    { $push: { companySiteIds: companySiteId } },
+    { $push: { siteIds: companySiteId } },
     { new: true }
   );
   if (!updatedCompany) {
@@ -365,7 +401,7 @@ const addArea = async (req) => {
   }
   const updatedCompany = await companySchema.findByIdAndUpdate(
     req.params.id,
-    { $push: { companyAreaIds: companyAreaId } },
+    { $push: { areaIds: companyAreaId } },
     { new: true }
   );
   if (!updatedCompany) {
@@ -376,7 +412,14 @@ const addArea = async (req) => {
   return updatedCompany;
 };
 
+const createWorker = async (req) => {
+  const worker = new workerSchema(req.body);
+  worker.save();
+  return worker
+};
+
 module.exports = {
+  createWorker,
   register,
   login,
   profile,
@@ -389,6 +432,7 @@ module.exports = {
   updateCountry,
   updateRuc,
   updateSocialReason,
+  updateProvince,
   updateCity,
   updateAddress,
   updateEconomicActivity,

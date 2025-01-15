@@ -7,7 +7,7 @@ const createCompanyCountry = async (req) => {
 };
 
 const getAllCompanyCountries = async () => {
-    const companyCountries = await companyCountrySchema.find();
+    const companyCountries = await companyCountrySchema.find().populate('isoIds');
     return companyCountries;
 };
 

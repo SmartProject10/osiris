@@ -9,13 +9,15 @@ const subcompanyWorkerSchema = new mongoose.Schema({
   projectName:{type: String, required: true},
   charge: {type: String, required: true},
   entryDate: {type: Date, required: true},
-  address: {type: String, required: true},
+  province: { type: String, maxlength: 50, required:true, match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo provincia no acepta números.'] },
+  city: { type: String, maxlength: 100, required:true, match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo ciudad no acepta números.'] },
+  address: { type: String, maxlength: 200, required:true, match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.-]+$/, 'La dirección solo puede contener letras, números, espacios, puntos y guiones.'] },
   district: {type: String, required: true},
   corporateEmail: {
     type: String,
     required: true,
     unique: true,
-    match: /^[^\s@]+@gmail\.com$/,
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
   personalEmail: {
     type: String,
@@ -23,7 +25,7 @@ const subcompanyWorkerSchema = new mongoose.Schema({
     unique: true,
     match: /^[^\s@]+@gmail\.com$/,
   },
-  nationalityWorkerId: {
+  nationalityId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'nationalityWorker',
     default: null
@@ -47,9 +49,9 @@ const subcompanyWorkerSchema = new mongoose.Schema({
     required: true
   },
   workSite: {type: String, required: true},
-  sizePants: {type: Number, required: true, min:0,max:99},
-  sizePolo: {type: Number, required: true, min:0,max:99},
-  sizeShoe: {type: Number, required: true, min:0,max:99},
+  sizePants: {type: Number, required: true, enum: [26, 28, 30, 32, 34, 36, 38, 40, 42, 44]},
+  sizePolo: {type: String, required: true, enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']},
+  sizeShoe: {type: Number, required: true, enum: [36, 38, 40, 42, 44]},
 });
 
 module.exports = mongoose.model('subcompanyWorker', subcompanyWorkerSchema);

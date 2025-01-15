@@ -5,8 +5,8 @@ const { createWorkerToken } = require('../../../token/jwt.js');
 //TOKEN
 
 /*
-(el trabajador ya es registrado antes en la tabla desde la página webiso con todos los campos exceptuando los campos "nombre","apellido"
- y "contraseña", los cuales se rellenan desde éste endpoint usado en el registro de la página isoandiso)
+(el trabajador ya se habrá creado antes desde la página webiso con todos los campos exceptuando los campos "nombre","apellido"
+ y "contraseña", los cuales se asignarán acá, cuando se ingresé acá desde la página isoandiso)
 */
 const register = async (req) => {
   const { email, name, lastname, password } = req.body;
@@ -72,6 +72,17 @@ const getCompanyWorker = async (req) => {
   return worker;
 };
 
+const getCompanyWorkerByEmail = async (req) => {
+  const { email } = req.body;
+  const worker = await workerSchema.findOne({ email });
+  if (!worker) {
+    const error = new Error("Trabajador no encontrado");
+    error.statusCode = 404;
+    throw error;
+  }
+  return worker;
+};
+
 const updateCompanyWorker = async (req) => {
   const { password, ...worker } = req.body;
   if (password) {
@@ -101,6 +112,7 @@ module.exports = {
   profile,
   getAllCompanyWorkers,
   getCompanyWorker,
+  getCompanyWorkerByEmail,
   updateCompanyWorker,
   deleteCompanyWorker
 };

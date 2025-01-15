@@ -29,11 +29,11 @@ const deleteCompanyArea = async (req) => {
   await companyAreaSchema.findByIdAndDelete(companyAreaId);
 };
 
-const deleteIsoOfCompanyArea = async (req) => {
+const deleteIsos = async (req) => {
   const companyAreaId = req.params.id;
   const updatedArea = await companyAreaSchema.findByIdAndUpdate(
     companyAreaId,
-    { $set: { isoId: null } },
+    { $set: { isoIds: [] } },
     { new: true }
   );
   if (!updatedArea) {
@@ -44,12 +44,33 @@ const deleteIsoOfCompanyArea = async (req) => {
   return updatedArea;
 };
 
-const updateIso = async (req) => {
+const deleteWorker = async (req) => {
+  const companyAreaId = req.params.id;
+  const updatedArea = await companyAreaSchema.findByIdAndUpdate(
+    companyAreaId,
+    { $set: { responsibleWorkerId: null } },
+    { new: true }
+  );
+  if (!updatedArea) {
+    const error = new Error("Área de la empresa no encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
+  return updatedArea;
+};
+
+const addIso = async (req) => {
   const companyAreaId = req.params.id;
   const { isoId } = req.body;
+   // Verificar que isoId esté presente en la solicitud
+   if (!isoId) {
+    const error = new Error("El campo isoId es requerido");
+    error.statusCode = 400;
+    throw error;
+  }
   const companyArea = await companyAreaSchema.findByIdAndUpdate(
     companyAreaId,
-    { $set: { isoId: isoId } },
+    { $addToSet: { isoIds: isoId } },
     { new: true }
   );
   if (!companyArea) {
@@ -60,12 +81,31 @@ const updateIso = async (req) => {
   return companyArea;
 };
 
+const updateResponsibleWorker = async (req) => {
+  const areaId = req.params.id;
+  const { responsibleWorkerId } = req.body;
+
+  const area = await companyAreaSchema.findByIdAndUpdate(
+    areaId,
+    { $set: { responsibleWorkerId: responsibleWorkerId } },
+    { new: true }
+  );
+  if (!area) {
+    const error = new Error("Área de la empresa no encontrada");
+    error.statusCode = 404;
+    throw error;
+  }
+  return area;
+};
+
 module.exports = {
   createCompanyArea,
   getAllCompanyAreas,
   getCompanyArea,
   getChargeOfHigherHierarchyOfArea,
   deleteCompanyArea,
-  deleteIsoOfCompanyArea,
-  updateIso
+  deleteIsos,
+  deleteWorker,
+  addIso,
+  updateResponsibleWorker
 };

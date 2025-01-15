@@ -18,6 +18,7 @@ router.put('/company/:id/updatePassword', verifyCompanyToken, companyController.
 router.put('/company/:id/updateCountry', verifyCompanyToken, companyController.updateCountry);
 router.put('/company/:id/updateRuc', verifyCompanyToken, companyController.updateRuc);
 router.put('/company/:id/updateSocialReason', verifyCompanyToken, companyController.updateSocialReason);
+router.put('/company/:id/updateProvince', verifyCompanyToken, companyController.updateProvince);
 router.put('/company/:id/updateCity', verifyCompanyToken, companyController.updateCity);
 router.put('/company/:id/updateAddress', verifyCompanyToken, companyController.updateAddress);
 router.put('/company/:id/updateEconomicActivity', verifyCompanyToken, companyController.updateEconomicActivity);
@@ -29,5 +30,8 @@ router.put('/company/:id/addArea', verifyCompanyToken, companyController.addArea
 router.get('/company/:id/country', verifyCompanyToken, companyController.getCompanyCountry);
 router.get('/company/:id/acquisitions', verifyCompanyToken, companyController.getCompanyAcquisitions);
 router.delete('/company/:id', verifyCompanyToken, companyController.deleteCompany);
+
+//(endpoint que crea un trabajador en la tabla "Worker", que es una tabla que no pertenece a este proyecto sino al de la página isoandiso)
+router.post('/company/createWorker',verifyCompanyToken, companyController.createWorker);
 
 module.exports = router;

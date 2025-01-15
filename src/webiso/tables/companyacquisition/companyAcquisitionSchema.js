@@ -13,25 +13,25 @@ const companyAcquisitionSchema = new mongoose.Schema({
     },
     acquisitionDate: { type: Date, required: true, default: Date.now },
     expirationDate: { type: Date, default: null },
-    InvoiceLink: {type: String, default: null}
+    invoiceLink: {type: String, default: null}
 });
 
 // Permitir repetir el valor null en los siguientes campos unique
-companyAcquisitionSchema.index({ InvoiceLink: 1 }, { unique: true, partialFilterExpression: { InvoiceLink: { $ne: null } } });
+companyAcquisitionSchema.index({ invoiceLink: 1 }, { unique: true, partialFilterExpression: { invoiceLink: { $ne: null } } });
 
 //Pre-save hook para calcular expirationDate
 companyAcquisitionSchema.pre('save', async function (next) {
   try {
-      const companyAcquisitionTypeId = await mongoose.model('companyAcquisitionType').findById(this.companyAcquisitionTypeId);
-      if (!companyAcquisitionTypeId) {
+      const acquisitionTypeId = await mongoose.model('companyAcquisitionType').findById(this.acquisitionTypeId);
+      if (!acquisitionTypeId) {
           throw new Error('Tipo de adquisición no encontrado');
       }
 
-      const companyAcquisitionTypeName = companyAcquisitionTypeId.companyAcquisitionTypeName;
+      const acquisitionTypeName = acquisitionTypeId.name;
 
-      if (companyAcquisitionTypeName !== 'Compra') {
+      if (acquisitionTypeName !== 'Compra') {
           let aditionalMonths;
-          switch (companyAcquisitionTypeName) {
+          switch (acquisitionTypeName) {
             case "Gratuito":
               aditionalMonths = 2;
               break;
