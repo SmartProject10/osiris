@@ -12,7 +12,7 @@ connectToMongoose();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000','https://www.isodigitalsolution.com'],
+  origin: ['http://localhost:5173', 'http://localhost:3000','https://webiso-649szbaz3-isolatechs-projects.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
