@@ -33,6 +33,16 @@ const getIso = async (req, res) => {
   }
 };
 
+//Obtener una iso por su comienzo de nombre
+const getIsoByNameStartWith = async (req, res) => {
+  try {
+    const iso = await isoService.getIsoByNameStartWith(req);
+    res.status(200).json(iso);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: 'Error obteniendo la iso por su nombre comenzando con ..', error: error.message });
+  }
+};
+
 //Eliminar ISO por ID
 const deleteIso = async (req, res) => {
   try {
@@ -47,5 +57,6 @@ module.exports = {
   createIso,
   getAllIsos,
   getIso,
+  getIsoByNameStartWith,
   deleteIso,
 };

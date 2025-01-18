@@ -145,6 +145,16 @@ const updateSocialReason = async (req, res) => {
   }
 };
 
+//Acualizar la provincia de la empresa por la empresa ID
+const updateProvince = async (req, res) => {
+  try {
+    const company = await companyService.updateProvince(req, res);
+    res.status(200).json(company);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: 'Error actualizando la provincia de la empresa', error: error.message });
+  }
+};
+
 //Acualizar la ciudad de la empresa por la empresa ID
 const updateCity = async (req, res) => {
   try {
@@ -225,7 +235,18 @@ const addArea = async (req, res) => {
   }
 };
 
+//Crear trabajador en la tabla trabajador perteneciente al proyecto de la página iso and iso
+const createWorker = async (req, res) => {
+  try {
+    const worker = await companyService.createWorker(req);
+    res.status(201).json(worker);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: 'Error creando el trabajador', error: error.message });
+  }
+};
+
 module.exports = {
+  createWorker,
   register,
   login,
   logout,
@@ -239,6 +260,7 @@ module.exports = {
   updateCountry,
   updateRuc,
   updateSocialReason,
+  updateProvince,
   updateCity,
   updateAddress,
   updateEconomicActivity,

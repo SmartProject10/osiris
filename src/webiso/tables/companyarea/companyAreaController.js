@@ -54,23 +54,43 @@ const deleteCompanyArea = async (req, res) => {
   }
 };
 
-//Eliminar iso del área
-const deleteIsoOfCompanyArea = async (req, res) => {
+//Eliminar las isos del área
+const deleteIsos = async (req, res) => {
   try {
-    await companyAreaService.deleteIsoOfCompanyArea(req);
-    res.status(200).json({ message: 'Iso del área de la empresa eliminada satisfactoriamente' });
+    await companyAreaService.deleteIsos(req);
+    res.status(200).json({ message: 'Las isos del área se eleminaron satisfactoriamente' });
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error eliminando la iso del área de la empresa', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error eliminando las isos del área', error: error.message });
   }
 };
 
-//Actualizar iso del área
-const updateIso = async (req, res) => {
+//Eliminar el trabajador del área
+const deleteWorker = async (req, res) => {
   try {
-    await companyAreaService.updateIso(req);
-    res.status(200).json({ message: 'iso del área de la empresa actualizada correctamente' });
+    await companyAreaService.deleteWorker(req);
+    res.status(200).json({ message: 'El trabajador del área se eleminó satisfactoriamente' });
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: 'Error actualizando el iso del área de la empresa', error: error.message });
+    res.status(error.statusCode || 500).json({ message: 'Error eliminando el trabajador del área', error: error.message });
+  }
+};
+
+//Agregar isos al área
+const addIso = async (req, res) => {
+  try {
+    await companyAreaService.addIso(req);
+    res.status(200).json({ message: 'iso agregada al área correctamente' });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: 'Error agregando la iso al área', error: error.message });
+  }
+};
+
+//Actualizar el trabajador responsable del área
+const updateResponsibleWorker = async (req, res) => {
+  try {
+    const companyArea = await companyAreaService.updateResponsibleWorker(req);
+    res.status(200).json(companyArea);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: 'Error agregando el trabajador responsable del área', error: error.message });
   }
 };
 
@@ -80,6 +100,8 @@ module.exports = {
   getCompanyArea,
   getChargeOfHigherHierarchyOfArea,
   deleteCompanyArea,
-  deleteIsoOfCompanyArea,
-  updateIso,
+  deleteIsos,
+  deleteWorker,
+  addIso,
+  updateResponsibleWorker,
 };

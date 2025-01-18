@@ -17,13 +17,13 @@ const companySiteSchema = new mongoose.Schema({
     type: String,
     required: true,
     maxlength: 100,
-    match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo nombre no acepta números.']
+    match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo ciudad no acepta números.']
   },
   province: {
     type: String,
     required: true,
     maxlength: 100,
-    match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo nombre no acepta números.']
+    match: [/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.-]+$/, 'el campo provincia no acepta números.']
   }
 });
 

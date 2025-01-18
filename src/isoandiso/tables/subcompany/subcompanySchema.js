@@ -9,13 +9,15 @@ const subcompanySchema = new mongoose.Schema({
   entryDate: { type: Date, required: true },
   contractTerminationDate: {
     type: Date,
-    required: true,
     validate: {
       validator: function (v) {
-        return v > this.entryDate;
+        if(v!==null){
+          return v > this.entryDate;
+        }
       },
       message: props => `La fecha de término de contrato (${props.value}) debe ser mayor a la fecha de ingreso (${this.entryDate}).`,
     },
+    default: null,
   },
 });
 

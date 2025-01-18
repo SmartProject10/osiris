@@ -9,9 +9,14 @@ const companyAreaSchema = new mongoose.Schema({
     type: String,
     required: true,
   }],
-  isoId:{
+  isoIds:[{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'iso',
+    default: null
+  }],
+  responsibleWorkerId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'worker',
     default: null
   }
 });
