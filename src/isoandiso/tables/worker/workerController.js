@@ -21,9 +21,9 @@ const register = async (req, res) => {
     const { token, worker } = await workerService.register(req);
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false, //cambiar a true cuando este proyecto de backend esté subido a un servidor https
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'Lax' //cambiar a None cuando este proyecto de backend esté subido a un servidor https
+      sameSite: 'None'
     });
     res.status(201).json(worker);
   } catch (error) {
@@ -37,9 +37,9 @@ const login = async (req, res) => {
     const { token, worker } = await workerService.login(req);
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false, //cambiar a true cuando este proyecto de backend esté subido a un servidor https
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'Lax' //cambiar a None cuando este proyecto de backend esté subido a un servidor https
+      sameSite: 'None'
     });
     res.status(200).json(worker);
   } catch (error) {
