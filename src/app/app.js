@@ -4,7 +4,6 @@ const cors = require('cors');
 const { connectToMongoose } = require('./db');
 const cookieParser = require('cookie-parser');
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Conectar a la base de datos
 connectToMongoose();
@@ -12,7 +11,7 @@ connectToMongoose();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000','https://www.isodigitalsolution.com'],
+  origin: [process.env.ORIGIN],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -49,8 +48,8 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar el servidor
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server listening on port ${process.env.PORT || 3000}`);
 });
 
 module.exports = app;
